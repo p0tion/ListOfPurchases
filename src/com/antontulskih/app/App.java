@@ -36,7 +36,7 @@ public class App {
         customer6.addProductToShoppingBasket(garlic, cheese, cucumber);
         customer2.addProductToShoppingBasket(garlic, tomato, bread, mineralWater);
 
-        CustomerDAO customerDaoImpl = new CustomerDAOCollImpl();
+        CustomerDAO customerDaoImpl = CustomerDAOCollImpl.getCustomerDAOCollImpl();
         customerDaoImpl.addToOrderProcessingList(customer1, customer4, customer6, customer2);
         customerDaoImpl.showAllOrdersById();
         customerDaoImpl.showAllOrdersByInvoice();

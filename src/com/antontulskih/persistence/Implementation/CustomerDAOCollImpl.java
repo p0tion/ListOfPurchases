@@ -18,7 +18,18 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CustomerDAOCollImpl implements CustomerDAO {
-    private static List<Customer> ordersList = new ArrayList<Customer>();
+    static private List<Customer> ordersList = new ArrayList<Customer>();
+
+    static private CustomerDAOCollImpl customerDAOCollImpl;
+
+    private CustomerDAOCollImpl() {}
+
+    static public CustomerDAOCollImpl getCustomerDAOCollImpl() {
+        if(customerDAOCollImpl == null) {
+            customerDAOCollImpl = new CustomerDAOCollImpl();
+        }
+        return customerDAOCollImpl;
+    }
 
     @Override
     public boolean addToOrderProcessingList(Customer... customer) {
