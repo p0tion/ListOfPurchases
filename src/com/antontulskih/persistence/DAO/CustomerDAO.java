@@ -1,6 +1,9 @@
 /**
+ * @{NAME}
+ *
+ * ${DATE}
+ *
  * @author Tulskih Anton
- *         $ {DATE}.
  */
 
 package com.antontulskih.persistence.DAO;
