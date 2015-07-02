@@ -15,7 +15,8 @@ public interface CustomerDAO {
     //    delete them
     boolean removeFromOrderProcessingList(Customer... customer);
     //    get by name
-    Customer getFromOrderProcessingListByName(String firstName, String lastName);
+    Customer getFromOrderProcessingListByName(String firstName,
+                                              String lastName);
     //    get by id
     Customer getFromOrderProcessingListById(Long id);
     //    get all

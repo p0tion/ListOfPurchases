@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product implements Serializable {
+public final class Product implements Serializable {
 
     private static Long uniqueId = 0L;
     private static List<Product> productsList = new ArrayList<Product>();
@@ -19,7 +19,10 @@ public class Product implements Serializable {
     private Double productPrice;
     private boolean isAvailable;
 
-    public Product(String productName, String productDescription, Double productPrice, boolean isAvailable) {
+    public Product(final String productName,
+                   final String productDescription,
+                   final Double productPrice,
+                   final boolean isAvailable) {
         super();
         this.id = ++uniqueId;
         this.productName = productName;
@@ -31,7 +34,7 @@ public class Product implements Serializable {
 
     public static void showProductList() {
         System.out.println("\n***Displaying the list of products***");
-        for(Product p: productsList) {
+        for (Product p: productsList) {
             System.out.println(p);
         }
     }
@@ -48,7 +51,7 @@ public class Product implements Serializable {
         return productDescription;
     }
 
-    public void setProductDescription(String productDescription) {
+    public void setProductDescription(final String productDescription) {
         this.productDescription = productDescription;
     }
 
@@ -56,7 +59,7 @@ public class Product implements Serializable {
         return productPrice;
     }
 
-    public void setProductPrice(Double productPrice) {
+    public void setProductPrice(final Double productPrice) {
         this.productPrice = productPrice;
     }
 
@@ -66,14 +69,22 @@ public class Product implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if ((o == null) || (getClass() != o.getClass())) {
+            return false;
+        }
 
         Product product = (Product) o;
 
-        if (!productName.equals(product.productName)) return false;
-        if (!productPrice.equals(product.productPrice)) return false;
+        if (!productName.equals(product.productName)) {
+            return false;
+        }
+        if (!productPrice.equals(product.productPrice)) {
+            return false;
+        }
 
         return true;
     }
