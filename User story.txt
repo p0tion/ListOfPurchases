@@ -1,0 +1,11 @@
+We need to make an orders processing list, in which will be customers, who made orders on our products. We should be able to:
+
+1. Add customers who did orders to orders processing list;
+2. Remove customers from it;
+3. Get customers from list by their name;
+4. Get customers from list by their ID;
+5. Show the full list ordered by customers IDs;
+6. Show the full list ordered by customers last names;
+7. Show the full list ordered by customers invoice value;
+8. Save the orders processing list on my hard drive with being able to choose realization: serialization, marshalling to XML or JSON.
+9. Load the orders processing list from existing files on my hard drive.
