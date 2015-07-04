@@ -11,6 +11,8 @@ package com.antontulskih.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Customer implements Serializable {
 
@@ -36,12 +38,12 @@ public final class Customer implements Serializable {
                     final Integer discount) {
         super();
         this.id = ++uniqueId;
-        this.customerFirstName = customerFirstName;
-        this.customerLastName = customerLastName;
-        this.customerCellphoneNumber = customerCellphoneNumber;
-        this.customerCardNumber = customerCardNumber;
-        this.customerEmail = customerEmail;
-        this.discount = discount;
+        setCustomerFirstName(customerFirstName);
+        setCustomerLastName(customerLastName);
+        setCustomerCellphoneNumber(customerCellphoneNumber);
+        setCustomerCardNumber(customerCardNumber);
+        setCustomerEmail(customerEmail);
+        setDiscount(discount);
         this.shoppingBasket = new ArrayList<Product>();
         this.invoice = 0.0;
     }
@@ -55,7 +57,12 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerFirstName(final String customerFirstName) {
-        this.customerFirstName = customerFirstName;
+        if ((customerFirstName == null) || (customerFirstName.equals(""))) {
+            throw new IllegalArgumentException("Customers first name is"
+                    + " invalid.");
+        } else {
+            this.customerFirstName = customerFirstName.trim();
+        }
     }
 
     public String getCustomerLastName() {
@@ -63,7 +70,12 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerLastName(final String customerLastName) {
-        this.customerLastName = customerLastName;
+        if ((customerLastName == null) || (customerLastName.equals(""))) {
+            throw new IllegalArgumentException("Customers last name is"
+                    + " invalid.");
+        } else {
+            this.customerLastName = customerLastName.trim();
+        }
     }
 
     public String getCustomerCellphoneNumber() {
@@ -72,7 +84,17 @@ public final class Customer implements Serializable {
 
     public void setCustomerCellphoneNumber(
             final String customerCellphoneNumber) {
-        this.customerCellphoneNumber = customerCellphoneNumber;
+        String validationExpression = "\\d";
+        Pattern pattern = Pattern.compile(validationExpression);
+        Matcher matcher = pattern.matcher(customerCellphoneNumber);
+        if ((customerCellphoneNumber == null)
+                || (customerCellphoneNumber.equals(""))
+                || (!matcher.matches())) {
+            throw new IllegalArgumentException("Customers cellphone number is"
+                    + " invalid.");
+        } else {
+            this.customerCellphoneNumber = customerCellphoneNumber.trim();
+        }
     }
 
     public String getCustomerCardNumber() {
@@ -80,7 +102,17 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerCardNumber(final String customerCardNumber) {
-        this.customerCardNumber = customerCardNumber;
+        String validationExpression = "\\d";
+        Pattern pattern = Pattern.compile(validationExpression);
+        Matcher matcher = pattern.matcher(customerCardNumber);
+        if ((customerCardNumber == null)
+                || (customerCardNumber.equals(""))
+                || (!matcher.matches())) {
+            throw new IllegalArgumentException("Customers card number is"
+                    + " invalid.");
+        } else {
+            this.customerCardNumber = customerCardNumber.trim();
+        }
     }
 
     public String getCustomerEmail() {
@@ -88,7 +120,16 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
+        String validationExpression = "^.+@.+\\..+$";
+        Pattern pattern = Pattern.compile(validationExpression);
+        Matcher matcher = pattern.matcher(customerEmail);
+        if ((customerEmail == null)
+                || (customerEmail.equals(""))
+                || (!matcher.matches())) {
+            throw new IllegalArgumentException("Customers email is invalid.");
+        } else {
+            this.customerEmail = customerEmail.trim();
+        }
     }
 
     public Integer getDiscount() {
@@ -96,7 +137,16 @@ public final class Customer implements Serializable {
     }
 
     public void setDiscount(final Integer discount) {
-        this.discount = discount;
+        final int minDiscount = 0;
+        final int maxDiscount = 100;
+        if ((discount == null)
+                || (discount < minDiscount)
+                || (discount > maxDiscount)) {
+            throw new IllegalArgumentException("Customers discount is"
+                    + " invalid.");
+        } else {
+            this.discount = discount;
+        }
     }
 
     public void addProductToShoppingBasket(final Product... p) {
@@ -123,10 +173,6 @@ public final class Customer implements Serializable {
 
     public Double getInvoice() {
         return invoice;
-    }
-
-    public void setInvoice(final Double invoice) {
-        this.invoice = invoice;
     }
 
     @Override

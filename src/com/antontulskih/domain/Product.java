@@ -28,9 +28,9 @@ public final class Product implements Serializable {
                    final boolean isAvailable) {
         super();
         this.id = ++uniqueId;
-        this.productName = productName;
-        this.productDescription = productDescription;
-        this.productPrice = productPrice;
+        setProductName(productName);
+        setProductDescription(productDescription);
+        setProductPrice(productPrice);
         this.isAvailable = isAvailable;
         productsList.add(this);
     }
@@ -50,12 +50,25 @@ public final class Product implements Serializable {
         return productName;
     }
 
+    public void setProductName(final String productName) {
+        if ((productName == null) || (productName.equals(""))) {
+            throw new IllegalArgumentException("Products name is invalid.");
+        } else {
+            this.productName = productName;
+        }
+    }
+
     public String getProductDescription() {
         return productDescription;
     }
 
     public void setProductDescription(final String productDescription) {
-        this.productDescription = productDescription;
+        if (productDescription == null) {
+            throw new IllegalArgumentException("Product description is"
+                    + " invalid");
+        } else {
+            this.productDescription = productDescription;
+        }
     }
 
     public Double getProductPrice() {
@@ -63,7 +76,12 @@ public final class Product implements Serializable {
     }
 
     public void setProductPrice(final Double productPrice) {
-        this.productPrice = productPrice;
+        if ((productPrice == null)
+                || (productPrice <= 0.0)) {
+            throw new IllegalArgumentException("Products price is invalid.");
+        } else {
+            this.productPrice = productPrice;
+        }
     }
 
     @Override
