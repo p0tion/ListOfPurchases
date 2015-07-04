@@ -37,18 +37,18 @@ final class App {
                 + " какой хошь", 19.78, true);
         Product.showProductList();
 
-        Customer customer1 = new Customer("Антон", "Тульских", "+380633355555",
+        Customer customer1 = new Customer("Антон", "Тульских", "0633355555",
                 "3215987468487541", "anton.tulskih@gmail.com", 5);
-        Customer customer2 = new Customer("Глеб", "Хлебушкин", "+380505005050",
+        Customer customer2 = new Customer("Глеб", "Хлебушкин", "0505005050",
                 "4444555511116666", "baton@yahoo.com", 0);
-        Customer customer3 = new Customer("Раиса", "Гулькина", "+380980374529",
+        Customer customer3 = new Customer("Раиса", "Гулькина", "0980374529",
                 "8888999944448888", "rayathebest@mail.ru", 15);
-        Customer customer4 = new Customer("Зинаида", "Вольф", "+380989876512",
+        Customer customer4 = new Customer("Зинаида", "Вольф", "0989876512",
                 "1111424482889099", "zzz@gmail.com", 3);
-        Customer customer5 = new Customer("Эдуард", "Погожий", "+380682587931",
+        Customer customer5 = new Customer("Эдуард", "Погожий", "0682587931",
                 "1234567876543210", "edik1987@mail.ru", 0);
         Customer customer6 = new Customer("Альберт", "Гутернштерн",
-                "+380935487961", "5555999977778888", "albe@i.ua", 20);
+                "0935487961", "5555999977778888", "albe@i.ua", 20);
 
         customer1.addProductToShoppingBasket(potato, tomato, garlic, bread);
         customer4.addProductToShoppingBasket(mineralWater, cheese, saladPepper,
@@ -76,4 +76,5 @@ final class App {
         System.out.println(customerDaoImpl.loadOrderProcessingList("xml"));
         System.out.println(customerDaoImpl.loadOrderProcessingList("json"));
     }
+
 }

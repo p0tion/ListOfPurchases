@@ -84,7 +84,7 @@ public final class Customer implements Serializable {
 
     public void setCustomerCellphoneNumber(
             final String customerCellphoneNumber) {
-        String validationExpression = "\\d";
+        String validationExpression = "\\d+";
         Pattern pattern = Pattern.compile(validationExpression);
         Matcher matcher = pattern.matcher(customerCellphoneNumber);
         if ((customerCellphoneNumber == null)
@@ -102,7 +102,7 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerCardNumber(final String customerCardNumber) {
-        String validationExpression = "\\d";
+        String validationExpression = "\\d+";
         Pattern pattern = Pattern.compile(validationExpression);
         Matcher matcher = pattern.matcher(customerCardNumber);
         if ((customerCardNumber == null)
