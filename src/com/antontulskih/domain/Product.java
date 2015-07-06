@@ -22,6 +22,8 @@ public final class Product implements Serializable {
     private Double productPrice;
     private boolean isAvailable;
 
+    public Product() { };
+
     public Product(final String productName,
                    final String productDescription,
                    final Double productPrice,

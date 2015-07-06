@@ -84,12 +84,14 @@ public final class Customer implements Serializable {
 
     public void setCustomerCellphoneNumber(
             final String customerCellphoneNumber) {
+        if (customerCellphoneNumber == null) {
+            throw new IllegalArgumentException("Customers cellphone number is"
+                        + " invalid.");
+        }
         String validationExpression = "\\d+";
         Pattern pattern = Pattern.compile(validationExpression);
         Matcher matcher = pattern.matcher(customerCellphoneNumber);
-        if ((customerCellphoneNumber == null)
-                || (customerCellphoneNumber.equals(""))
-                || (!matcher.matches())) {
+        if ((customerCellphoneNumber.equals("")) || (!matcher.matches())) {
             throw new IllegalArgumentException("Customers cellphone number is"
                     + " invalid.");
         } else {
@@ -102,12 +104,14 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerCardNumber(final String customerCardNumber) {
+        if (customerCardNumber == null) {
+            throw new IllegalArgumentException("Customers card number is"
+                    + " invalid.");
+        }
         String validationExpression = "\\d+";
         Pattern pattern = Pattern.compile(validationExpression);
         Matcher matcher = pattern.matcher(customerCardNumber);
-        if ((customerCardNumber == null)
-                || (customerCardNumber.equals(""))
-                || (!matcher.matches())) {
+        if ((customerCardNumber.equals("")) || (!matcher.matches())) {
             throw new IllegalArgumentException("Customers card number is"
                     + " invalid.");
         } else {
@@ -120,12 +124,13 @@ public final class Customer implements Serializable {
     }
 
     public void setCustomerEmail(final String customerEmail) {
+        if (customerEmail == null) {
+            throw new IllegalArgumentException("Customers email is invalid.");
+        }
         String validationExpression = "^.+@.+\\..+$";
         Pattern pattern = Pattern.compile(validationExpression);
         Matcher matcher = pattern.matcher(customerEmail);
-        if ((customerEmail == null)
-                || (customerEmail.equals(""))
-                || (!matcher.matches())) {
+        if ((customerEmail.equals("")) || (!matcher.matches())) {
             throw new IllegalArgumentException("Customers email is invalid.");
         } else {
             this.customerEmail = customerEmail.trim();
