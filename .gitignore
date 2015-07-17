@@ -1,5 +1,7 @@
 /.idea
 /out
+/lib
+/target
 *.json
 *.xml
 *.ser
