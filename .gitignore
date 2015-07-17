@@ -6,3 +6,7 @@
 *.xml
 *.ser
 *.jar
+*.mwb
+*.bak
+*.suml
+*.txt
