@@ -169,6 +169,11 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
+    public Set<Customer> getAll() {
+        return customerList;
+    }
+
+    @Override
     public boolean update(Customer... customers) {
         for (Customer c: customers) {
             for (Customer d: customerList) {

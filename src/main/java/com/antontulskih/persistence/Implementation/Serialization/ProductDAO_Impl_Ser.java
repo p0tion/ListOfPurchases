@@ -10,20 +10,21 @@ package com.antontulskih.persistence.Implementation.Serialization;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.Implementation.Collection.CustomerDAO_Impl_Coll;
-import com.antontulskih.persistence.Implementation.XML.CustomerDAO_Impl_XML;
+import com.antontulskih.persistence.Implementation.Collection.ProductDAO_Impl_Coll;
+import com.antontulskih.persistence.Implementation.XML.ProductDAO_Impl_XML;
 
 import java.io.*;
 import java.util.Set;
 
 import static java.lang.System.out;
 
-public final class CustomerDAO_Impl_Ser extends
-        CustomerDAO_Impl_XML {
+public final class ProductDAO_Impl_Ser extends
+        ProductDAO_Impl_XML {
 
-    public CustomerDAO_Impl_Ser() {
-        customerDAOImplColl = CustomerDAO_Impl_Coll.getCustomerDAOCollImpl();
-        CustomerDAO_Impl_Coll.getCustomerList().clear();
-        fileName = "customerList.ser";
+    public ProductDAO_Impl_Ser() {
+        productDAOImplColl = ProductDAO_Impl_Coll.getProductDAOCollImpl();
+        ProductDAO_Impl_Coll.getProductList().clear();
+        fileName = "productList.ser";
     }
 
     @Override

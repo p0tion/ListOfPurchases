@@ -15,6 +15,9 @@ import com.antontulskih.persistence.DAO_Factory.DAO_AbstractFactory;
 import com.antontulskih.persistence.DAO_Factory.DAO_FactoryInitializer;
 import com.antontulskih.persistence.DAO_Factory.StorageType;
 import com.antontulskih.util.CustomerFormattedTable;
+import com.antontulskih.util.ProductFormattedTable;
+
+import static com.antontulskih.util.CustomerFormattedTable.printOneCustomer;
 
 final class App {
 
@@ -42,103 +45,72 @@ final class App {
         Customer customer8 = new Customer("Darth", "Vader", "4444555599992222");
 
         DAO_AbstractFactory daoAbstractFactory =
-                DAO_FactoryInitializer.getDAO_Factory(StorageType.COLLECTION);
-        CustomerDAO customerDAOImplColl = daoAbstractFactory.getCustomerDAO();
-        ProductDAO productDAOImplColl = daoAbstractFactory.getProductDAO();
+//             DAO_FactoryInitializer.getDAO_Factory(StorageType.COLLECTION);
+//             DAO_FactoryInitializer.getDAO_Factory(StorageType.XML);
+//             DAO_FactoryInitializer.getDAO_Factory(StorageType.SERIALIZATION);
+//             DAO_FactoryInitializer.getDAO_Factory(StorageType.JSON);
+             DAO_FactoryInitializer.getDAO_Factory(StorageType.JDBC);
 
-        customerDAOImplColl.save(customer1, customer2, customer3, customer4,
+
+        CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();
+        ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
+
+        customerDAOImpl.save(customer1, customer2, customer3, customer4,
                 customer5, customer6, customer7, customer8);
 
-        customerDAOImplColl.showAllById();
+        customerDAOImpl.showAllById();
 
-        productDAOImplColl.save(potato, cucumber, garlic, cheese, minWater,
-                nuts, tomato, bread, saladPepper);
+        productDAOImpl.save(potato, cucumber, garlic, cheese, minWater, nuts,
+                tomato, bread, saladPepper);
 
-        productDAOImplColl.showAllById();
+        productDAOImpl.showAllById();
 
-        Customer newCustomer5 = customerDAOImplColl.getById(5);
+        CustomerFormattedTable.printListOfCustomers(customerDAOImpl.getAll());
+        ProductFormattedTable.printListOfProducts(productDAOImpl.getAll());
+
+        Customer newCustomer5 = customerDAOImpl.getById(5);
         newCustomer5.addProductToShoppingBasket(
-                productDAOImplColl.getById(1,2,3)
+                productDAOImpl.getById(1, 3, 5)
         );
         newCustomer5.addProductToShoppingBasket(
-                productDAOImplColl.getByName("Salad pepper", "Nuts")
+                productDAOImpl.getByName("Nuts", "Salad pepper")
         );
 
         newCustomer5.showShoppingBasket();
 
-        customerDAOImplColl.update(newCustomer5);
-        customerDAOImplColl.showAllById();
-        CustomerFormattedTable.printOneCustomer(newCustomer5);
+        customerDAOImpl.update(newCustomer5);
+        customerDAOImpl.showAllById();
+        printOneCustomer(newCustomer5);
 
         Customer newCustomer8 =
-                customerDAOImplColl.getByName("Darth", "Vader");
+                customerDAOImpl.getByName("Darth", "Vader");
 
         newCustomer8.addProductToShoppingBasket(
-                productDAOImplColl.getById(1,5,7,9,4,2)
+                productDAOImpl.getById(1, 5, 7, 9)
         );
         newCustomer5.clearShoppingBasket();
 
-        customerDAOImplColl.remove(customer1, customer3);
-        customerDAOImplColl.removeById(6, 7);
-        customerDAOImplColl.update(newCustomer5, newCustomer8);
-        customerDAOImplColl.showAllById();
+        customerDAOImpl.remove(customer1, customer3);
+        customerDAOImpl.removeById(6, 7);
+        customerDAOImpl.update(newCustomer5, newCustomer8);
+        customerDAOImpl.showAllById();
 
-        productDAOImplColl.remove(potato, minWater);
-        productDAOImplColl.removeById(2, 6);
-        productDAOImplColl.showAllByPrice();
-//
-//        customer1.addProductToShoppingBasket(potato, tomato, garlic, bread);
-//        customer4.addProductToShoppingBasket(mineralWater, cheese, saladPepper,
-//                garlic, nuts);
-//        customer6.addProductToShoppingBasket(garlic, cheese, cucumber);
-//        customer2.addProductToShoppingBasket(garlic, tomato, bread,
-//                mineralWater);
-//        customer3.addProductToShoppingBasket(cheese, mineralWater, nuts);
-//        customer7.addProductToShoppingBasket(tomato, cheese, garlic);
-//        customer8.addProductToShoppingBasket(bread, cheese, saladPepper);
-//        customer5.addProductToShoppingBasket(potato, cucumber, bread, cheese,
-//                mineralWater, nuts, garlic);
-//
-//        CustomerDAO customerDAOImplColl = DAO_FactoryInitializer.
-//                getDAO_Factory(StorageType.COLLECTION);
-//        customerDAOImplColl.save(customer1, customer4, customer6,
-//                customer2);
-//        customerDAOImplColl.showAllById();
-//        customerDAOImplColl.showAllByInvoice();
-//        customerDAOImplColl.showAllByLastName();
-//        printListOfCustomers(customerDAOImplColl.getByName("Anton", "Tulskih"));
-//        printListOfCustomers(customerDAOImplColl.getByName("Vasya", "Pupkin"));
-//        customerDAOImplColl.remove(customer1, customer4);
-//        customerDAOImplColl.showAllById();
-//
-//        CustomerDAO customerDAOSerImpl = DAO_FactoryInitializer.
-//                getDAO_Factory(StorageType.SERIALIZATION);
-//        customerDAOSerImpl.save(customer3);
-//        printListOfCustomers(customerDAOSerImpl.loadListOfOrders());
-//        customerDAOSerImpl.remove(customer2);
-//        printListOfCustomers(customerDAOSerImpl.loadListOfOrders());
-//
-//        CustomerDAO customerDAOXMLImpl = DAO_FactoryInitializer.
-//                getDAO_Factory(StorageType.XML);
-//        customerDAOXMLImpl.save(customer7, customer1);
-//        printListOfCustomers(customerDAOXMLImpl.loadListOfOrders());
-//        customerDAOXMLImpl.removeById(3);
-//        printListOfCustomers(customerDAOXMLImpl.loadListOfOrders());
-//
-//        CustomerDAO customerDAOJSONImpl = DAO_FactoryInitializer.
-//                getDAO_Factory(StorageType.JSON);
-//        customerDAOJSONImpl.save(customer5);
-//        printListOfCustomers(customerDAOJSONImpl.loadListOfOrders());
-//        printListOfCustomers(customerDAOJSONImpl.getById(7,1,6,5,8,2));
-//        customerDAOJSONImpl.removeById(5,7);
-//        printListOfCustomers(customerDAOJSONImpl.loadListOfOrders());
-//
-//        CustomerDAO customerDAOJDBCImpl = CustomerDAO_Factory.
-//                getDAO_Factory(StorageType.JDBC);
-//        customerDAOJDBCImpl.save(customer2, customer1, customer4,
-//                customer6);
-//        out.println(customerDAOXMLImpl.loadListOfOrders());
+        productDAOImpl.remove(bread);
+        productDAOImpl.removeById(2, 4);
+        productDAOImpl.showAllByPrice();
+
+        customerDAOImpl.remove(newCustomer5, newCustomer8);
+        customerDAOImpl.showAllByLastName();
+
+        productDAOImpl.removeById(1,3,5);
+        productDAOImpl.remove(nuts, tomato, saladPepper);
+
+        customerDAOImpl.removeById(4,2);
+
+        customerDAOImpl.showAllById();
+        productDAOImpl.showAllById();
+
+//        CustomerDAO_Impl_JDBC.resetTables();
 
     }
-
 }

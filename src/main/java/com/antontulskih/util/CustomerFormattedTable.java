@@ -54,6 +54,8 @@ public final class CustomerFormattedTable {
     }
 
     public static void printOneCustomer(Customer c) {
+        out.println("\n*** Displaying information about " + c.getFirstName()
+                + " " + c.getLastName() + " ***");
         printLine();
         printHeader();
         printLine();

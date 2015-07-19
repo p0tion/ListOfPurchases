@@ -102,6 +102,11 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     }
 
     @Override
+    public Set<Product> getAll() {
+        return productList;
+    }
+
+    @Override
     public boolean update(final Product... products) {
         for (Product p: products) {
             for (Product d: productList) {
@@ -161,7 +166,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
             boolean isInList = false;
             for (Product p: productList) {
                 if (p.getName().equals(n)) {
-                    out.println("*** Getting " + p.getName() + " ***");
+                    out.println("*** Getting " + p.getName() + " from the list "
+                            + "of products ***");
                     isInList = true;
                     set.add(p);
                 }

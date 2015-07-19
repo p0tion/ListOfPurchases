@@ -19,15 +19,19 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Set;
-import java.util.TreeSet;
 
-import static com.antontulskih.util.CustomerComparator.IdSorterComparator;
 import static java.lang.System.out;
 
 public class CustomerDAO_Impl_XML implements CustomerDAO {
 
-    protected CustomerDAO_Impl_Coll customerDAOImplColl =
-            CustomerDAO_Impl_Coll.getCustomerDAOCollImpl();
+    protected CustomerDAO_Impl_Coll customerDAOImplColl;
+    protected String fileName;
+
+    public CustomerDAO_Impl_XML() {
+        customerDAOImplColl = CustomerDAO_Impl_Coll.getCustomerDAOCollImpl();
+        CustomerDAO_Impl_Coll.getCustomerList().clear();
+        fileName = "customerList.xml";
+    }
 
     @Override
     public boolean save(final Customer... customers) {
@@ -38,13 +42,12 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     public boolean writeToFile() {
-        final String fileName = "customerList.xml";
-        out.println("\n*** Saving list of customers to " + fileName + " ***");
+        out.println("\n*** Saving list of customers to " + fileName + " ***\n");
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);
             xStream.alias("Product", Product.class);
-            xStream.toXML(customerDAOImplColl.getCustomerList(),
+            xStream.toXML(CustomerDAO_Impl_Coll.getCustomerList(),
                     new FileOutputStream(fileName));
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,26 +55,26 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
         return true;
     }
 
-    public Set<Customer> readFromFile() {
-        Set<Customer> newOrdersList =
-                new TreeSet<Customer>(new IdSorterComparator());
-        final String fileName = "customerList.xml";
+    public boolean readFromFile() {
+        CustomerDAO_Impl_Coll.getCustomerList().clear();
         out.println("\n*** Loading list of customers from " + fileName
-                + " ***");
+                + " ***\n");
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);
             xStream.alias("Product", Product.class);
-            newOrdersList.addAll((Set<Customer>) xStream.fromXML(
-                    new FileInputStream(fileName)));
+            CustomerDAO_Impl_Coll.getCustomerList().addAll(
+                    (Set<Customer>) xStream.fromXML(
+                            new FileInputStream(fileName)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return newOrdersList;
+        return true;
     }
 
     @Override
     public boolean remove(final Customer... customers) {
+        readFromFile();
         for(Customer c: customers) {
             customerDAOImplColl.remove(c);
         }
@@ -80,6 +83,7 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
 
     @Override
     public boolean removeById(final Integer... ids) {
+        readFromFile();
         for (Integer i: ids) {
             customerDAOImplColl.removeById(i);
         }
@@ -88,36 +92,50 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
 
     @Override
     public Customer getByName(final String firstName, final String lastName) {
+        readFromFile();
         return customerDAOImplColl.getByName(firstName, lastName);
     }
 
     @Override
     public Set<Customer> getById(final Integer... ids) {
-            return customerDAOImplColl.getById(ids);
+        readFromFile();
+        return customerDAOImplColl.getById(ids);
     }
 
     @Override
     public Customer getById(final Integer id) {
+        readFromFile();
         return customerDAOImplColl.getById(id);
     }
 
     @Override
+    public Set<Customer> getAll() {
+        readFromFile();
+        return customerDAOImplColl.getAll();
+    }
+
+    @Override
     public boolean update(Customer... customers) {
-        return customerDAOImplColl.update(customers);
+        readFromFile();
+        customerDAOImplColl.update(customers);
+        return writeToFile();
     }
 
     @Override
     public void showAllById() {
+        readFromFile();
         customerDAOImplColl.showAllById();
     }
 
     @Override
     public void showAllByLastName() {
+        readFromFile();
         customerDAOImplColl.showAllByLastName();
     }
 
     @Override
     public void showAllByInvoice() {
+        readFromFile();
         customerDAOImplColl.showAllByInvoice();
     }
 }

@@ -32,7 +32,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="jettison-1.3" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.mojo:findbugs-maven-plugin:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:findbugs:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />

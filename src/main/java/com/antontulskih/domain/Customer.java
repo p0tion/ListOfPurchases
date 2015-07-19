@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.antontulskih.util.ProductFormattedTable.*;
-import static java.lang.System.*;
+import static java.lang.System.out;
 
 public final class Customer implements Serializable {
 
@@ -28,7 +28,7 @@ public final class Customer implements Serializable {
     private Double invoice;
     private List<Product> shoppingBasket;
 
-    public Customer() { }
+    public Customer() { this.shoppingBasket = new ArrayList<Product>(); }
 
     public Customer(final String firstName,
                     final String lastName,
@@ -39,7 +39,6 @@ public final class Customer implements Serializable {
         setCardNumber(cardNumber);
         setInvoice(0.0);
         setQuantity(0);
-        this.shoppingBasket = new ArrayList<Product>();
 
     }
 
@@ -107,7 +106,6 @@ public final class Customer implements Serializable {
                 + " "
                 + this.getLastName()
                 + " added to their purchase basket:");
-
         for (Product p: products) {
             this.shoppingBasket.add(p);
             invoice += p.getPrice();

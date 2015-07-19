@@ -15,6 +15,7 @@ public interface AbstarctDAO<T> {
     void showAllById();
     Set<T> getById(final Integer... ids);
     T getById(final Integer id);
+    Set<T> getAll();
     boolean update(final T... items);
     boolean remove(final T... items);
     boolean removeById(final Integer... ids);

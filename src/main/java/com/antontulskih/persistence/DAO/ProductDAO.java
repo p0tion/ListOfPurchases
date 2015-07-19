@@ -13,8 +13,6 @@ import com.antontulskih.domain.Product;
 import java.util.Set;
 
 public interface ProductDAO extends AbstarctDAO<Product> {
-    //    delete products
-    boolean remove(final Product... products);
     //    get by name
     Set<Product> getByName(final String... names);
     Product getByName(final String name);

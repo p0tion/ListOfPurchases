@@ -8,9 +8,9 @@
 
 package com.antontulskih.persistence.Implementation.JSON;
 
-import com.antontulskih.domain.Customer;
-import com.antontulskih.persistence.Implementation.Collection.CustomerDAO_Impl_Coll;
-import com.antontulskih.persistence.Implementation.XML.CustomerDAO_Impl_XML;
+import com.antontulskih.domain.Product;
+import com.antontulskih.persistence.Implementation.Collection.ProductDAO_Impl_Coll;
+import com.antontulskih.persistence.Implementation.XML.ProductDAO_Impl_XML;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 
@@ -21,21 +21,21 @@ import java.util.Set;
 
 import static java.lang.System.out;
 
-public final class CustomerDAO_Impl_JSON extends
-        CustomerDAO_Impl_XML {
+public final class ProductDAO_Impl_JSON extends
+        ProductDAO_Impl_XML {
 
-    public CustomerDAO_Impl_JSON() {
-        customerDAOImplColl = CustomerDAO_Impl_Coll.getCustomerDAOCollImpl();
-        CustomerDAO_Impl_Coll.getCustomerList().clear();
-        fileName = "customerList.json";
+    public ProductDAO_Impl_JSON() {
+        productDAOImplColl = ProductDAO_Impl_Coll.getProductDAOCollImpl();
+        ProductDAO_Impl_Coll.getProductList().clear();
+        fileName = "productList.json";
     }
 
     @Override
     public boolean writeToFile() {
-        out.println("\n*** Saving list of customers to " + fileName + " ***\n");
+        out.println("\n*** Saving list of products to " + fileName + " ***\n");
         try {
             XStream xStream = new XStream(new JettisonMappedXmlDriver());
-            xStream.toXML(CustomerDAO_Impl_Coll.getCustomerList(),
+            xStream.toXML(ProductDAO_Impl_Coll.getProductList(),
                     new FileOutputStream(fileName));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -45,12 +45,12 @@ public final class CustomerDAO_Impl_JSON extends
 
     @Override
     public boolean readFromFile() {
-        CustomerDAO_Impl_Coll.getCustomerList().clear();
-        out.println("\n***Loading list of orders from " + fileName + "***");
+        ProductDAO_Impl_Coll.getProductList().clear();
+        out.println("\n*** Loading list of products from " + fileName + " ***\n");
         try {
             XStream xStream = new XStream(new JettisonMappedXmlDriver());
-            CustomerDAO_Impl_Coll.getCustomerList().addAll(
-                    (Set<Customer>) xStream.fromXML(
+            ProductDAO_Impl_Coll.getProductList().addAll(
+                    (Set<Product>) xStream.fromXML(
                             new FileInputStream(fileName)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
