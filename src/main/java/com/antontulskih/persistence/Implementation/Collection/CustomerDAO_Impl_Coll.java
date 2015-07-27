@@ -10,8 +10,6 @@ package com.antontulskih.persistence.Implementation.Collection;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.DAO.CustomerDAO;
-import com.antontulskih.util.CustomerComparator.InvoiceSorterComparator;
-import com.antontulskih.util.CustomerFormattedTable;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -90,7 +88,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
-    public boolean removeById(final Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         Customer customerArray[] = new Customer[ids.length];
         int count = 0;
         for (Integer i: ids) {
@@ -108,6 +106,14 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         }
         remove(customerArray);
         return false;
+    }
+
+    @Override
+    public boolean removeAll() {
+        out.println("*** Removing all customers from the list of customers "
+                + "***");
+        customerList.clear();
+        return true;
     }
 
     @Override
@@ -131,7 +137,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getById(final Integer... ids) {
+    public Set<Customer> getByIds(final Integer... ids) {
         Set<Customer> set= new TreeSet<Customer>(new IdSorterComparator());
         for (Integer i: ids) {
             boolean isInList = false;
@@ -169,11 +175,6 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getAll() {
-        return customerList;
-    }
-
-    @Override
     public boolean update(Customer... customers) {
         for (Customer c: customers) {
             for (Customer d: customerList) {
@@ -195,32 +196,30 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
-    public void showAllById() {
-        out.println("\n*** Displaying the list of customers "
-                + "sorted by ID ***");
-        Set<Customer> idSortedOrdersList =
-                new TreeSet<Customer>(new IdSorterComparator());
-        idSortedOrdersList.addAll(customerList);
-        CustomerFormattedTable.printListOfCustomers(idSortedOrdersList);
+    public Set<Customer> getAllSortedById() {
+        out.println("\n*** Getting all customers from the list ordered "
+                + "by ID ***");
+        return customerList;
     }
 
     @Override
-    public void showAllByLastName() {
-        out.println("\n*** Displaying the list of customers "
-                + "sorted by last name ***");
-        Set<Customer> lastNameSortedOrdersList =
-                new TreeSet<Customer>(new LastNameSorterComparator());
-        lastNameSortedOrdersList.addAll(customerList);
-        CustomerFormattedTable.printListOfCustomers(lastNameSortedOrdersList);
+    public Set<Customer> getAllSortedByLastName() {
+        out.println("\n*** Getting all customers from the list ordered "
+                + "by last name ***");
+        Set<Customer> lastNameSortedSet = new TreeSet<Customer>(
+                new LastNameSorterComparator());
+        lastNameSortedSet.addAll(customerList);
+        return lastNameSortedSet;
     }
 
     @Override
-    public void showAllByInvoice() {
-        out.println("\n*** Displaying the list of customers "
-                + "sorted by invoice ***");
-        Set<Customer> invoiceSortedOrdersList =
-                new TreeSet<Customer>(new InvoiceSorterComparator());
-        invoiceSortedOrdersList.addAll(customerList);
-        CustomerFormattedTable.printListOfCustomers(invoiceSortedOrdersList);
+    public Set<Customer> getAllSortedByInvoice() {
+        out.println("\n*** Getting all customers from the list ordered "
+                + "by invoice***");
+        Set<Customer> lastNameSortedSet = new TreeSet<Customer>(
+                new LastNameSorterComparator());
+        lastNameSortedSet.addAll(customerList);
+        return null;
     }
+
 }

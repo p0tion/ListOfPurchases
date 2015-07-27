@@ -9,12 +9,9 @@
 package com.antontulskih.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class Product implements Serializable {
 
-    private static List<Product> allProducts = new ArrayList<Product>();
     private Integer id;
     private String name;
     private String description;
@@ -29,14 +26,6 @@ public final class Product implements Serializable {
         setName(name);
         setDescription(description);
         setPrice(price);
-        for (Product p: allProducts) {
-            if (this.getName().equals(p.getName())) {
-                throw new IllegalArgumentException("Product with such "
-                        + "product name already exists: "
-                        + this.getName() + ".");
-            }
-        }
-        allProducts.add(this);
     }
 
     public Integer getId() {

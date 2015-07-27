@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.antontulskih.util.CustomerComparator.IdSorterComparator;
-import static com.antontulskih.util.CustomerFormattedTable.*;
+import static com.antontulskih.util.CustomerComparator.*;
 import static java.lang.System.out;
 
 public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
@@ -36,6 +35,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                                 + "= customer_product_table.customer_id && "
                             + "product_table.product_id = "
                                 + "customer_product_table.product_id;";
+    final String anotherQuery = "SELECT product_id FROM "
+            + "customer_product_table WHERE customer_id=?;";
 
     @Override
     public boolean save(final Customer... customers) {
@@ -164,7 +165,7 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     }
 
     @Override
-    public boolean removeById(final Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         PreparedStatement ps = null;
         ResultSet rs;
         try {
@@ -209,9 +210,35 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     }
 
     @Override
+    public boolean removeAll() {
+        Statement st = null;
+        try {
+            out.println("*** Removing all customers from the list of "
+                    + "customers ***");
+            c = DriverManager.getConnection(url, user, password);
+            st = c.createStatement();
+            st.execute("DELETE FROM customer_product_table");
+            st.execute("DELETE FROM customer_table");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    @Override
     public Customer getByName(final String firstName, final String lastName) {
         PreparedStatement ps = null;
-        Statement st;
         ResultSet rs;
         Customer customer = new Customer();
         try {
@@ -229,18 +256,19 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
             customer.setFirstName(rs.getString("first_name"));
             customer.setLastName(rs.getString("last_name"));
             customer.setCardNumber(rs.getString("card_number"));
-            customer.setQuantity(rs.getInt("quantity"));
-            customer.setInvoice(rs.getDouble("invoice"));
-            if (customer.getQuantity() != 0) {
+            customer.setQuantity(0);
+            customer.setInvoice(0.0);
+            if (rs.getInt("quantity") != 0) {
                 ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
                 List<Integer> productIdsList = new ArrayList<Integer>();
-                st = c.createStatement();
-                rs = st.executeQuery(query);
-                while (rs.next()) {
-                    productIdsList.add(rs.getInt("product_id"));
+                ps = c.prepareStatement(anotherQuery);
+                ps.setInt(1, customer.getId());
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    productIdsList.add(rs2.getInt("product_id"));
                 }
                 customer.addProductToShoppingBasket(
-                        productDAOImp.getById(productIdsList.toArray(new
+                        productDAOImp.getByIds(productIdsList.toArray(new
                                 Integer[productIdsList.size()]))
                 );
             }
@@ -262,10 +290,9 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getById(final Integer... ids) {
+    public Set<Customer> getByIds(final Integer... ids) {
         Set<Customer> set = new TreeSet<Customer>(new IdSorterComparator());
         PreparedStatement ps = null;
-        Statement st;
         ResultSet rs;
         Customer customer;
         try {
@@ -284,19 +311,20 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 customer.setFirstName(rs.getString("first_name"));
                 customer.setLastName(rs.getString("last_name"));
                 customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(rs.getInt("quantity"));
-                customer.setInvoice(rs.getDouble("invoice"));
-                if (customer.getQuantity() != 0) {
+                customer.setQuantity(0);
+                customer.setInvoice(0.0);
+                if (rs.getInt("quantity") != 0) {
                     ProductDAO_Impl_JDBC productDAOImp =
                             new ProductDAO_Impl_JDBC();
                     List<Integer> productIdsList = new ArrayList<Integer>();
-                    st = c.createStatement();
-                    rs = st.executeQuery(query);
-                    while (rs.next()) {
-                        productIdsList.add(rs.getInt("product_id"));
+                    ps = c.prepareStatement(anotherQuery);
+                    ps.setInt(1, customer.getId());
+                    ResultSet rs2 = ps.executeQuery();
+                    while (rs2.next()) {
+                        productIdsList.add(rs2.getInt("product_id"));
                     }
                     customer.addProductToShoppingBasket(
-                            productDAOImp.getById(productIdsList.toArray(new
+                            productDAOImp.getByIds(productIdsList.toArray(new
                                     Integer[productIdsList.size()]))
                     );
                 }
@@ -322,7 +350,6 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     @Override
     public Customer getById(final Integer id) {
         PreparedStatement ps = null;
-        Statement st;
         ResultSet rs;
         Customer customer = new Customer();
         try {
@@ -339,18 +366,19 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
             customer.setFirstName(rs.getString("first_name"));
             customer.setLastName(rs.getString("last_name"));
             customer.setCardNumber(rs.getString("card_number"));
-            customer.setQuantity(rs.getInt("quantity"));
-            customer.setInvoice(rs.getDouble("invoice"));
-            if (customer.getQuantity() != 0) {
+            customer.setQuantity(0);
+            customer.setInvoice(0.0);
+            if (rs.getInt("quantity") != 0) {
                 ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
                 List<Integer> productIdsList = new ArrayList<Integer>();
-                st = c.createStatement();
-                rs = st.executeQuery(query);
-                while (rs.next()) {
-                    productIdsList.add(rs.getInt("product_id"));
+                ps = c.prepareStatement(anotherQuery);
+                ps.setInt(1, customer.getId());
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    productIdsList.add(rs2.getInt("product_id"));
                 }
                 customer.addProductToShoppingBasket(
-                        productDAOImp.getById(productIdsList.toArray(new
+                        productDAOImp.getByIds(productIdsList.toArray(new
                                 Integer[productIdsList.size()]))
                 );
             }
@@ -372,36 +400,148 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getAll() {
+    public Set<Customer> getAllSortedById() {
         Set<Customer> set = new TreeSet<Customer>(new IdSorterComparator());
         PreparedStatement ps = null;
         Statement st;
         ResultSet rs;
         Customer customer;
         try {
-            out.println("\n*** Getting all customers from the list ***");
+            out.println("\n*** Getting all customers from the list ordered "
+                    + "by ID ***");
             c = DriverManager.getConnection(url, user, password);
             st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM customer_table");
+            rs = st.executeQuery("SELECT * FROM customer_table;");
             while (rs.next()) {
                 customer = new Customer();
                 customer.setId(rs.getInt("customer_id"));
                 customer.setFirstName(rs.getString("first_name"));
                 customer.setLastName(rs.getString("last_name"));
                 customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(rs.getInt("quantity"));
-                customer.setInvoice(rs.getDouble("invoice"));
-                if (customer.getQuantity() != 0) {
+                customer.setQuantity(0);
+                customer.setInvoice(0.0);
+                if (rs.getInt("quantity") != 0) {
                     ProductDAO_Impl_JDBC productDAOImp =
                             new ProductDAO_Impl_JDBC();
                     List<Integer> productIdsList = new ArrayList<Integer>();
-                    st = c.createStatement();
-                    rs = st.executeQuery(query);
-                    while (rs.next()) {
-                        productIdsList.add(rs.getInt("product_id"));
+                    ps = c.prepareStatement(anotherQuery);
+                    ps.setInt(1, customer.getId());
+                    ResultSet rs2 = ps.executeQuery();
+                    while (rs2.next()) {
+                        productIdsList.add(rs2.getInt("product_id"));
                     }
                     customer.addProductToShoppingBasket(
-                            productDAOImp.getById(productIdsList.toArray(
+                            productDAOImp.getByIds(productIdsList.toArray(
+                                    new Integer[productIdsList.size()]))
+                    );
+                }
+                set.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Customer> getAllSortedByLastName() {
+        Set<Customer> set = new TreeSet<Customer>(new LastNameSorterComparator());
+        PreparedStatement ps = null;
+        Statement st;
+        ResultSet rs;
+        Customer customer;
+        try {
+            out.println("\n*** Getting all customers from the list ordered "
+                    + "by last name ***");
+            c = DriverManager.getConnection(url, user, password);
+            st = c.createStatement();
+            rs = st.executeQuery("SELECT * FROM customer_table;");
+            while (rs.next()) {
+                customer = new Customer();
+                customer.setId(rs.getInt("customer_id"));
+                customer.setFirstName(rs.getString("first_name"));
+                customer.setLastName(rs.getString("last_name"));
+                customer.setCardNumber(rs.getString("card_number"));
+                customer.setQuantity(0);
+                customer.setInvoice(0.0);
+                if (rs.getInt("quantity") != 0) {
+                    ProductDAO_Impl_JDBC productDAOImp =
+                            new ProductDAO_Impl_JDBC();
+                    List<Integer> productIdsList = new ArrayList<Integer>();
+                    ps = c.prepareStatement(anotherQuery);
+                    ps.setInt(1, customer.getId());
+                    ResultSet rs2 = ps.executeQuery();
+                    while (rs2.next()) {
+                        productIdsList.add(rs2.getInt("product_id"));
+                    }
+                    customer.addProductToShoppingBasket(
+                            productDAOImp.getByIds(productIdsList.toArray(
+                                    new Integer[productIdsList.size()]))
+                    );
+                }
+                set.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Customer> getAllSortedByInvoice() {
+        Set<Customer> set = new TreeSet<Customer>(new InvoiceSorterComparator());
+        PreparedStatement ps = null;
+        Statement st;
+        ResultSet rs;
+        Customer customer;
+        try {
+            out.println("\n*** Getting all customers from the list ordered "
+                    + "be invoice***");
+            c = DriverManager.getConnection(url, user, password);
+            st = c.createStatement();
+            rs = st.executeQuery("SELECT * FROM customer_table;");
+            while (rs.next()) {
+                customer = new Customer();
+                customer.setId(rs.getInt("customer_id"));
+                customer.setFirstName(rs.getString("first_name"));
+                customer.setLastName(rs.getString("last_name"));
+                customer.setCardNumber(rs.getString("card_number"));
+                customer.setQuantity(0);
+                customer.setInvoice(0.0);
+                if (rs.getInt("quantity") != 0) {
+                    ProductDAO_Impl_JDBC productDAOImp =
+                            new ProductDAO_Impl_JDBC();
+                    List<Integer> productIdsList = new ArrayList<Integer>();
+                    ps = c.prepareStatement(anotherQuery);
+                    ps.setInt(1, customer.getId());
+                    ResultSet rs2 = ps.executeQuery();
+                    while (rs2.next()) {
+                        productIdsList.add(rs2.getInt("product_id"));
+                    }
+                    customer.addProductToShoppingBasket(
+                            productDAOImp.getByIds(productIdsList.toArray(
                                     new Integer[productIdsList.size()]))
                     );
                 }
@@ -477,128 +617,5 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
             }
         }
         return true;
-    }
-
-    @Override
-    public void showAllById() {
-        Statement st = null;
-        ResultSet rs;
-        Customer customer = new Customer();
-        try {
-            System.out.println("\n*** Displaying the list of customers sorted "
-                    + "by ID ***");
-            c = DriverManager.getConnection(url, user, password);
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM customer_table ORDER BY "
-                    + "customer_id;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                customer.setId(rs.getInt("customer_id"));
-                customer.setFirstName(rs.getString("first_name"));
-                customer.setLastName(rs.getString("last_name"));
-                customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(rs.getInt("quantity"));
-                customer.setInvoice(rs.getDouble("invoice"));
-                printCustomer(customer);
-            }
-            printLine();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void showAllByLastName() {
-        Statement st = null;
-        ResultSet rs;
-        Customer customer = new Customer();
-        try {
-            System.out.println("\n*** Displaying the list of customers sorted "
-                    + "by last name ***");
-            c = DriverManager.getConnection(url, user, password);
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM customer_table ORDER BY "
-                    + "last_name;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                customer.setId(rs.getInt("customer_id"));
-                customer.setFirstName(rs.getString("first_name"));
-                customer.setLastName(rs.getString("last_name"));
-                customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(rs.getInt("quantity"));
-                customer.setInvoice(rs.getDouble("invoice"));
-                printCustomer(customer);
-            }
-            printLine();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void showAllByInvoice() {
-        Statement st = null;
-        ResultSet rs;
-        Customer customer = new Customer();
-        try {
-            System.out.println("\n*** Displaying the list of customers sorted "
-                    + "by invoice ***");
-            c = DriverManager.getConnection(url, user, password);
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM customer_table ORDER BY "
-                    + "invoice;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                customer.setId(rs.getInt("customer_id"));
-                customer.setFirstName(rs.getString("first_name"));
-                customer.setLastName(rs.getString("last_name"));
-                customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(rs.getInt("quantity"));
-                customer.setInvoice(rs.getDouble("invoice"));
-                printCustomer(customer);
-            }
-            printLine();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

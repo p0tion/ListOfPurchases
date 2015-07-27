@@ -82,11 +82,18 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     @Override
-    public boolean removeById(final Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         readFromFile();
         for (Integer i: ids) {
-            customerDAOImplColl.removeById(i);
+            customerDAOImplColl.removeByIds(i);
         }
+        return writeToFile();
+    }
+
+    @Override
+    public boolean removeAll() {
+        readFromFile();
+        customerDAOImplColl.removeAll();
         return writeToFile();
     }
 
@@ -97,9 +104,9 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getById(final Integer... ids) {
+    public Set<Customer> getByIds(final Integer... ids) {
         readFromFile();
-        return customerDAOImplColl.getById(ids);
+        return customerDAOImplColl.getByIds(ids);
     }
 
     @Override
@@ -109,9 +116,21 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     @Override
-    public Set<Customer> getAll() {
+    public Set<Customer> getAllSortedById() {
         readFromFile();
-        return customerDAOImplColl.getAll();
+        return customerDAOImplColl.getAllSortedById();
+    }
+
+    @Override
+    public Set<Customer> getAllSortedByLastName() {
+        readFromFile();
+        return customerDAOImplColl.getAllSortedByLastName();
+    }
+
+    @Override
+    public Set<Customer> getAllSortedByInvoice() {
+        readFromFile();
+        return customerDAOImplColl.getAllSortedByInvoice();
     }
 
     @Override
@@ -119,23 +138,5 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
         readFromFile();
         customerDAOImplColl.update(customers);
         return writeToFile();
-    }
-
-    @Override
-    public void showAllById() {
-        readFromFile();
-        customerDAOImplColl.showAllById();
-    }
-
-    @Override
-    public void showAllByLastName() {
-        readFromFile();
-        customerDAOImplColl.showAllByLastName();
-    }
-
-    @Override
-    public void showAllByInvoice() {
-        readFromFile();
-        customerDAOImplColl.showAllByInvoice();
     }
 }

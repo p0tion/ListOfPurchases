@@ -23,7 +23,7 @@ public final class CustomerFormattedTable {
 
     public static void printLine(){
         out.println("----------------------------------------------------------"
-                + "------------------");
+                + "------------------------------");
     }
 
     public static void printHeader() {

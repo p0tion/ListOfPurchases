@@ -14,8 +14,8 @@ import com.antontulskih.persistence.DAO.ProductDAO;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.antontulskih.util.ProductComparator.*;
-import static com.antontulskih.util.ProductFormattedTable.printListOfProducts;
+import static com.antontulskih.util.ProductComparator.IdSorterComparator;
+import static com.antontulskih.util.ProductComparator.NameSorterComparator;
 import static java.lang.System.out;
 
 public class ProductDAO_Impl_Coll implements ProductDAO {
@@ -66,7 +66,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getById(final Integer... ids) {
+    public Set<Product> getByIds(final Integer... ids) {
         Set<Product> set= new TreeSet<Product>(new IdSorterComparator());
         for (Integer i: ids) {
             boolean isInList = false;
@@ -102,8 +102,30 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getAll() {
+    public Set<Product> getAllSortedById() {
+        out.println("\n*** Getting all products from the list ordered "
+                + "by ID ***");
         return productList;
+    }
+
+    @Override
+    public Set<Product> getAllSortedByName() {
+        out.println("\n*** Getting all products from the list ordered "
+                + "by name ***");
+        Set<Product> nameSortedProductList = new TreeSet<Product>(
+                new NameSorterComparator());
+        nameSortedProductList.addAll(productList);
+        return nameSortedProductList;
+    }
+
+    @Override
+    public Set<Product> getAllSortedByPrice() {
+        out.println("\n*** Getting all products from the list ordered "
+                + "by price ***");
+        Set<Product> priceSortedProductList = new TreeSet<Product>(
+                new NameSorterComparator());
+        priceSortedProductList.addAll(productList);
+        return priceSortedProductList;
     }
 
     @Override
@@ -139,7 +161,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     }
 
     @Override
-    public boolean removeById(final Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         Product productArray[] = new Product[ids.length];
         int count = 0;
         for (Integer i: ids) {
@@ -160,7 +182,14 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getByName(final String... names) {
+    public boolean removeAll() {
+        out.println("*** Removing all products from the list of products ***");
+        productList.clear();
+        return true;
+    }
+
+    @Override
+    public Set<Product> getByNames(final String... names) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
         for (String n: names) {
             boolean isInList = false;
@@ -196,32 +225,4 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
         return null;
     }
 
-    @Override
-    public void showAllById() {
-        out.println("\n*** Displaying the list of products sorted by ID ***");
-        Set<Product> idSortedProductList =
-                new TreeSet<Product>(new IdSorterComparator());
-        idSortedProductList.addAll(productList);
-        printListOfProducts(idSortedProductList);
-    }
-
-    @Override
-    public void showAllByName() {
-        out.println("\n*** Displaying the list of products "
-                + "sorted by name ***");
-        Set<Product> nameSortedProductList =
-                new TreeSet<Product>(new NameSorterComparator());
-        nameSortedProductList.addAll(productList);
-        printListOfProducts(nameSortedProductList);
-    }
-
-    @Override
-    public void showAllByPrice() {
-        out.println("\n*** Displaying the list of products "
-                + "sorted by price ***");
-        Set<Product> priceSortedOrdersList =
-                new TreeSet<Product>(new PriceSorterComparator());
-        priceSortedOrdersList.addAll(productList);
-        printListOfProducts(priceSortedOrdersList);
-    }
 }

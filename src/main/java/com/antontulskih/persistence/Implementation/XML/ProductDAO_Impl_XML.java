@@ -78,18 +78,25 @@ public class ProductDAO_Impl_XML implements ProductDAO {
     }
 
     @Override
-    public boolean removeById(final Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         readFromFile();
         for (Integer i: ids) {
-            productDAOImplColl.removeById(i);
+            productDAOImplColl.removeByIds(i);
         }
         return writeToFile();
     }
 
     @Override
-    public Set<Product> getByName(final String... names) {
+    public boolean removeAll() {
         readFromFile();
-        return productDAOImplColl.getByName(names);
+        productDAOImplColl.removeAll();
+        return writeToFile();
+    }
+
+    @Override
+    public Set<Product> getByNames(final String... names) {
+        readFromFile();
+        return productDAOImplColl.getByNames(names);
     }
 
     @Override
@@ -99,9 +106,9 @@ public class ProductDAO_Impl_XML implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getById(final Integer... ids) {
+    public Set<Product> getByIds(final Integer... ids) {
         readFromFile();
-        return productDAOImplColl.getById(ids);
+        return productDAOImplColl.getByIds(ids);
     }
 
     @Override
@@ -111,9 +118,21 @@ public class ProductDAO_Impl_XML implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getAll() {
+    public Set<Product> getAllSortedById() {
         readFromFile();
-        return productDAOImplColl.getAll();
+        return productDAOImplColl.getAllSortedById();
+    }
+
+    @Override
+    public Set<Product> getAllSortedByName() {
+        readFromFile();
+        return productDAOImplColl.getAllSortedByName();
+    }
+
+    @Override
+    public Set<Product> getAllSortedByPrice() {
+        readFromFile();
+        return productDAOImplColl.getAllSortedByPrice();
     }
 
     @Override
@@ -122,23 +141,4 @@ public class ProductDAO_Impl_XML implements ProductDAO {
         productDAOImplColl.update(products);
         return writeToFile();
     }
-
-    @Override
-    public void showAllById() {
-        readFromFile();
-        productDAOImplColl.showAllById();
-    }
-
-    @Override
-    public void showAllByName() {
-        readFromFile();
-        productDAOImplColl.showAllByName();
-    }
-
-    @Override
-    public void showAllByPrice() {
-        readFromFile();
-        productDAOImplColl.showAllByPrice();
-    }
-
 }

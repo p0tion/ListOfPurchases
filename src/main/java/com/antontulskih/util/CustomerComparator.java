@@ -21,7 +21,7 @@ public final class CustomerComparator {
             implements Comparator<Customer>, Serializable {
         @Override
         public int compare(final Customer c1, final Customer c2) {
-            return c1.getId().compareTo(c2.getId());
+            return Integer.compare(c1.getId(), c2.getId());
         }
     }
 
@@ -29,7 +29,11 @@ public final class CustomerComparator {
             implements Comparator<Customer>, Serializable {
         @Override
         public int compare(final Customer c1, final Customer c2) {
-            return c1.getLastName().compareTo(c2.getLastName());
+            if (c1.getLastName().compareTo(c2.getLastName()) == 0) {
+                return Integer.compare(c1.getId(), c2.getId());
+            } else {
+                return c1.getLastName().compareTo(c2.getLastName());
+            }
         }
     }
 
@@ -37,7 +41,11 @@ public final class CustomerComparator {
             implements Comparator<Customer>, Serializable {
         @Override
         public int compare(final Customer c1, final Customer c2) {
-            return Double.compare(c1.getInvoice(), c2.getInvoice());
+            if (Double.compare(c1.getInvoice(), c2.getInvoice()) == 0) {
+                return Integer.compare(c1.getId(), c2.getId());
+            } else {
+                return Double.compare(c1.getInvoice(), c2.getInvoice());
+            }
         }
     }
 }

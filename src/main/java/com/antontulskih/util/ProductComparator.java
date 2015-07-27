@@ -28,7 +28,11 @@ public final class ProductComparator {
             implements Comparator<Product>, Serializable {
         @Override
         public int compare(Product p1, Product p2) {
-            return p1.getName().compareTo(p2.getName());
+            if (p1.getName().compareTo(p2.getName()) == 0) {
+                return Integer.compare(p1.getId(), p2.getId());
+            } else {
+                return p1.getName().compareTo(p2.getName());
+            }
         }
     }
 
@@ -36,7 +40,11 @@ public final class ProductComparator {
             implements Comparator<Product>, Serializable {
         @Override
         public int compare(Product p1, Product p2) {
-            return Double.compare(p1.getPrice(), p2.getPrice());
+            if (Double.compare(p1.getPrice(), p2.getPrice()) == 0) {
+                return Integer.compare(p1.getId(), p2.getId());
+            } else {
+                return Double.compare(p1.getPrice(), p2.getPrice());
+            }
         }
     }
 }

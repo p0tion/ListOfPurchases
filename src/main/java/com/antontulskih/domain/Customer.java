@@ -33,7 +33,7 @@ public final class Customer implements Serializable {
     public Customer(final String firstName,
                     final String lastName,
                     final String cardNumber) {
-        super();
+        this();
         setFirstName(firstName);
         setLastName(lastName);
         setCardNumber(cardNumber);
@@ -47,7 +47,12 @@ public final class Customer implements Serializable {
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        if ((id == null) || (id <= 0)) {
+            throw new IllegalArgumentException("Invalid ID value. Must be " +
+                    "greater than 0.");
+        } else {
+            this.id = id;
+        }
     }
 
     public String getFirstName() {
@@ -69,8 +74,8 @@ public final class Customer implements Serializable {
 
     public void setLastName(final String lastName) {
         if ((lastName == null) || (lastName.equals(""))) {
-            throw new IllegalArgumentException("Customers last name is"
-                    + " invalid.");
+            throw new IllegalArgumentException("Customers last name is "
+                    + "invalid.");
         } else {
             this.lastName = lastName.trim();
         }
@@ -109,6 +114,7 @@ public final class Customer implements Serializable {
         for (Product p: products) {
             this.shoppingBasket.add(p);
             invoice += p.getPrice();
+            invoice = (double)(Math.round(invoice * 100)) / 100;
             out.println("- " + p.getName());
         }
         quantity = this.shoppingBasket.size();

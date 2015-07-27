@@ -8,6 +8,7 @@
 
 package com.antontulskih.persistence.Implementation.JDBC;
 
+import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
 
@@ -15,8 +16,7 @@ import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.antontulskih.util.ProductComparator.IdSorterComparator;
-import static com.antontulskih.util.ProductFormattedTable.*;
+import static com.antontulskih.util.ProductComparator.*;
 import static java.lang.System.out;
 
 public final class ProductDAO_Impl_JDBC implements ProductDAO {
@@ -69,14 +69,15 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getAll() {
+    public Set<Product> getAllSortedById() {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
         Statement st = null;
         ResultSet rs;
         Product product;
         try {
             c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Getting all products from the list ***");
+            out.println("\n*** Getting all products from the list ordered "
+                    + "by ID ***");
             st = c.createStatement();
             rs = st.executeQuery("SELECT * FROM product_table;");
             while (rs.next()) {
@@ -105,7 +106,81 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getById(Integer... ids) {
+    public Set<Product> getAllSortedByName() {
+        Set<Product> set = new TreeSet<Product>(new NameSorterComparator());
+        Statement st = null;
+        ResultSet rs;
+        Product product;
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            out.println("\n*** Getting all products from the list ordered "
+                    + "by name ***");
+            st = c.createStatement();
+            rs = st.executeQuery("SELECT * FROM product_table;");
+            while (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                set.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Product> getAllSortedByPrice() {
+        Set<Product> set = new TreeSet<Product>(new PriceSorterComparator());
+        Statement st = null;
+        ResultSet rs;
+        Product product;
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            out.println("\n*** Getting all products from the list ordered "
+                    + "by price ***");
+            st = c.createStatement();
+            rs = st.executeQuery("SELECT * FROM product_table;");
+            while (rs.next()) {
+                product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("name"));
+                product.setDescription(rs.getString("description"));
+                product.setPrice(rs.getDouble("price"));
+                set.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return set;
+    }
+
+    @Override
+    public Set<Product> getByIds(Integer... ids) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
         PreparedStatement ps = null;
         ResultSet rs;
@@ -180,7 +255,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getByName(String... names) {
+    public Set<Product> getByNames(String... names) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
         PreparedStatement ps = null;
         ResultSet rs;
@@ -324,7 +399,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public boolean removeById(Integer... ids) {
+    public boolean removeByIds(Integer... ids) {
         PreparedStatement ps = null;
         ResultSet rs;
         try {
@@ -361,28 +436,21 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public void showAllById() {
+    public boolean removeAll() {
         Statement st = null;
-        ResultSet rs;
-        Product product = new Product();
+        CustomerDAO_Impl_JDBC customerDAOImpl = new CustomerDAO_Impl_JDBC();
         try {
+            out.println("*** Removing all products from the list of "
+                    + "products ***");
             c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Displaying the list of products sorted "
-                    + "by ID ***");
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM product_table ORDER BY "
-                    + "product_id;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                printProduct(product);
+            Set<Customer> customerList = customerDAOImpl.getAllSortedById();
+            for (Customer c: customerList) {
+                c.clearShoppingBasket();
+                customerDAOImpl.update(c);
             }
-            printLine();
+            st = c.createStatement();
+            st.execute("DELETE FROM customer_product_table");
+            st.execute("DELETE FROM product_table");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -397,83 +465,6 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public void showAllByName() {
-        Statement st = null;
-        ResultSet rs;
-        Product product = new Product();
-        try {
-            c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Displaying the list of products sorted "
-                    + "by name ***");
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM product_table ORDER BY "
-                    + "name;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                printProduct(product);
-            }
-            printLine();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void showAllByPrice() {
-        Statement st = null;
-        ResultSet rs;
-        Product product = new Product();
-        try {
-            c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Displaying the list of products sorted "
-                    + "by price ***");
-            st = c.createStatement();
-            rs = st.executeQuery("SELECT * FROM product_table ORDER BY "
-                    + "price;");
-            printLine();
-            printHeader();
-            printLine();
-            while (rs.next()) {
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                printProduct(product);
-            }
-            printLine();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (st != null) {
-                    st.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        return true;
     }
 }
