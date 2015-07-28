@@ -46,13 +46,15 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
            c = DriverManager.getConnection(url, user, password);
             for (Customer customer: customers) {
                 ps = c.prepareStatement("INSERT INTO customer_table"
-                     + "(first_name, last_name, card_number, quantity, invoice)"
-                     + "VALUES(?, ?, ?, ?, ?);");
+                     + "(first_name, last_name, card_number, quantity, invoice,"
+                     + " login, password) VALUES(?, ?, ?, ?, ?, ?, ?);");
                 ps.setString(1, customer.getFirstName());
                 ps.setString(2, customer.getLastName());
                 ps.setString(3, customer.getCardNumber());
                 ps.setInt(4, customer.getQuantity());
                 ps.setDouble(5, customer.getInvoice());
+                ps.setString(6, customer.getLogin());
+                ps.setString(7, customer.getPassword());
                 ps.executeUpdate();
                 ps = c.prepareStatement("SELECT customer_id, first_name,"
                         + "last_name FROM customer_table WHERE first_name=?"
@@ -61,11 +63,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 ps.setString(2, customer.getLastName());
                 rs = ps.executeQuery();
                 rs.next();
-                System.out.println("*** " + rs.getString("first_name")
-                        + " "
-                        + rs.getString("last_name")
-                        + " has been saved to the list of customers. ID - "
-                        + rs.getInt("customer_id") + " ***");
+                out.printf("%n*** %s %s has been saved to the list of "
+                                + "customers. ID - %d ***",
+                        rs.getString("first_name"), rs.getString("last_name"),
+                        rs.getInt("customer_id"));
                 customer.setId(rs.getInt("customer_id"));
                 if (customer.getQuantity() != 0) {
                     saveShoppingBasket(customer);
@@ -123,29 +124,25 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         try {
             c = DriverManager.getConnection(url, user, password);
             for (Customer customer: customers) {
+                Integer id = customer.getId();
                 ps = c.prepareStatement("SELECT customer_id, first_name,"
-                        + "last_name FROM customer_table WHERE first_name=?"
-                        + "AND last_name=?;");
-                ps.setString(1, customer.getFirstName());
-                ps.setString(2, customer.getLastName());
+                        + "last_name FROM customer_table WHERE customer_id=?;");
+                ps.setInt(1, id);
                 rs = ps.executeQuery();
                 rs.next();
                 if (customer.getQuantity() != 0) {
                     ps = c.prepareStatement("DELETE FROM customer_product_table"
                             + " WHERE customer_id=?;");
-                    ps.setInt(1, customer.getId());
+                    ps.setInt(1, id);
                     ps.execute();
                 }
                 ps = c.prepareStatement("DELETE FROM customer_table "
-                        + "WHERE first_name=? AND last_name=?;");
-                ps.setString(1, customer.getFirstName());
-                ps.setString(2, customer.getLastName());
-                ps.executeUpdate();
-                System.out.println("*** " + rs.getString("first_name")
-                        + " "
-                        + rs.getString("last_name")
-                        + " has been removed from the list of customers. ID - "
-                        + rs.getInt("customer_id") + " ***");
+                        + "WHERE customer_id=?;");
+                ps.setInt(1, id);
+                ps.execute();
+                out.printf("%n*** %s %s has been removed from the list of "
+                        + "customers. ID - %d ***", rs.getString("first_name"),
+                        rs.getString("last_name"), rs.getInt("customer_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -177,8 +174,12 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 ps.setInt(1, i);
                 rs = ps.executeQuery();
                 rs.next();
+                out.printf("%n*** %s %s has been removed from the list of "
+                                + "customers. ID - %d ***",
+                        rs.getString("first_name"), rs.getString("last_name"),
+                        rs.getInt("customer_id"));
                 if (rs.getInt("quantity") != 0) {
-                    ps = c.prepareStatement("DELETE * FROM "
+                    ps = c.prepareStatement("DELETE FROM "
                             + "customer_product_table WHERE customer_id=?;");
                     ps.setInt(1, i);
                     ps.executeUpdate();
@@ -187,10 +188,6 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                         + "WHERE customer_id=?;");
                 ps.setInt(1, i);
                 ps.executeUpdate();
-                System.out.println("*** " + rs.getString("first_name") + " "
-                       + rs.getString("last_name") + " has been removed "
-                       + " from the list of customers. ID - "
-                       + rs.getInt("customer_id") + " ***");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -213,7 +210,7 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     public boolean removeAll() {
         Statement st = null;
         try {
-            out.println("*** Removing all customers from the list of "
+            out.printf("%n*** Removing all customers from the list of "
                     + "customers ***");
             c = DriverManager.getConnection(url, user, password);
             st = c.createStatement();
@@ -249,15 +246,16 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
             ps.setString(2, lastName);
             rs = ps.executeQuery();
             rs.next();
-            out.println("*** Getting " + rs.getString("first_name")
-                    + " " + rs.getString("last_name")
-                    + " from the list of customers ***");
+            out.printf("%n*** Getting %s %s from the list of customers ***",
+                    rs.getString("first_name"), rs.getString("last_name"));
             customer.setId(rs.getInt("customer_id"));
             customer.setFirstName(rs.getString("first_name"));
             customer.setLastName(rs.getString("last_name"));
             customer.setCardNumber(rs.getString("card_number"));
             customer.setQuantity(0);
             customer.setInvoice(0.0);
+            customer.setLogin(rs.getString("login"));
+            customer.setPassword(rs.getString("password"));
             if (rs.getInt("quantity") != 0) {
                 ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
                 List<Integer> productIdsList = new ArrayList<Integer>();
@@ -292,57 +290,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     @Override
     public Set<Customer> getByIds(final Integer... ids) {
         Set<Customer> set = new TreeSet<Customer>(new IdSorterComparator());
-        PreparedStatement ps = null;
-        ResultSet rs;
-        Customer customer;
-        try {
-            c = DriverManager.getConnection(url, user, password);
-            for (Integer id: ids) {
-                customer = new Customer();
-                ps = c.prepareStatement("SELECT * FROM customer_table WHERE "
-                        + "customer_id=?;");
-                ps.setInt(1, id);
-                rs = ps.executeQuery();
-                rs.next();
-                out.println("*** Getting " + rs.getString("first_name")
-                        + " " + rs.getString("last_name")
-                        + " from the list of customers ***");
-                customer.setId(rs.getInt("customer_id"));
-                customer.setFirstName(rs.getString("first_name"));
-                customer.setLastName(rs.getString("last_name"));
-                customer.setCardNumber(rs.getString("card_number"));
-                customer.setQuantity(0);
-                customer.setInvoice(0.0);
-                if (rs.getInt("quantity") != 0) {
-                    ProductDAO_Impl_JDBC productDAOImp =
-                            new ProductDAO_Impl_JDBC();
-                    List<Integer> productIdsList = new ArrayList<Integer>();
-                    ps = c.prepareStatement(anotherQuery);
-                    ps.setInt(1, customer.getId());
-                    ResultSet rs2 = ps.executeQuery();
-                    while (rs2.next()) {
-                        productIdsList.add(rs2.getInt("product_id"));
-                    }
-                    customer.addProductToShoppingBasket(
-                            productDAOImp.getByIds(productIdsList.toArray(new
-                                    Integer[productIdsList.size()]))
-                    );
-                }
-                set.add(customer);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        for (Integer id: ids) {
+            set.add(getById(id));
         }
         return set;
     }
@@ -359,15 +308,16 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             rs.next();
-            out.println("*** Getting " + rs.getString("first_name")
-                    + " " + rs.getString("last_name")
-                    + " from the list of customers ***");
+            out.printf("%n*** Getting %s %s from the list of customers ***",
+                    rs.getString("first_name"), rs.getString("last_name"));
             customer.setId(rs.getInt("customer_id"));
             customer.setFirstName(rs.getString("first_name"));
             customer.setLastName(rs.getString("last_name"));
             customer.setCardNumber(rs.getString("card_number"));
             customer.setQuantity(0);
             customer.setInvoice(0.0);
+            customer.setLogin(rs.getString("login"));
+            customer.setPassword(rs.getString("password"));
             if (rs.getInt("quantity") != 0) {
                 ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
                 List<Integer> productIdsList = new ArrayList<Integer>();
@@ -407,7 +357,7 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         ResultSet rs;
         Customer customer;
         try {
-            out.println("\n*** Getting all customers from the list ordered "
+            out.printf("%n*** Getting all customers from the list ordered "
                     + "by ID ***");
             c = DriverManager.getConnection(url, user, password);
             st = c.createStatement();
@@ -420,6 +370,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 customer.setCardNumber(rs.getString("card_number"));
                 customer.setQuantity(0);
                 customer.setInvoice(0.0);
+                customer.setLogin(rs.getString("login"));
+                customer.setPassword(rs.getString("password"));
                 if (rs.getInt("quantity") != 0) {
                     ProductDAO_Impl_JDBC productDAOImp =
                             new ProductDAO_Impl_JDBC();
@@ -462,7 +414,7 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         ResultSet rs;
         Customer customer;
         try {
-            out.println("\n*** Getting all customers from the list ordered "
+            out.printf("%n*** Getting all customers from the list ordered "
                     + "by last name ***");
             c = DriverManager.getConnection(url, user, password);
             st = c.createStatement();
@@ -475,6 +427,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 customer.setCardNumber(rs.getString("card_number"));
                 customer.setQuantity(0);
                 customer.setInvoice(0.0);
+                customer.setLogin(rs.getString("login"));
+                customer.setPassword(rs.getString("password"));
                 if (rs.getInt("quantity") != 0) {
                     ProductDAO_Impl_JDBC productDAOImp =
                             new ProductDAO_Impl_JDBC();
@@ -517,8 +471,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         ResultSet rs;
         Customer customer;
         try {
-            out.println("\n*** Getting all customers from the list ordered "
-                    + "be invoice***");
+            out.printf("%n*** Getting all customers from the list ordered "
+                    + "by invoice***");
             c = DriverManager.getConnection(url, user, password);
             st = c.createStatement();
             rs = st.executeQuery("SELECT * FROM customer_table;");
@@ -530,6 +484,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 customer.setCardNumber(rs.getString("card_number"));
                 customer.setQuantity(0);
                 customer.setInvoice(0.0);
+                customer.setLogin(rs.getString("login"));
+                customer.setPassword(rs.getString("password"));
                 if (rs.getInt("quantity") != 0) {
                     ProductDAO_Impl_JDBC productDAOImp =
                             new ProductDAO_Impl_JDBC();
@@ -573,16 +529,19 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 if (customer.getId() > 0) {
                     ps = c.prepareStatement("UPDATE customer_table SET "
                             + "first_name=?, last_name=?, card_number=?, "
-                            + "quantity=?, invoice=? WHERE customer_id=?;");
+                            + "quantity=?, invoice=?, login=?, password=? "
+                            + "WHERE customer_id=?;");
                     ps.setString(1, customer.getFirstName());
                     ps.setString(2, customer.getLastName());
                     ps.setString(3, customer.getCardNumber());
                     ps.setInt(4, customer.getQuantity());
                     ps.setDouble(5, customer.getInvoice());
-                    ps.setInt(6, customer.getId());
+                    ps.setString(6, customer.getLogin());
+                    ps.setString(7, customer.getPassword());
+                    ps.setInt(8, customer.getId());
                     ps.executeUpdate();
-                    out.println("*** Updating " + customer.getFirstName()
-                            + " " + customer.getLastName() + " ***");
+                    out.printf("%n*** Updating %s %s ***", customer
+                            .getFirstName(), customer.getLastName());
                     ps = c.prepareStatement("DELETE FROM "
                             + "customer_product_table WHERE customer_id=?;");
                     ps.setInt(1, customer.getId());

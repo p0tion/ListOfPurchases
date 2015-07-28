@@ -8,10 +8,13 @@
 
 package com.antontulskih.domain;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 public final class Product implements Serializable {
 
+    @Id
     private Integer id;
     private String name;
     private String description;
@@ -34,8 +37,9 @@ public final class Product implements Serializable {
 
     public void setId(final Integer id) {
         if ((id == null) || (id <= 0)) {
-            throw new IllegalArgumentException("Invalid id value: " + id + ". "
-                    + "Must be greater than 0.");
+            String errorMessage = String.format("Invalid id value: %d. Must be "
+                    + "greater than 0.", id);
+            throw new IllegalArgumentException(errorMessage);
         } else {
             this.id = id;
         }
@@ -60,7 +64,7 @@ public final class Product implements Serializable {
     public void setDescription(final String description) {
         if (description == null) {
             throw new IllegalArgumentException("Product description is"
-                    + " invalid");
+                    + " invalid.");
         } else {
             this.description = description;
         }

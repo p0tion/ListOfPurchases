@@ -77,16 +77,20 @@ public final class CustomerFormattedTable {
         garlic.setId(5);
 
         Customer customer1 =
-                new Customer("Anton", "Tulskih", "3215987468487541");
+                new Customer("Anton", "Tulskih", "3215987468487541", "Anton",
+                        "Qw1234");
         customer1.setId(1);
         Customer customer2 =
-                new Customer("John", "Smith", "4444555511116666");
+                new Customer("John", "Smith", "4444555511116666",
+                        "John", "Qw1234");
         customer2.setId(2);
         Customer customer3 =
-                new Customer("Mickey", "Mouse", "8888999944448888");
+                new Customer("Mickey", "Mouse", "8888999944448888", "Mickey",
+                        "Qw1234");
         customer3.setId(3);
         Customer customer4 =
-                new Customer("Buz", "Lighter", "1111424482889099");
+                new Customer("Buz", "Lighter", "1111424482889099", "Buz",
+                        "Qw1234");
         customer4.setId(4);
 
         customer1.addProductToShoppingBasket(cheese, garlic, potato, tomato);

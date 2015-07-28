@@ -42,7 +42,7 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     public boolean writeToFile() {
-        out.println("\n*** Saving list of customers to " + fileName + " ***\n");
+        out.printf("%n*** Saving list of customers to %s ***%n", fileName);
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);
@@ -57,8 +57,7 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
 
     public boolean readFromFile() {
         CustomerDAO_Impl_Coll.getCustomerList().clear();
-        out.println("\n*** Loading list of customers from " + fileName
-                + " ***\n");
+        out.printf("%n*** Loading list of customers from %s ***%n", fileName);
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);

@@ -13,5 +13,6 @@ public enum StorageType {
     JDBC,
     JSON,
     SERIALIZATION,
-    XML
+    XML,
+    HIBERNATE
 }

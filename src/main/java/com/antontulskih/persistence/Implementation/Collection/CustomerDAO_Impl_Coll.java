@@ -43,30 +43,23 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
             if (customerList.size() == 0) {
                 c.setId(id++);
                 customerList.add(c);
-                out.println("*** " + c.getFirstName()
-                        + " "
-                        + c.getLastName()
-                        + " has been saved. ID - "
-                        + c.getId() + " ***");
+                out.printf("*** %s %s has been saved. ID - %d ***",
+                        c.getFirstName(), c.getLastName(), c.getId());
             } else {
                 for (Customer d: customerList) {
                     if ((c.getFirstName().equals(d.getFirstName()))
                             && (c.getLastName().equals(d.getLastName()))) {
-                        throw new IllegalArgumentException("Customer with such"
-                                + " first and last names already exists:"
-                                + d.getFirstName() + " "
-                                + d.getLastName() + ". "
-                                + "ID - " + d.getId());
+                        String errorMessage = String.format("Customer with such"
+                                + " first and last names already exists: %s "
+                                + "%s. ID - %d",
+                                d.getFirstName(), d.getLastName(), d.getId());
+                        throw new IllegalArgumentException(errorMessage);
                     }
                 }
                 c.setId(id++);
                 customerList.add(c);
-                out.println("*** " + c.getFirstName()
-                        + " "
-                        + c.getLastName()
-                        + " has been saved. ID - "
-                        + c.getId() + " ***");
-
+                out.printf("*** %s %s has been saved. ID - %d ***",
+                        c.getFirstName(), c.getLastName(), c.getId());
             }
         }
         return true;
@@ -76,12 +69,13 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     public boolean remove(final Customer... customers) {
         for (Customer c: customers) {
             if (customerList.contains(c)) {
-                out.println("*** " + c.getFirstName() + " "
-                        + c.getLastName() + " has been removed ***");
+                out.printf("*** %s %s has been removed ***",
+                        c.getFirstName(), c.getLastName());
                 customerList.remove(c);
             } else {
-                throw new IllegalArgumentException("There is no such customer: "
-                        + c.getFirstName() + " " + c.getLastName());
+                String errorMessage = String.format("There is no such customer:"
+                        + " %s %s", c.getFirstName(), c.getLastName());
+                throw new IllegalArgumentException(errorMessage);
             }
         }
         return true;
@@ -122,10 +116,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         for (Customer c: customerList) {
             if (c.getFirstName().equals(firstName)
                     && c.getLastName().equals(lastName)) {
-                out.println("*** Getting "
-                        + c.getFirstName()
-                        + " " + c.getLastName()
-                        + " ***");
+                out.printf("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName());
                 return c;
             }
         }
@@ -143,8 +135,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
             boolean isInList = false;
             for (Customer c: customerList) {
                 if (c.getId().equals(i)) {
-                    out.println("*** Getting customer with ID "
-                            + i + " from the list of customers ***");
+                    out.printf("*** Getting customer with ID %d from the list "
+                            + "of customers ***", i);
                     isInList = true;
                     set.add(c);
                 }
@@ -162,8 +154,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         boolean isInList = false;
         for (Customer c: customerList) {
             if (c.getId().equals(id)) {
-                out.println("*** Getting customer with ID "
-                        + id + " from the list of customers ***");
+                out.printf("*** Getting customer with ID %d from the list of "
+                        + "customers ***", id);
                 return c;
             }
         }
@@ -179,13 +171,13 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         for (Customer c: customers) {
             for (Customer d: customerList) {
                 if (c.getId().equals(d.getId())) {
-                    out.println("*** Updating "
-                            + c.getFirstName() + " " + c.getLastName()
-                            + " ***");
-
+                    out.printf("*** Updating %s %s ***",
+                            c.getFirstName(), c.getLastName());
                     d.setFirstName(c.getFirstName());
                     d.setLastName(c.getLastName());
                     d.setCardNumber(c.getCardNumber());
+                    d.setLogin(c.getLogin());
+                    d.setPassword(c.getPassword());
                     d.setQuantity(c.getQuantity());
                     d.setInvoice(c.getInvoice());
                     d.setShoppingBasket(c.getShoppingBasket());

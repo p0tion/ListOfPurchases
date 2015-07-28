@@ -42,24 +42,21 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
             if (productList.size() == 0) {
                 p.setId(id++);
                 productList.add(p);
-                out.println("*** " + p.getName()
-                        + " has been saved. ID - "
-                        + p.getId() + " ***");
+                out.printf("%n*** %s has been saved. ID - %d ***",
+                        p.getName(), p.getId());
             } else {
                 for (Product d: productList) {
                     if (p.getName().equals(d.getName())) {
-                        throw new IllegalArgumentException("Product with such"
-                                + " name already exists:"
-                                + d.getName() + " "
-                                + "ID - " + d.getId());
+                        String errorMessage = String.format("Product with such"
+                                + " name already exists: %s. ID - %d",
+                                d.getName(), d.getId());
+                        throw new IllegalArgumentException(errorMessage);
                     }
                 }
                 p.setId(id++);
                 productList.add(p);
-                out.println("*** " + p.getName()
-                        + " "
-                        + " has been saved. ID - "
-                        + p.getId() + " ***");
+                out.printf("%n*** %s has been saved. ID - %d",
+                        p.getName(), p.getId());
             }
         }
         return true;
@@ -72,8 +69,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
             boolean isInList = false;
             for (Product p: productList) {
                 if (p.getId().equals(i)) {
-                    out.println("*** Getting product with ID "
-                            + i + " from the list of products ***");
+                    out.printf("%n*** Getting product with ID %d from the list "
+                            + "of products ***", i);
                     isInList = true;
                     set.add(p);
                 }
@@ -90,8 +87,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public Product getById(final Integer id) {
         for (Product p: productList) {
             if (p.getId().equals(id)) {
-                out.println("*** Getting product with ID "
-                        + id + " from the list of products ***");
+                out.printf("%n*** Getting product with ID %d from the list of "
+                                + "products ***", id);
                 return p;
             } else {
                 throw new IllegalArgumentException("There is no product with "
@@ -103,14 +100,14 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public Set<Product> getAllSortedById() {
-        out.println("\n*** Getting all products from the list ordered "
+        out.printf("%n*** Getting all products from the list ordered "
                 + "by ID ***");
         return productList;
     }
 
     @Override
     public Set<Product> getAllSortedByName() {
-        out.println("\n*** Getting all products from the list ordered "
+        out.printf("%n*** Getting all products from the list ordered "
                 + "by name ***");
         Set<Product> nameSortedProductList = new TreeSet<Product>(
                 new NameSorterComparator());
@@ -120,7 +117,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public Set<Product> getAllSortedByPrice() {
-        out.println("\n*** Getting all products from the list ordered "
+        out.printf("%n*** Getting all products from the list ordered "
                 + "by price ***");
         Set<Product> priceSortedProductList = new TreeSet<Product>(
                 new NameSorterComparator());
@@ -133,9 +130,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
         for (Product p: products) {
             for (Product d: productList) {
                 if (p.getId().equals(d.getId())) {
-                    out.println("*** Updating "
-                            + p.getName() + " ***");
-
+                    out.printf("%n*** Updating %s ***", p.getName());
                     d.setName(p.getName());
                     d.setDescription(p.getDescription());
                     d.setPrice(p.getPrice());
@@ -149,8 +144,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public boolean remove(final Product... products) {
         for (Product p: products) {
             if (productList.contains(p)) {
-                out.println("*** " + p.getName() + " has been removed from "
-                        + " the list of products ***");
+                out.printf("%n*** %s has been removed from the list of "
+                        + "products ***", p.getName());
                 productList.remove(p);
             } else {
                 throw new IllegalArgumentException("There is no product with "
@@ -183,7 +178,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public boolean removeAll() {
-        out.println("*** Removing all products from the list of products ***");
+        out.printf("%n*** Removing all products from the list of products ***");
         productList.clear();
         return true;
     }
@@ -195,8 +190,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
             boolean isInList = false;
             for (Product p: productList) {
                 if (p.getName().equals(n)) {
-                    out.println("*** Getting " + p.getName() + " from the list "
-                            + "of products ***");
+                    out.printf("%n*** Getting %s from the list "
+                            + "of products ***", p.getName());
                     isInList = true;
                     set.add(p);
                 }
@@ -214,7 +209,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
         boolean isInList = false;
         for (Product p: productList) {
             if (p.getName().equals(name)) {
-                out.println("*** Getting " + p.getName() + " ***");
+                out.printf("%n*** Getting %s ***", p.getName());
                 return p;
             }
         }

@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS `listofpurchases`.`customer_table` (
   `card_number` VARCHAR(45) NOT NULL,
   `quantity` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   `invoice` FLOAT UNSIGNED NOT NULL DEFAULT '0',
+  `login` VARCHAR(45) NOT NULL UNIQUE,
+  `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`customer_id`),
   UNIQUE INDEX `full_name` (`first_name`, `last_name`));
 

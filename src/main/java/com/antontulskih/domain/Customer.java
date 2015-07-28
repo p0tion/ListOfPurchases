@@ -8,6 +8,9 @@
 
 package com.antontulskih.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,30 +21,37 @@ import java.util.regex.Pattern;
 import static com.antontulskih.util.ProductFormattedTable.*;
 import static java.lang.System.out;
 
+@Entity
 public final class Customer implements Serializable {
 
+    @Id
     private Integer id;
     private String firstName;
     private String lastName;
     private String cardNumber;
     private Integer quantity;
     private Double invoice;
+    private String login;
+    private String password;
+    @Transient
     private List<Product> shoppingBasket;
 
     public Customer() { this.shoppingBasket = new ArrayList<Product>(); }
 
     public Customer(final String firstName,
                     final String lastName,
-                    final String cardNumber) {
+                    final String cardNumber,
+                    final String login,
+                    final String password) {
         this();
         setFirstName(firstName);
         setLastName(lastName);
         setCardNumber(cardNumber);
+        setLogin(login);
+        setPassword(password);
         setInvoice(0.0);
         setQuantity(0);
-
     }
-
     public Integer getId() {
         return id;
     }
@@ -106,15 +116,11 @@ public final class Customer implements Serializable {
     }
 
     public void addProductToShoppingBasket(final Product... products) {
-        out.println("\n***");
-        out.println(this.getFirstName()
-                + " "
-                + this.getLastName()
-                + " added to their purchase basket:");
+        out.printf("%n%n*** %s %s added to their purchase basket:%n",
+                this.getFirstName(), this.getLastName());
         for (Product p: products) {
             this.shoppingBasket.add(p);
             invoice += p.getPrice();
-            invoice = (double)(Math.round(invoice * 100)) / 100;
             out.println("- " + p.getName());
         }
         quantity = this.shoppingBasket.size();
@@ -122,8 +128,8 @@ public final class Customer implements Serializable {
     }
 
     public void showShoppingBasket() {
-        out.println("\n*** Displaying shopping basket of "
-                + this.getFirstName() + " " + this.getLastName() + " ***");
+        out.printf("%n*** Displaying shopping basket of %s %s ***%n",
+                this.getFirstName(), this.getLastName());
         printLine();
         printHeader();
         printLine();
@@ -159,42 +165,82 @@ public final class Customer implements Serializable {
     }
 
     public void clearShoppingBasket() {
-        out.println("*** Clearing shopping basket of "
-                + this.getFirstName() + " " + this.getLastName() + " ***");
+        out.printf("%n*** Clearing shopping basket of %s %s ***",
+                this.getFirstName(), this.getLastName());
         this.invoice = 0.0;
         this.quantity = 0;
         shoppingBasket.clear();
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        if (login == null) {
+            throw new IllegalArgumentException("Customers login is "
+                    + "invalid.");
+        }
+        String validationExpression = "[A-Za-z0-9_]{2,15}";
+        Pattern pattern = Pattern.compile(validationExpression);
+        Matcher matcher = pattern.matcher(login);
+        if ((login.equals("")) || (!matcher.matches())) {
+            throw new IllegalArgumentException("Customers login is "
+                    + "invalid.");
+        } else {
+            this.login = login.trim();
+        }
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        if (password == null) {
+            throw new IllegalArgumentException("Password is invalid.");
+        }
+        String validationExpression = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}";
+        Pattern pattern = Pattern.compile(validationExpression);
+        Matcher matcher = pattern.matcher(password);
+        if ((password.equals("")) || (!matcher.matches())) {
+            throw new IllegalArgumentException("Password is invalid.");
+        } else {
+            this.password = password.trim();
+        }
+    }
+
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if ((o == null) || (getClass() != o.getClass())) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Customer customer = (Customer) o;
 
-        if (!cardNumber.equals(customer.cardNumber)) {
-            return false;
-        }
-        if (!firstName.equals(customer.firstName)) {
-            return false;
-        }
-        if (!lastName.equals(customer.lastName)) {
-            return false;
-        }
+        if (!cardNumber.equals(customer.cardNumber)) return false;
+        if (!firstName.equals(customer.firstName)) return false;
+        if (!id.equals(customer.id)) return false;
+        if (!invoice.equals(customer.invoice)) return false;
+        if (!lastName.equals(customer.lastName)) return false;
+        if (!login.equals(customer.login)) return false;
+        if (!password.equals(customer.password)) return false;
+        if (!quantity.equals(customer.quantity)) return false;
+        if (!shoppingBasket.equals(customer.shoppingBasket)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = firstName.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + firstName.hashCode();
         result = 31 * result + lastName.hashCode();
         result = 31 * result + cardNumber.hashCode();
+        result = 31 * result + quantity.hashCode();
+        result = 31 * result + invoice.hashCode();
+        result = 31 * result + login.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + shoppingBasket.hashCode();
         return result;
     }
 

@@ -41,7 +41,7 @@ public class ProductDAO_Impl_XML implements ProductDAO {
     }
 
     public boolean writeToFile() {
-        out.println("\n*** Saving list of products to " + fileName + " ***\n");
+        out.printf("%n*** Saving list of products to %s ***%n", fileName);
         try {
             XStream xStream = new XStream();
             xStream.alias("Product", Product.class);
@@ -54,8 +54,7 @@ public class ProductDAO_Impl_XML implements ProductDAO {
     }
 
     public boolean readFromFile() {
-        out.println("\n*** Loading list of products from " + fileName
-                + " ***\n");
+        out.printf("%n*** Loading list of products from ***%n", fileName);
         try {
             XStream xStream = new XStream();
             xStream.alias("Product", Product.class);

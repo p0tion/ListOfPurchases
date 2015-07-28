@@ -28,7 +28,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
 
 
     @Override
-    public boolean save(Product... products) {
+    public boolean save(final Product... products) {
         PreparedStatement ps = null;
         ResultSet rs;
         try {
@@ -46,9 +46,9 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 ps.setString(1, product.getName());
                 rs = ps.executeQuery();
                 rs.next();
-                out.println("*** " + rs.getString("name")
-                        + " has been saved to the list of products. ID - "
-                        + rs.getInt("product_id") + " ***");
+                out.printf("%n*** %s has been saved to the list of products. "
+                                + "ID - %d ***",
+                        rs.getString("name"), rs.getInt("product_id"));
                 product.setId(rs.getInt("product_id"));
             }
         } catch (SQLException e) {
@@ -180,47 +180,16 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getByIds(Integer... ids) {
+    public Set<Product> getByIds(final Integer... ids) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
-        PreparedStatement ps = null;
-        ResultSet rs;
-        Product product;
-        try {
-            c = DriverManager.getConnection(url, user, password);
-            for (Integer id: ids) {
-                product = new Product();
-                ps = c.prepareStatement("SELECT * FROM product_table WHERE "
-                        + "product_id=?;");
-                ps.setInt(1, id);
-                rs = ps.executeQuery();
-                rs.next();
-                out.println("*** Getting " + rs.getString("name")
-                        + " from the list of products ***");
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                set.add(product);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        for (Integer id: ids) {
+            set.add(getById(id));
         }
         return set;
     }
 
     @Override
-    public Product getById(Integer id) {
+    public Product getById(final Integer id) {
         PreparedStatement ps = null;
         ResultSet rs;
         Product product = new Product();
@@ -231,8 +200,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             rs.next();
-            out.println("*** Getting " + rs.getString("name")
-                    + " from the list of products ***");
+            out.printf("%n*** Getting %s from the list of products ***",
+                    rs.getString("name"));
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
@@ -255,47 +224,16 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public Set<Product> getByNames(String... names) {
+    public Set<Product> getByNames(final String... names) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
-        PreparedStatement ps = null;
-        ResultSet rs;
-        Product product;
-        try {
-            c = DriverManager.getConnection(url, user, password);
-            for (String name: names) {
-                product = new Product();
-                ps = c.prepareStatement("SELECT * FROM product_table WHERE "
-                        + "name=?;");
-                ps.setString(1, name);
-                rs = ps.executeQuery();
-                rs.next();
-                out.println("*** Getting " + rs.getString("name")
-                        + " from the list of products ***");
-                product.setId(rs.getInt("product_id"));
-                product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
-                set.add(product);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        for (String name: names) {
+            set.add(getByName(name));
         }
         return set;
     }
 
     @Override
-    public Product getByName(String name) {
+    public Product getByName(final String name) {
         PreparedStatement ps = null;
         ResultSet rs;
         Product product = new Product();
@@ -306,8 +244,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             ps.setString(1, name);
             rs = ps.executeQuery();
             rs.next();
-            out.println("*** Getting " + rs.getString("name")
-                    + " from the list of products ***");
+            out.printf("%n*** Getting %s from the list of products ***",
+                    rs.getString("name"));
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
@@ -330,7 +268,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public boolean update(Product... products) {
+    public boolean update(final Product... products) {
         PreparedStatement ps = null;
         try {
             c = DriverManager.getConnection(url, user, password);
@@ -344,7 +282,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                     ps.setDouble(3, product.getPrice());
                     ps.setInt(4, product.getId());
                     ps.executeUpdate();
-                    out.println("*** Updating " + product.getName() + " ***");
+                    out.printf("%n*** Updating %s ***", product.getName());
                 } else {
                     throw new IllegalArgumentException("There is no product in "
                             + "the list with such ID - " + product.getId());
@@ -368,18 +306,23 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public boolean remove(Product... products) {
+    public boolean remove(final Product... products) {
         PreparedStatement ps = null;
         try {
             c = DriverManager.getConnection(url, user, password);
             for (Product product: products) {
+                Integer id = product.getId();
+                String name = product.getName();
+                ps = c.prepareStatement("DELETE FROM customer_product_table "
+                        + "WHERE product_id=?;");
+                ps.setInt(1, id);
+                ps.execute();
                 ps = c.prepareStatement("DELETE FROM product_table WHERE "
                         + "product_id=?;");
-                ps.setInt(1, product.getId());
+                ps.setInt(1, id);
                 ps.execute();
-                out.println("*** " + product.getName() + " has been removed "
-                        + "from the list of products. ID - "
-                        + product.getId() + " ***");
+                out.printf("%n*** %s has been removed from the list of "
+                        + "products. ID - %d ***", name, id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -399,7 +342,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     }
 
     @Override
-    public boolean removeByIds(Integer... ids) {
+    public boolean removeByIds(final Integer... ids) {
         PreparedStatement ps = null;
         ResultSet rs;
         try {
@@ -410,13 +353,16 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 ps.setInt(1, id);
                 rs = ps.executeQuery();
                 rs.next();
+                ps = c.prepareStatement("DELETE FROM customer_product_table "
+                        + "WHERE product_id=?;");
+                ps.setInt(1, id);
+                ps.execute();
                 ps = c.prepareStatement("DELETE FROM product_table WHERE "
                         + "product_id=?;");
                 ps.setInt(1, id);
                 ps.execute();
-                out.println("*** " + rs.getString("name") + " has been "
-                        + "removed from the list of products. ID - "
-                        + id + " ***");
+                out.printf("%n*** %s has been removed from the list of "
+                        + "products. ID - %d ***", rs.getString("name"), id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -440,7 +386,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
         Statement st = null;
         CustomerDAO_Impl_JDBC customerDAOImpl = new CustomerDAO_Impl_JDBC();
         try {
-            out.println("*** Removing all products from the list of "
+            out.printf("%n*** Removing all products from the list of "
                     + "products ***");
             c = DriverManager.getConnection(url, user, password);
             Set<Customer> customerList = customerDAOImpl.getAllSortedById();

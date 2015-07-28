@@ -24,11 +24,14 @@ public abstract class DAO_FactoryInitializer {
                 return new XML_DAO_Factory();
             case SERIALIZATION:
                 return new SerializationDAO_Factory();
+            case HIBERNATE:
+                return new HibernateDAO_Factory();
             default:
                 throw new IllegalArgumentException("Parameter must be either "
                         + StorageType.COLLECTION + ", "
                         + StorageType.JSON + ", "
                         + StorageType.JDBC + ", "
+                        + StorageType.HIBERNATE + ", "
                         + StorageType.XML + " or "
                         + StorageType.SERIALIZATION + ".");
         }
