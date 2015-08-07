@@ -11,90 +11,96 @@
     <link href="../css/main.css" type="text/css" rel="Stylesheet"/>
 </head>
 <body onload="initialDefaultSortValues(sortCustomersSelect, sortProductsSelect)">
-    <p>${customer.firstName} ${customer.lastName} <a id="logOutText" href="">
-        (log out)</a> </p>
-    <p id="sortText1">Sort customer table by </p>
-    <p id="sortText2">Sort product table by </p>
-    <p><select class="sortSelect" id="sortCustomersSelect">
-        <option value="id">ID</option>
-        <option value="lastName">Last name</option>
-        <option value="invoice">Invoice</option>
-    </select></p>
-    <p><select class="sortSelect" id="sortProductsSelect">
+    <div class="logOut"><a href="/editCustomers">${user.firstName}
+     ${user.lastName}</a> <a
+            id="logOutText" href="${pageContext.request.contextPath}/signIn">(log out)</a> </div>
+    <form method="post">
+    <p id="sortText1" ${hideFromUser}>Sort customers by </p>
+        <p ${hideFromUser}><select class="sortSelect" id="sortCustomersSelect"
+                    name="sortCustomer">
+            <option value="id">ID</option>
+            <option value="lastName">Last name</option>
+            <option value="invoice">Invoice</option>
+        </select></p>
+    <p id="sortText2">Sort products by </p>
+    <p><select class="sortSelect" id="sortProductsSelect" name="sortProduct">
         <option value="id">ID</option>
         <option value="name">Name</option>
         <option value="price">Price</option>
     </select></p>
-    <p><input id="sortButton" type="submit" value="Sort"
-              onclick="sortTables(sortCustomersSelect,
-    sortProductsSelect)"></p>
+    <p><input id="sortButton" type="submit" value="Sort"/></p>
+    </form>
     <a id="hrefEditCustomerTable"
-       href="${pageContext.request.contextPath}/jsp/editCustomers">edit
+       href="${pageContext.request.contextPath}/editCustomers" ${hideFromUser}>edit
     </a>
-    <table class="tables" id="customerTable" border="1" cellpadding="3" cellspacing="1">
-        <caption><span style="font-size:20px;">Customers Table</span></caption>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Card Number</th>
-                <th>Quantity</th>
-                <th>Invoice</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="i" items="${customerList}">
-                <tr>
-                    <td>${i.id}</td>
-                    <td>${i.firstName}</td>
-                    <td>${i.lastName}</td>
-                    <td>${i.cardNumber}</td>
-                    <td>${i.quantity}</td>
-                    <td>${i.invoice}</td>
-                    <td class="hiddenTd">
-                        <c:if test="${i.quantity == 0}">
-                            <a title="Add products to the shopping basket"
-                               href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
-                                add
-                            </a>
-                        </c:if>
-                        <c:if test="${i.quantity > 0}">
-                            <a title="Edit shopping basket"
-                               href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
-                                edit
-                            </a>
-                        </c:if>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-    <a id="hrefEditProductTable" href="${pageContext.request.contextPath}/jsp/editProducts">edit
+    <a id="hrefEditProductTable"
+       href="${pageContext.request.contextPath}/editProducts"
+       ${hideFromUser}>edit
     </a>
-    <table class="tables" id="productTable" border="1" cellpadding="3"
-           cellspacing="1">
-        <caption><span style="font-size:20px;">Products Table</span></caption>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th width="138">Name</th>
-                <th width="138">Description</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="i" items="${productList}">
-                <tr>
-                    <td>${i.id}</td>
-                    <td>${i.name}</td>
-                    <td>${i.description}</td>
-                    <td>${i.price}</td>
+    <form class="showCustProdForm">
+        <table class="tables" border="1" cellpadding="3" cellspacing="1">
+            <caption><span style="font-size:20px;">${tableLabel}</span></caption>
+            <thead>
+                <tr style="font-size: 10pt">
+                    <th ${hideFromUser}>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Card Number</th>
+                    <th>Quantity</th>
+                    <th>Invoice</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:forEach var="i" items="${customerList}">
+                    <tr>
+                        <td ${hideFromUser}>${i.id}</td>
+                        <td>${i.firstName}</td>
+                        <td>${i.lastName}</td>
+                        <td>${i.cardNumber}</td>
+                        <td>${i.quantity}</td>
+                        <td>${i.invoice}</td>
+                        <td class="hiddenTd">
+                            <c:if test="${i.quantity == 0}">
+                                <a title="Add products to the shopping basket"
+                                   href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
+                                    add
+                                </a>
+                            </c:if>
+                            <c:if test="${i.quantity > 0}">
+                                <a title="Edit shopping basket"
+                                   href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
+                                    edit
+                                </a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
 
+        <table class="tables" id="productTable" border="1" cellpadding="3"
+               cellspacing="1">
+            <caption><span style="font-size:20px;">Products Table</span></caption>
+            <thead>
+                <tr style="font-size: 10pt">
+                    <th>ID</th>
+                    <th width="138">Name</th>
+                    <th width="138">Description</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="i" items="${productList}">
+                    <tr>
+                        <td>${i.id}</td>
+                        <td>${i.name}</td>
+                        <td>${i.description}</td>
+                        <td>${i.price}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </form>
 </body>
 <script>
     function sortTables(selectCustomers, selectProducts) {

@@ -2,16 +2,16 @@ package com.antontulskih.service;
 
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
-import com.antontulskih.persistence.Implementation.JDBC.ProductDAO_Impl_JDBC;
+import com.antontulskih.persistence.Implementation.Hibernate.ProductDAO_Impl_Hibernate;
 
 import java.util.Set;
 
 /**
- * @author Tulskih Anton
- * @{NAME} 20.07.2015
- */
+* @author Tulskih Anton
+* @{NAME} 20.07.2015
+*/
 public class ProductService {
-    private ProductDAO productDAO = new ProductDAO_Impl_JDBC();
+    private ProductDAO productDAO = new ProductDAO_Impl_Hibernate();
 
     public boolean save(Product... products) {
         return productDAO.save(products);

@@ -17,7 +17,6 @@ import com.antontulskih.persistence.DAO_Factory.StorageType;
 
 import static com.antontulskih.util.CustomerFormattedTable.printListOfCustomers;
 import static com.antontulskih.util.CustomerFormattedTable.printOneCustomer;
-import static com.antontulskih.util.ProductFormattedTable.printListOfProducts;
 
 final class App {
 
@@ -51,6 +50,17 @@ final class App {
                 "Celine", "Qw1234");
         Customer customer8 = new Customer("Darth", "Vader", "4444555599992222",
                 "Darth", "Qw1234");
+        Customer customer9 = new Customer("Angelina", "Jolie",
+                "8888999977774444", "Angelina", "Qw1234");
+        Customer customer10 = new Customer("Johny", "Depp", "7894563215879564",
+                "Johny", "Qw1234");
+        Customer customer11 = new Customer("Brad", "Pitt", "7895136849761584",
+                "Brad", "Qw1234");
+        Customer customer12 = new Customer("Bradley", "Cooper",
+                "9561358745896547", "Bradley", "Qw1234");
+        Customer customer13 = new Customer("George", "Clooney",
+                "9874563214587458", "George", "Qw1234");
+
 
         DAO_AbstractFactory daoAbstractFactory;
         switch(args[0]) {
@@ -89,84 +99,145 @@ final class App {
                 break;
         }
 
-//        SessionFactory sf = HibernateUtil.getSessionFactory();
-//        Session session = sf.openSession();
-//        System.out.println("session opened");
-//        session.beginTransaction();
-//        session.save(new com.antontulskih.domain.Customer("Bryan", "SHNAPS",
-//                "7777888899994444", "kuzya", "Qw1234"));
-//        String hql = "from Customer where firstName = :name";
-//        Query query = session.createQuery(hql);
-//        query.setString("name","Bryan");
-//        Customer customer = (Customer) query.uniqueResult();
-//        System.out.println(customer);
-//        session.getTransaction().commit();
-//        session.close();
-//        System.out.println("session closed");
-
         CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();
         ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
 
-        customerDAOImpl.save(customer1, customer2, customer3, customer4,
-                customer5, customer6, customer7, customer8);
+//        customerDAOImpl.save(customer1, customer2, customer3, customer4,
+//                customer5, customer6, customer7, customer8, customer9,
+//                customer10, customer11, customer12, customer13);
 
-        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//        productDAOImpl.save(potato, cucumber, bread, minWater, tomato, cheese,
+//                garlic, nuts, saladPepper);
 
-        productDAOImpl.save(potato, cucumber, garlic, cheese, minWater, nuts,
-                tomato, bread, saladPepper);
+        Customer customer = customerDAOImpl.getById(200);
 
-        customer6.addProductToShoppingBasket(
-                productDAOImpl.getByNames("Bread", "Nuts", "Cheese", "Tomato")
+        printOneCustomer(customer);
+
+        customer.showShoppingBasket();
+
+        customer.addProductToShoppingBasket(
+                productDAOImpl.getByIds(75, 76, 82)
         );
 
-        customer4.addProductToShoppingBasket(
-                productDAOImpl.getAllSortedById()
-        );
+        customer.showShoppingBasket();
 
-        customerDAOImpl.update(customer1, customer6, customer4);
+        customerDAOImpl.update(customer);
 
-        printListOfCustomers(customerDAOImpl.getAllSortedById());
+        printListOfCustomers(customerDAOImpl.getAllSortedByInvoice());
 
-        printListOfProducts(productDAOImpl.getAllSortedByPrice());
-        customer5.addProductToShoppingBasket(
-                productDAOImpl.getByIds(1, 3, 5)
-        );
-        customer5.addProductToShoppingBasket(
-                productDAOImpl.getByNames("Nuts", "Salad pepper")
-        );
+//        Customer customer = new Customer();
+//        customer.setName("Vasya");
 
-        customer5.showShoppingBasket();
+//        Product potato = new Product();
+//        Product cucumber = new Product();
+//        Product bread = new Product();
+//        potato.setName("Potato");
+//        cucumber.setName("Cucumber");
+//        bread.setName("Bread");
 
-        customerDAOImpl.update(customer5);
-        printListOfCustomers(customerDAOImpl.getAllSortedById());
-        printOneCustomer(customer5);
 
-        customer8.addProductToShoppingBasket(
-                productDAOImpl.getByIds(1, 5, 7, 9)
-        );
-        customer5.clearShoppingBasket();
 
-        customerDAOImpl.remove(customer1, customer3);
-        customerDAOImpl.removeByIds(6, 7);
-        customerDAOImpl.update(customer5, customer8);
-        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//        customer1.addProductToShoppingBasket(
+//                potato, cucumber, bread
+//        );
+//
+//        printOneCustomer(customer1);
+//
+//        customer1.showShoppingBasket();
+//
+//        customerDAOImpl.save(customer1);
+//
+//        customer1 = customerDAOImpl.getById(1);
+//
+//        printOneCustomer(customer1);
+//
+//        customer1.showShoppingBasket();
 
-        productDAOImpl.remove(bread);
-        productDAOImpl.removeByIds(2, 4);
-        printListOfProducts(productDAOImpl.getAllSortedByPrice());
 
-        customerDAOImpl.remove(customer5, customer8);
-        printListOfCustomers(customerDAOImpl.getAllSortedByLastName());
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//
+//        customerDAOImpl.remove(customer1);
+//        customerDAOImpl.removeByIds(2, 5);
+//
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//
+//        Customer new_customer = customerDAOImpl.getByName("Tom", "Cruise");
+//
+//        new_customer.addProductToShoppingBasket(
+//                productDAOImpl.getByNames("Bread", "Potato", "Cucumber")
+//        );
+//
+//        new_customer.addProductToShoppingBasket(
+//                productDAOImpl.getByIds(3, 4, 5)
+//        );
+//
+//        printOneCustomer(new_customer);
+//
+//        new_customer.showShoppingBasket();
+//
+//        customerDAOImpl.update(new_customer);
+//
+//        printListOfCustomers(customerDAOImpl.getAllSortedByInvoice());
+//
+//        new_customer = customerDAOImpl.getById(3);
+//
+//        printOneCustomer(new_customer);
+//
+//        new_customer.showShoppingBasket();
 
-        productDAOImpl.removeByIds(1,3,5);
-        productDAOImpl.remove(nuts, tomato, saladPepper);
-
-        customerDAOImpl.removeByIds(4,2);
-
-        productDAOImpl.removeAll();
-        customerDAOImpl.removeAll();
-        printListOfCustomers(customerDAOImpl.getAllSortedById());
-        printListOfProducts(productDAOImpl.getAllSortedById());
+//
+//        customer6.addProductToShoppingBasket(
+//                productDAOImpl.getByNames("Bread", "Nuts", "Cheese", "Tomato")
+//        );
+//
+//        customer4.addProductToShoppingBasket(
+//                productDAOImpl.getAllSortedById()
+//        );
+//
+//        customerDAOImpl.update(customer1, customer6, customer4);
+//
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//
+//        printListOfProducts(productDAOImpl.getAllSortedByPrice());
+//        customer5.addProductToShoppingBasket(
+//                productDAOImpl.getByIds(1, 3, 5)
+//        );
+//        customer5.addProductToShoppingBasket(
+//                productDAOImpl.getByNames("Nuts", "Salad pepper")
+//        );
+//
+//        customer5.showShoppingBasket();
+//
+//        customerDAOImpl.update(customer5);
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//        printOneCustomer(customer5);
+//
+//        customer8.addProductToShoppingBasket(
+//                productDAOImpl.getByIds(1, 5, 7, 9)
+//        );
+//        customer5.clearShoppingBasket();
+//
+//        customerDAOImpl.remove(customer1, customer3);
+//        customerDAOImpl.removeByIds(6, 7);
+//        customerDAOImpl.update(customer5, customer8);
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//
+//        productDAOImpl.remove(bread);
+//        productDAOImpl.removeByIds(2, 4);
+//        printListOfProducts(productDAOImpl.getAllSortedByPrice());
+//
+//        customerDAOImpl.remove(customer5, customer8);
+//        printListOfCustomers(customerDAOImpl.getAllSortedByLastName());
+//
+//        productDAOImpl.removeByIds(1,3,5);
+//        productDAOImpl.remove(nuts, tomato, saladPepper);
+//
+//        customerDAOImpl.removeByIds(4,2);
+//
+//        productDAOImpl.removeAll();
+//        customerDAOImpl.removeAll();
+//        printListOfCustomers(customerDAOImpl.getAllSortedById());
+//        printListOfProducts(productDAOImpl.getAllSortedById());
 
     }
 }

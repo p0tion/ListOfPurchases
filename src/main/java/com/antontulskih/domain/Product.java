@@ -1,4 +1,4 @@
-/**
+ /**
  * @{NAME}
  *
  * ${DATE}
@@ -12,9 +12,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public final class Product implements Serializable {
+@Table(name = "product_table")
+public class Product implements Serializable {
 
-    @Id
     private Integer id;
     private String name;
     private String description;
@@ -31,6 +31,9 @@ public final class Product implements Serializable {
         setPrice(price);
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
     public Integer getId() {
         return id;
     }
@@ -45,6 +48,7 @@ public final class Product implements Serializable {
         }
     }
 
+    @Column(name = "name", unique = true)
     public String getName() {
         return name;
     }
@@ -57,6 +61,7 @@ public final class Product implements Serializable {
         }
     }
 
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -70,6 +75,7 @@ public final class Product implements Serializable {
         }
     }
 
+    @Column(name = "price")
     public Double getPrice() {
         return price;
     }
@@ -79,13 +85,14 @@ public final class Product implements Serializable {
                 || (price <= 0.0)) {
             throw new IllegalArgumentException("Products price is invalid.");
         } else {
-            this.price = price;
+            this.price = Math.round(price * 100) / 100.0;
         }
     }
 
     @Override
     public String toString() {
-        return String.format("%s  %.2f", name, price);
+        return String.format("Name - %s, price - %.2f", name,
+                price);
     }
 
     @Override
@@ -99,14 +106,8 @@ public final class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (!name.equals(product.name)) {
-            return false;
-        }
-        if (!price.equals(product.price)) {
-            return false;
-        }
+        return name.equals(product.name) && price.equals(product.price);
 
-        return true;
     }
 
     @Override

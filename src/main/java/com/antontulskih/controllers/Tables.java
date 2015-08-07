@@ -15,10 +15,10 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * @author Tulskih Anton
- * @{NAME} 20.07.2015
- */
-@WebServlet("/tables")
+* @author Tulskih Anton
+* @{NAME} 20.07.2015
+*/
+@WebServlet(name = "Tables", urlPatterns = "/tables")
 public class Tables extends HttpServlet {
 
     private CustomerService customerService = new CustomerService();
@@ -26,6 +26,10 @@ public class Tables extends HttpServlet {
     Set<Customer> customerList;
     Set<Product> productList;
     HttpSession session;
+    String sortCust;
+    String sortProd;
+    String hideAdminElementsFromUser;
+    String tableLabel;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,35 +38,17 @@ public class Tables extends HttpServlet {
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("Cannot find the driver in the classpath!", e);
         }
-        String sortCust = "id";
-        String sortProd = "id";
-        session = req.getSession(false);
+
         if (session == null) {
             session = req.getSession(true);
+            sortCust = "id";
+            sortProd = "id";
             session.setAttribute("sortCust", sortCust);
             session.setAttribute("sortProd", sortProd);
         }
-        if ((req.getParameter("sortCust") != null) && (req.getParameter
-                ("sortProd") != null)) {
-            sortCust = req.getParameter("sortCust");
-            sortProd = req.getParameter("sortProd");
-            session.setAttribute("sortCust", sortCust);
-            session.setAttribute("sortProd", sortProd);
-        }
+
         sortCust = (String)session.getAttribute("sortCust");
         sortProd = (String)session.getAttribute("sortProd");
-
-        switch (sortCust) {
-            case "id":
-                customerList = customerService.getAllSortedById();
-                break;
-            case "lastName":
-                customerList = customerService.getAllSortedByLastName();
-                break;
-            case "invoice":
-                customerList = customerService.getAllSortedByInvoice();
-                break;
-        }
 
         switch (sortProd) {
             case "id":
@@ -75,14 +61,44 @@ public class Tables extends HttpServlet {
                 productList = productService.getAllSortedByPrice();
                 break;
         }
+        Customer user = customerService.getById(
+                (Integer)session.getAttribute("userId"));
+
+        if (user.getLogin().equals("admin")) {
+            switch (sortCust) {
+                case "id":
+                    customerList = customerService.getAllSortedById();
+                    break;
+                case "lastName":
+                    customerList = customerService.getAllSortedByLastName();
+                    break;
+                case "invoice":
+                    customerList = customerService.getAllSortedByInvoice();
+                    break;
+            }
+            hideAdminElementsFromUser = "";
+            tableLabel = "Customers Table";
+        } else {
+            customerList = customerService.getByIds(user.getId());
+            hideAdminElementsFromUser = "style=\"visibility: hidden\"";
+            tableLabel = "Your basket";
+        }
+
         req.setAttribute("productList", productList);
         req.setAttribute("customerList", customerList);
+        req.setAttribute("user", user);
+        req.setAttribute("tableLabel", tableLabel);
+        req.setAttribute("hideFromUser", hideAdminElementsFromUser);
         req.getRequestDispatcher("/jsp/tables.jsp").forward(req, resp);
 
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        sortCust = req.getParameter("sortCustomer");
+        sortProd = req.getParameter("sortProduct");
+        session.setAttribute("sortCust", sortCust);
+        session.setAttribute("sortProd", sortProd);
+        this.doGet(req, resp);
     }
 }

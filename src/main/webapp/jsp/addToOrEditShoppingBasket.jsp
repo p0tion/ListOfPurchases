@@ -21,12 +21,17 @@
   </style>
 </head>
 <body>
+<div class="logOut"><a href="/editCustomers">${user.firstName}
+    ${user.lastName}</a> <a id="logOutText" href="/signIn">(log out)</a>
+</div>
+<form class="addEditShoppingBasket">
   <table>
     <tbody>
     <tr>
-      <td style="text-align: right">
-        Shopping basket of ${customer.firstName}
-        ${customer.lastName}:
+      <td>
+        Shopping basket of<br>
+        <p  style=" margin: 0; text-align: right"><b>${customer.firstName}
+        ${customer.lastName}</b>:</p>
       </td>
         <td colspan="2" style="text-align: right;">
           Full product list:
@@ -35,8 +40,7 @@
     <tr>
       <td>
         <form id="update">
-        <select style="margin-left: 80px;" multiple="true" id="products"
-                size="10">
+        <select multiple="true" id="products" size="10">
           <c:forEach var="i" items="${customer.shoppingBasket}">
             <option value="${i.id}">${i.name}</option>
           </c:forEach>
@@ -48,28 +52,40 @@
         <tbody>
         <tr>
           <td>
-            <input type="button" name="removeAllButton"
+            <input class="button"
+                   type="button"
+                   style="margin-top: 0"
+                   name="removeAllButton"
                    onclick="removeAllProducts(products)";
                    value=">>"/>
           </td>
         </tr>
         <tr>
           <td>
-            <input type="button" name="removeButton"
+            <input class="button"
+                   type="button"
+                   style="margin-top: 0"
+                   name="removeButton"
                    onclick="removeProducts(products)";
                    value=">"/>
           </td>
           </tr>
           <tr>
           <td>
-            <input type="button" name="addButton"
+            <input class="button"
+                   type="button"
+                   style="margin-top: 0"
+                   name="addButton"
                    onclick="addProducts(productList, products)";
                    value="<"/>
           </td>
         </tr>
         <tr>
           <td>
-            <input type="button" name="addAllButton"
+            <input class="button"
+                   type="button"
+                   style="margin-top: 0"
+                   name="addAllButton"
                    onclick="addAllProducts(productList, products)";
                    value="<<"/>
           </td>
@@ -78,8 +94,7 @@
       </table>
       </td>
       <td>
-        <select multiple="true" id="productList" size="10" style="margin-bottom:
-         10px">
+        <select multiple="true" id="productList" size="10">
           <c:forEach var="i" items="${productList}">
             <option value="${i.id}">${i.name}</option>
           </c:forEach>
@@ -89,22 +104,33 @@
     <tr>
       <td>
         <c:if test="${customer.quantity == 0}">
-          <input type="button" style="margin-left: 125px"
-                 onclick="updateCustomer(products)" value="Add"/>
+          <input class="button"
+                 type="submit"
+                 style="margin-left: 30px;
+                        margin-top: 0"
+                 value="Add"
+                 form="update"
+                 onclick="updateCustomer(products)"
+                  />
         </c:if>
         <c:if test="${customer.quantity > 0}">
-          <input type="button" style="margin-left: 125px"
-                 onclick="updateCustomer(products)" value="Update"/>
+          <input class="button"
+                 type="submit"
+                 style="margin-left: 30px;
+                        margin-top: 0"
+                 value="Update"
+                 form="update"
+                 onclick="updateCustomer(products)"
+                  />
         </c:if>
       </td>
     </tr>
     </tbody>
   </table>
-</body>
-<br>
-<a style="text-decoration: none" title="Back to the main page"
-   href=${pageContext.request.contextPath}/tables>Back
+</form>
+<a id="backToTablesUrl" href=${pageContext.request.contextPath}/tables>Back
   to tables</a>
+</body>
 <script>
   function removeAllProducts(select)
   {
@@ -155,11 +181,11 @@
     var jsonText = JSON.stringify(array);
     if (array.length == 0) {
       document.location.href
-              ="${pageContext.request.contextPath}/jsp/updateCustomer?idToUpdate="
+              ="${pageContext.request.contextPath}/updateCustomer?idToUpdate="
       + ${customer.id} + "&products=none";
     } else {
       document.location.href
-              ="${pageContext.request.contextPath}/jsp/updateCustomer?idToUpdate="
+              ="${pageContext.request.contextPath}/updateCustomer?idToUpdate="
       + ${customer.id} + "&products=" + jsonText;
     }
   }

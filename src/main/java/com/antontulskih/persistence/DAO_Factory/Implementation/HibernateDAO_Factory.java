@@ -11,17 +11,17 @@ package com.antontulskih.persistence.DAO_Factory.Implementation;
 import com.antontulskih.persistence.DAO.CustomerDAO;
 import com.antontulskih.persistence.DAO.ProductDAO;
 import com.antontulskih.persistence.DAO_Factory.DAO_AbstractFactory;
-import com.antontulskih.persistence.Implementation.Collection.CustomerDAO_Impl_Coll;
-import com.antontulskih.persistence.Implementation.Collection.ProductDAO_Impl_Coll;
+import com.antontulskih.persistence.Implementation.Hibernate.CustomerDAO_Impl_Hibernate;
+import com.antontulskih.persistence.Implementation.Hibernate.ProductDAO_Impl_Hibernate;
 
-public class CollectionDAO_Factory implements DAO_AbstractFactory {
+public class HibernateDAO_Factory implements DAO_AbstractFactory {
     @Override
     public CustomerDAO getCustomerDAO() {
-        return CustomerDAO_Impl_Coll.getCustomerDAOCollImpl();
+        return new CustomerDAO_Impl_Hibernate();
     }
 
     @Override
     public ProductDAO getProductDAO() {
-        return ProductDAO_Impl_Coll.getProductDAOCollImpl();
+        return new ProductDAO_Impl_Hibernate();
     }
 }

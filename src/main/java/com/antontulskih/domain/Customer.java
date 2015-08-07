@@ -1,16 +1,14 @@
 /**
- * @{NAME}
- *
- * ${DATE}
- *
- * @author Tulskih Anton
- */
+* @{NAME}
+*
+* ${DATE}
+*
+* @author Tulskih Anton
+*/
 
 package com.antontulskih.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +20,9 @@ import static com.antontulskih.util.ProductFormattedTable.*;
 import static java.lang.System.out;
 
 @Entity
-public final class Customer implements Serializable {
+@Table(name = "customer_table")
+public class Customer implements Serializable {
 
-    @Id
     private Integer id;
     private String firstName;
     private String lastName;
@@ -33,25 +31,36 @@ public final class Customer implements Serializable {
     private Double invoice;
     private String login;
     private String password;
-    @Transient
     private List<Product> shoppingBasket;
 
-    public Customer() { this.shoppingBasket = new ArrayList<Product>(); }
+    public Customer() {
+        this.shoppingBasket = new ArrayList<Product>();
+    }
+
+    public Customer(final String firstName,
+                    final String lastName,
+                    final String cardNumber) {
+        this();
+        setFirstName(firstName);
+        setLastName(lastName);
+        setCardNumber(cardNumber);
+        setInvoice(0.0);
+        setQuantity(0);
+    }
 
     public Customer(final String firstName,
                     final String lastName,
                     final String cardNumber,
                     final String login,
                     final String password) {
-        this();
-        setFirstName(firstName);
-        setLastName(lastName);
-        setCardNumber(cardNumber);
+        this(firstName, lastName, cardNumber);
         setLogin(login);
         setPassword(password);
-        setInvoice(0.0);
-        setQuantity(0);
     }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "customer_id")
     public Integer getId() {
         return id;
     }
@@ -65,6 +74,7 @@ public final class Customer implements Serializable {
         }
     }
 
+    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -78,6 +88,7 @@ public final class Customer implements Serializable {
         }
     }
 
+    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -91,14 +102,15 @@ public final class Customer implements Serializable {
         }
     }
 
+    @Column(name = "card_number", unique = true)
     public String getCardNumber() {
         return cardNumber;
     }
 
     public void setCardNumber(final String cardNumber) {
         if (cardNumber == null) {
-            throw new IllegalArgumentException("Customers card number is"
-                    + " invalid.");
+            throw new IllegalArgumentException("Customers card number cannot "
+                    + "be null.");
         }
         String validationExpression = "\\d+";
         Pattern pattern = Pattern.compile(validationExpression);
@@ -115,12 +127,18 @@ public final class Customer implements Serializable {
         addProductToShoppingBasket(set.toArray(new Product[set.size()]));
     }
 
+    public void addProductToShoppingBasket(final List<Product> list) {
+        addProductToShoppingBasket(list.toArray(new Product[list.size()]));
+    }
+
     public void addProductToShoppingBasket(final Product... products) {
         out.printf("%n%n*** %s %s added to their purchase basket:%n",
                 this.getFirstName(), this.getLastName());
         for (Product p: products) {
             this.shoppingBasket.add(p);
             invoice += p.getPrice();
+            // to truncate garbage of double like 58.54890000000000000001
+            invoice = Math.round(invoice * 100) / 100.0;
             out.println("- " + p.getName());
         }
         quantity = this.shoppingBasket.size();
@@ -139,23 +157,31 @@ public final class Customer implements Serializable {
         printLine();
     }
 
+    @Column(name = "invoice")
     public Double getInvoice() {
-        return this.invoice;
+        return invoice;
     }
 
     public void setInvoice(final Double invoice) {
         this.invoice = invoice;
     }
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_product_table",
+        joinColumns = @JoinColumn(name = "customer_id"),
+        inverseJoinColumns = @JoinColumn(name = "product_id"))
     public List<Product> getShoppingBasket() {
         return shoppingBasket;
     }
 
-    public void setShoppingBasket(final List<Product> shoppingBasket) {
-        this.shoppingBasket.clear();
-        this.shoppingBasket.addAll(shoppingBasket);
+    public void setShoppingBasket(final List<Product> anotherShoppingBasket) {
+        //kill me for the next two lines, they had cost me four days of my life
+//        this.shoppingBasket.clear();
+//        this.shoppingBasket.addAll(anotherShoppingBasket);
+        this.shoppingBasket = anotherShoppingBasket;
     }
 
+    @Column(name = "quantity")
     public Integer getQuantity() {
         return quantity;
     }
@@ -172,6 +198,7 @@ public final class Customer implements Serializable {
         shoppingBasket.clear();
     }
 
+    @Column(name = "login", unique = true)
     public String getLogin() {
         return login;
     }
@@ -192,6 +219,7 @@ public final class Customer implements Serializable {
         }
     }
 
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -246,7 +274,7 @@ public final class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%d  %s %s",
+        return String.format("ID - %d, name - %s %s",
                 id,
                 firstName,
                 lastName

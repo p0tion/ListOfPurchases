@@ -9,17 +9,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * @author Tulskih Anton
- * @{NAME} 21.07.2015
- */
+* @author Tulskih Anton
+* @{NAME} 21.07.2015
+*/
 
-@WebServlet("/jsp/updateCustomer")
+@WebServlet(name = "UpdateCustomer", urlPatterns = "/updateCustomer")
 public class UpdateCustomer extends HttpServlet {
 
+    HttpSession session;
     CustomerService customerService = new CustomerService();
     ProductService productService = new ProductService();
 
@@ -54,14 +56,8 @@ public class UpdateCustomer extends HttpServlet {
             }
             customerService.update(customer);
         }
-
-//        Set<Customer> customerList = customerService.getAllSortedById();
-//        Set<Product> productList = productService.getAllSortedById();
-//
-//        req.setAttribute("customerList", customerList);
-//        req.setAttribute("productList", productList);
-        req.getRequestDispatcher("/tables").forward(req,
-                resp);
+//        req.getRequestDispatcher("/tables").forward(req, resp);
+        resp.sendRedirect("/tables");
     }
 
     @Override

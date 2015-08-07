@@ -1,10 +1,10 @@
 /**
- * @{NAME}
- *
- * ${DATE}
- *
- * @author Tulskih Anton
- */
+* @{NAME}
+*
+* ${DATE}
+*
+* @author Tulskih Anton
+*/
 package com.antontulskih.util;
 
 import com.antontulskih.domain.Product;

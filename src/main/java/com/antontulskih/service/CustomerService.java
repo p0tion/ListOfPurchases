@@ -2,16 +2,16 @@ package com.antontulskih.service;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.DAO.CustomerDAO;
-import com.antontulskih.persistence.Implementation.JDBC.CustomerDAO_Impl_JDBC;
+import com.antontulskih.persistence.Implementation.Hibernate.CustomerDAO_Impl_Hibernate;
 
 import java.util.Set;
 
 /**
- * @author Tulskih Anton
- * @{NAME} 20.07.2015
- */
+* @author Tulskih Anton
+* @{NAME} 20.07.2015
+*/
 public class CustomerService {
-    private CustomerDAO customerDAO = new CustomerDAO_Impl_JDBC();
+    private CustomerDAO customerDAO = new CustomerDAO_Impl_Hibernate();
 
     public boolean save(Customer... customers) {
         return customerDAO.save(customers);

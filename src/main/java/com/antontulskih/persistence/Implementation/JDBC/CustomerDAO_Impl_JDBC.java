@@ -31,7 +31,7 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                             + "product_table.product_id\n"
                             + "FROM customer_table, customer_product_table, "
                             + "product_table\n"
-                            + "where customer_table.customer_id "
+                            + "WHERE customer_table.customer_id "
                                 + "= customer_product_table.customer_id && "
                             + "product_table.product_id = "
                                 + "customer_product_table.product_id;";
@@ -45,6 +45,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         try {
            c = DriverManager.getConnection(url, user, password);
             for (Customer customer: customers) {
+                if (customer == null) {
+                    throw new IllegalArgumentException(String.format("Input "
+                            + "customer cannot be null: %s.", customer));
+                }
                 ps = c.prepareStatement("INSERT INTO customer_table"
                      + "(first_name, last_name, card_number, quantity, invoice,"
                      + " login, password) VALUES(?, ?, ?, ?, ?, ?, ?);");
@@ -90,6 +94,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
     }
 
     public boolean saveShoppingBasket(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException(String.format("Input customer "
+                    + "cannot be null: %s.", customer));
+        }
         PreparedStatement ps = null;
         try {
             for (Product product: customer.getShoppingBasket()) {
@@ -124,11 +132,20 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         try {
             c = DriverManager.getConnection(url, user, password);
             for (Customer customer: customers) {
+                if (customer == null) {
+                    throw new IllegalArgumentException(String.format
+                            ("Input customer cannot be null: %s", customer));
+                }
                 Integer id = customer.getId();
                 ps = c.prepareStatement("SELECT customer_id, first_name,"
                         + "last_name FROM customer_table WHERE customer_id=?;");
                 ps.setInt(1, id);
                 rs = ps.executeQuery();
+                if (!rs.isBeforeFirst() ) {
+                    throw new IllegalArgumentException(String.format("There "
+                                    + "is no such customer in the list: %s.",
+                            customer));
+                }
                 rs.next();
                 if (customer.getQuantity() != 0) {
                     ps = c.prepareStatement("DELETE FROM customer_product_table"
@@ -168,11 +185,19 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         try {
             c = DriverManager.getConnection(url, user, password);
             for (Integer i: ids) {
+                if (i < 1) {
+                    throw new IllegalArgumentException("ID must be greater "
+                            + "than 0.");
+                }
                 ps = c.prepareStatement("SELECT customer_id, first_name, "
                         + "last_name, quantity FROM customer_table "
                         + "WHERE customer_id=?;");
                 ps.setInt(1, i);
                 rs = ps.executeQuery();
+                if (!rs.isBeforeFirst() ) {
+                    throw new IllegalArgumentException(String.format("There is no "
+                                    + "customer with such ID: %d.", i));
+                }
                 rs.next();
                 out.printf("%n*** %s %s has been removed from the list of "
                                 + "customers. ID - %d ***",
@@ -235,16 +260,27 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
 
     @Override
     public Customer getByName(final String firstName, final String lastName) {
+        if (firstName == null || lastName == null
+                || firstName == "" || lastName == "") {
+            throw new IllegalArgumentException(String.format("First and last "
+                    + "name cannot be null or blank. First name: %s, last "
+                    + "name: %s.", firstName, lastName ));
+        }
         PreparedStatement ps = null;
         ResultSet rs;
         Customer customer = new Customer();
         try {
             c = DriverManager.getConnection(url, user, password);
             ps = c.prepareStatement("SELECT * FROM customer_table WHERE "
-                    + "first_name=? and last_name=?;");
+                    + "first_name=? AND last_name=?;");
             ps.setString(1, firstName);
             ps.setString(2, lastName);
             rs = ps.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such name: %s %s",
+                        firstName, lastName));
+            }
             rs.next();
             out.printf("%n*** Getting %s %s from the list of customers ***",
                     rs.getString("first_name"), rs.getString("last_name"));
@@ -298,6 +334,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
 
     @Override
     public Customer getById(final Integer id) {
+        if (id == null || id < 0) {
+            throw new IllegalArgumentException(String.format("ID cannot be "
+                    + "null and should be greater than 0. Your ID: %d.", id));
+        }
         PreparedStatement ps = null;
         ResultSet rs;
         Customer customer = new Customer();
@@ -307,6 +347,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                     + "customer_id=?;");
             ps.setInt(1, id);
             rs = ps.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                throw new IllegalArgumentException("There is no customer "
+                        + "with such ID: " + id);
+            }
             rs.next();
             out.printf("%n*** Getting %s %s from the list of customers ***",
                     rs.getString("first_name"), rs.getString("last_name"));
@@ -526,6 +570,10 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         try {
             c = DriverManager.getConnection(url, user, password);
             for (Customer customer: customers) {
+                if (customer == null) {
+                    throw new IllegalArgumentException(String.format("Input "
+                            + "customer cannot be null: %s.", customer));
+                }
                 if (customer.getId() > 0) {
                     ps = c.prepareStatement("UPDATE customer_table SET "
                             + "first_name=?, last_name=?, card_number=?, "
@@ -557,8 +605,8 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                         }
                     }
                 } else {
-                    throw new IllegalArgumentException("There is no product in "
-                            + "the list with such ID - " + customer.getId());
+                    throw new IllegalArgumentException("There is no customer "
+                            + "in the list with such ID - " + customer.getId());
                 }
             }
         } catch (SQLException e) {

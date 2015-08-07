@@ -1,100 +1,154 @@
-@font-face {
-    font-family: San Francisco;
-    src: url('resources/System San Francisco Display Regular.ttf');
+html {
+    background-image: url("http://desktop.ly/images/devices/cinema_display.png");
+    background-size: 1000px 1400px;
+    background-repeat: no-repeat;
+    background-position: 170px center;
+    background-attachment: fixed;
+    font-size: 10pt;
+    font-family: "San Francisco", sans-serif;
 }
 body {
-    font-family: "San Francisco", sans-serif;
-    margin: 20px;
     padding: 0px;
 }
-
-.tables
-{
+.editCustomersForm {
+    width: 810px;
+    margin: 6% 235px;
+    padding: 25px;
+    background-color: rgba(250,250,250,0.5);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2),
+    inset 0px 1px 0px 0px rgba(250, 250, 250, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.editProductsForm {
+    width: 500px;
+    margin: 6% 390px;
+    padding: 25px;
+    background-color: rgba(250,250,250,0.5);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2),
+    inset 0px 1px 0px 0px rgba(250, 250, 250, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.showCustProdForm {
+    width: 860px;
+    margin: 6% 206px;
+    padding: 25px;
+    background-color: rgba(250,250,250,0.5);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2),
+    inset 0px 1px 0px 0px rgba(250, 250, 250, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.addEditShoppingBasket {
+    width: 400px;
+    margin: 10% 31%;
+    padding: 25px;
+    background-color: rgba(250,250,250,0.5);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2),
+    inset 0px 1px 0px 0px rgba(250, 250, 250, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.button {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #64c8ef; /* Old browsers */
+    background: -moz-linear-gradient(top,  #64c8ef 0%, #00a2e2 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#64c8ef), color-stop(100%,#00a2e2)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #64c8ef 0%,#00a2e2 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #64c8ef 0%,#00a2e2 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #64c8ef 0%,#00a2e2 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #64c8ef 0%,#00a2e2 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#64c8ef', endColorstr='#00a2e2',GradientType=0 ); /* IE6-9 */
+    color: #fff;
+    padding: 5px 15px;
+    margin-right: 0;
+    margin-top: 15px;
+    border-radius: 3px;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1),
+    0px 1px 0px 0px rgba(250, 250, 250, 0.5) ;
+}
+.tables {
     width: auto;
-    font-size: 14px;
     text-align: center;
-}
+    border-radius: 5px;
+    border: 10px;
+    display: inline;
 
-#sortText1
-{
-    font-size: 14px;
 }
-
-#sortText2
-{
-    font-size: 14px;
+input:not([type=submit]) {
+    padding: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1),
+    0px 1px 0px 0px rgba(250, 250, 250, 0.5) ;
 }
-
-.sortSelect
-{
+#sortText1 {
+    position: fixed;
+    left: 10px;
+    top: 5px;
+}
+#sortText2 {
+    position: fixed;
+    left: 10px;
+    top: 55px;
+}
+.sortSelect {
     width: 90px;
-    position: absolute;
+    position: fixed;
 }
-
-#sortCustomersSelect
-{
-    top: 20px;
-    left: 170px;
+#sortCustomersSelect {
+    top: 40px;
+    left: 70px;
 }
-
-#sortProductsSelect
-{
-    top: 50px;
-    left: 170px;
+#sortProductsSelect {
+    top: 90px;
+    left: 70px;
 }
-
-#sortButton
-{
-    position: absolute;
-    top: 78px;
-    left: 195px;
+#sortButton {
+    position: fixed;
+    top: 120px;
+    left: 95px;
 }
-
-a
-{
+a {
     text-decoration: none;
 }
-
-#hrefEditCustomerTable
-{
-    position: absolute;
-    left: 580px;
-    top: 180px;
-    font-size: 12px
+#backToTablesUrl {
+    position: fixed;
+    left: 50px;
+    bottom: 50px;
+    color: #000000;
 }
-
-#hrefEditProductTable
-{
+.logOut {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+#logOutText {
+    color: #000000;
+}
+#hrefEditCustomerTable {
     position: absolute;
-    left: 1111px;
-    top: 180px;
+    left: 550px;
+    top: 105px;
     font-size: 12px;
+    color: red;
 }
-
-.hiddenTd
-{
+#hrefEditProductTable {
+    position: absolute;
+    left: 995px;
+    top: 105px;
+    font-size: 12px;
+    color: red;
+}
+td {
+    font-size: 10pt;
+}
+.hiddenTd {
     text-align: center;
     border: hidden;
 }
-
-#customerTable
-{
-    position: absolute;
-    top: 183px;
-    left: 255px;
-}
-
-#productTable
-{
-    position: absolute;
-    top: 183px;
-    left: 855px;
-}
-
-#logOutText
-{
-    position: absolute;
-    font-size: 12px;
-    right: 10px;
-    top: 10px;
+#productTable {
+    margin-left: 50px;
 }
