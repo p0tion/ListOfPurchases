@@ -88,6 +88,7 @@ public class EditCustomers extends HttpServlet {
         req.getRequestDispatcher("/jsp/editCustomers.jsp").forward(req,
                 resp);
         message.delete(0, message.length());
+        scrollDownOnSubmit = "";
     }
 
     @Override

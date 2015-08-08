@@ -30,6 +30,7 @@ public class EditProducts extends HttpServlet {
     Set<Product> productList;
     StringBuilder message = new StringBuilder();
     Customer user;
+    String scrollDownOnSubmit = "";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -37,23 +38,29 @@ public class EditProducts extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("Cannot find the driver in the classpath!", e);
+            throw new IllegalStateException("Cannot find the driver in the "
+                    + "classpath!", e);
         }
         session = req.getSession(false);
         productList = productService.getAllSortedById();
         user = customerService.getById((Integer)session.getAttribute("userId"));
 
         req.setAttribute("user", user);
+        req.setAttribute("scrollDownOnSubmit", scrollDownOnSubmit);
         req.setAttribute("productList", productList);
         req.setAttribute("updateMessage", message);
         req.getRequestDispatcher("/jsp/editProducts.jsp").forward(req,
                 resp);
         message.delete(0, message.length());
+        scrollDownOnSubmit = "";
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
+        scrollDownOnSubmit = "window.onload = window.scrollTo(0, document"
+                + ".body.scrollHeight);";
         productList = productService.getAllSortedById();
 
         // removing all products (if "select all"-checkbox checked)

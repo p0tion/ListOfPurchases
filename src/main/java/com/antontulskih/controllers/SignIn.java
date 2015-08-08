@@ -38,6 +38,9 @@ public class SignIn extends HttpServlet {
         req.setAttribute("password", password);
         req.setAttribute("errorMessage", errorMessage);
         req.getRequestDispatcher("/jsp/signIn.jsp").forward(req, resp);
+        errorMessage = "";
+        login = "";
+        password = "";
     }
 
     @Override

@@ -8,9 +8,11 @@
 <html>
 <head>
     <title>Tables</title>
-    <link href="../css/main.css" type="text/css" rel="Stylesheet"/>
+    <link href="../resources/css/main.css" type="text/css" rel="Stylesheet"/>
+    <script src="../resources/js/tables.js" defer="defer"></script>
 </head>
-<body onload="initialDefaultSortValues(sortCustomersSelect, sortProductsSelect)">
+<body onload="initialDefaultSortValues(
+        sortCustomersSelect, sortProductsSelect, ${sortCust}, ${sortProd})">
     <div class="logOut"><a href="/editCustomers">${user.firstName}
      ${user.lastName}</a> <a
             id="logOutText" href="${pageContext.request.contextPath}/signIn">(log out)</a> </div>
@@ -39,9 +41,9 @@
     </a>
     <form class="showCustProdForm">
         <table class="tables" border="1" cellpadding="3" cellspacing="1">
-            <caption><span style="font-size:20px;">${tableLabel}</span></caption>
+            <caption><span>${tableLabel}</span></caption>
             <thead>
-                <tr style="font-size: 10pt">
+                <tr id="tr2">
                     <th ${hideFromUser}>ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -80,9 +82,9 @@
 
         <table class="tables" id="productTable" border="1" cellpadding="3"
                cellspacing="1">
-            <caption><span style="font-size:20px;">Products Table</span></caption>
+            <caption><span>Products Table</span></caption>
             <thead>
-                <tr style="font-size: 10pt">
+                <tr id="tr">
                     <th>ID</th>
                     <th width="138">Name</th>
                     <th width="138">Description</th>
@@ -102,39 +104,4 @@
         </table>
     </form>
 </body>
-<script>
-    function sortTables(selectCustomers, selectProducts) {
-        for (var i = 0; i < selectCustomers.length; i++) {
-            if (selectCustomers.options[i].selected) {
-                sortCust = selectCustomers.options[i].value;
-            }
-        }
-        for (var i = 0; i < selectProducts.length; i++) {
-            if (selectProducts.options[i].selected) {
-                sortProd = selectProducts.options[i].value;
-            }
-        }
-
-        window.location =
-                "${pageContext.request.contextPath}/tables?sortCust="
-        + sortCust + "&sortProd=" + sortProd;
-    }
-
-    function initialDefaultSortValues(selectCustomers, selectProducts) {
-        var sortCust = "${sortCust}";
-        var sortProd = "${sortProd}";
-        for(var i, j = 0; i = selectCustomers.options[j]; j++) {
-            if(i.value == sortCust) {
-                selectCustomers.selectedIndex = j;
-                break;
-            }
-        }
-        for(var i, j = 0; i = selectProducts.options[j]; j++) {
-            if(i.value == sortProd) {
-                selectProducts.selectedIndex = j;
-                break;
-            }
-        }
-    }
-</script>
 </html>

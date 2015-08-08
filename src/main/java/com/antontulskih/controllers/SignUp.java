@@ -42,12 +42,14 @@ public class SignUp extends HttpServlet {
         req.setAttribute("cardNumber", cardNumber);
         req.setAttribute("login", login);
         req.setAttribute("password", password);
+        req.getRequestDispatcher("/jsp/signUp.jsp").forward(req, resp);
+        loginError = "";
+        cardNumberError = "";
         firstName = "";
         lastName = "";
         cardNumber = "";
         login = "";
         password = "";
-        req.getRequestDispatcher("/jsp/signUp.jsp").forward(req, resp);
     }
 
         @Override

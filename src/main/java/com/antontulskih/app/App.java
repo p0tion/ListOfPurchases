@@ -9,14 +9,11 @@ package com.antontulskih.app;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
-import com.antontulskih.persistence.DAO.CustomerDAO;
-import com.antontulskih.persistence.DAO.ProductDAO;
 import com.antontulskih.persistence.DAO_Factory.DAO_AbstractFactory;
 import com.antontulskih.persistence.DAO_Factory.DAO_FactoryInitializer;
 import com.antontulskih.persistence.DAO_Factory.StorageType;
-
-import static com.antontulskih.util.CustomerFormattedTable.printListOfCustomers;
-import static com.antontulskih.util.CustomerFormattedTable.printOneCustomer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 final class App {
 
@@ -99,8 +96,12 @@ final class App {
                 break;
         }
 
-        CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();
-        ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
+
+        Logger logger = LogManager.getLogger();
+
+        logger.info("bla");
+//        CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();
+//        ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
 
 //        customerDAOImpl.save(customer1, customer2, customer3, customer4,
 //                customer5, customer6, customer7, customer8, customer9,
@@ -109,21 +110,21 @@ final class App {
 //        productDAOImpl.save(potato, cucumber, bread, minWater, tomato, cheese,
 //                garlic, nuts, saladPepper);
 
-        Customer customer = customerDAOImpl.getById(200);
-
-        printOneCustomer(customer);
-
-        customer.showShoppingBasket();
-
-        customer.addProductToShoppingBasket(
-                productDAOImpl.getByIds(75, 76, 82)
-        );
-
-        customer.showShoppingBasket();
-
-        customerDAOImpl.update(customer);
-
-        printListOfCustomers(customerDAOImpl.getAllSortedByInvoice());
+//        Customer customer = customerDAOImpl.getById(200);
+//
+//        printOneCustomer(customer);
+//
+//        customer.showShoppingBasket();
+//
+//        customer.addProductToShoppingBasket(
+//                productDAOImpl.getByIds(75, 76, 82)
+//        );
+//
+//        customer.showShoppingBasket();
+//
+//        customerDAOImpl.update(customer);
+//
+//        printListOfCustomers(customerDAOImpl.getAllSortedByInvoice());
 
 //        Customer customer = new Customer();
 //        customer.setName("Vasya");
