@@ -115,15 +115,39 @@ label {
 	border-radius: 3px;
 	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
 }
-#cardNumberErrMsg {
+#signUpFirstNameErrMsg {
 	position: absolute;
-	top: 252px;
+	top: 147px;
+	left: 740px;
+	color: red;
+}
+#signUpLastNameErrMsg {
+	position: absolute;
+	top: 199px;
+	left: 740px;
+	color: red;
+}
+#signUpCardNumberErrMsg {
+	position: absolute;
+	top: 250px;
 	left: 740px;
 	color: red;
 }
 #signUpLoginErrMsg {
 	position: absolute;
-	top: 303px;
+	top: 302px;
+	left: 740px;
+	color: red;
+}
+#signUpPasswordErrMsg {
+	position: absolute;
+	top: 355px;
+	left: 740px;
+	color: red;
+}
+#signUpConfirmPasswordErrMsg {
+	position: absolute;
+	top: 406px;
 	left: 740px;
 	color: red;
 }
@@ -137,5 +161,6 @@ input:focus:invalid {
 input:required:valid {
 	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAZZJREFUeNpi/P//PwMpgImBRMAy58QshrNPTzP8+vOLIUInisFQyYjhz98/DB9/fmT48/+35v7H+8KNhE2+WclZd+G0gZmJmYGThUNz1fUVMZtvbWT59eUXG9wGZIWMUPj993eJ5VeWxuy8veM/CzPL3yfvH/9H0QBSBDYZyOVm4mGYfn6q4cory5lYmFh+MrEwM/76/YsR7mk2ZjbWP///WP37/y8cqIDhx58fjvtu7XV6//ndT34G/v8FasUsDjKO/+A2PP3wpGLd+TVsfOz8XH6KAT+nHpokcu7h6d9q/BoMxToVbBYqlt9///+1GO4/WVdpXqY/zMqXn13/+vTjI9mj94/y//v9/3e9ZRObvYbDT0Y2xnm///x+wsfHB3GSGLf41jb3rv0O8nbcR66d+HPvxf2/+YZFTHaqjl8YWBnm/vv37yly5LL8+vuLgYuVa3uf/4T/Kd8SnSTZpb6FGUXwcvJxbAPKP2VkZESNOBDx8+9PBm4OwR1TwmYwcfzjsBUQFLjOxs52A2YyKysrXANAgAEA7buhysQuIREAAAAASUVORK5CYII=);
 	background-position: right top;
-	background-repeat: no-repeat
+	background-repeat: no-repeat;
+	box-shadow: none;
 }

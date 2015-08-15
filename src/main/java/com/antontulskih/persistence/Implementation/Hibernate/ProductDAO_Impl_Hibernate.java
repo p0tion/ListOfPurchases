@@ -2,13 +2,14 @@ package com.antontulskih.persistence.Implementation.Hibernate;
 
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
-import com.antontulskih.util.HibernateUtil;
 import com.antontulskih.util.ProductComparator.NameSorterComparator;
 import com.antontulskih.util.ProductComparator.PriceSorterComparator;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Set;
@@ -20,9 +21,11 @@ import static com.antontulskih.util.ProductComparator.IdSorterComparator;
 * @author Tulskih Anton
 * @{NAME} 28.07.2015
 */
+@Repository
 public class ProductDAO_Impl_Hibernate implements ProductDAO {
 
-    SessionFactory sf = HibernateUtil.getSessionFactory();
+    @Autowired
+    SessionFactory sf;
 
     @Override
     public Product getByName(final String name) {

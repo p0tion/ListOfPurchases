@@ -3,11 +3,12 @@ package com.antontulskih.persistence.Implementation.Hibernate;
 import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.DAO.CustomerDAO;
 import com.antontulskih.util.CustomerComparator.LastNameSorterComparator;
-import com.antontulskih.util.HibernateUtil;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +22,11 @@ import static com.antontulskih.util.CustomerComparator.InvoiceSorterComparator;
 * @author Tulskih Anton
 * @{NAME} 27.07.2015
 */
+@Repository
 public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
 
-    private SessionFactory sf = HibernateUtil.getSessionFactory();
+    @Autowired
+    private SessionFactory sf;
 
     @Override
     public Customer getByName(final String firstName, final String lastName) {
@@ -37,6 +40,92 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
                     + ":firstName and lastName = :lastName");
             query.setString("firstName", firstName);
             query.setString("lastName", lastName);
+            customer = (Customer) query.uniqueResult();
+            transaction.commit();
+        } catch (RuntimeException e){
+            try{
+                transaction.rollback();
+            }catch(RuntimeException rbe){
+                System.out.println("Couldn’t roll back transaction");
+            }
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByLoginAndPassword(final String login, final String
+            password) {
+        Session session = null;
+        Transaction transaction = null;
+        Customer customer = null;
+        try {
+            session = sf.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("from Customer where login = "
+                    + ":login and password = :password");
+            query.setString("login", login);
+            query.setString("password", password);
+            customer = (Customer) query.uniqueResult();
+            transaction.commit();
+        } catch (RuntimeException e){
+            try{
+                transaction.rollback();
+            }catch(RuntimeException rbe){
+                System.out.println("Couldn’t roll back transaction");
+            }
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByLogin(String login) {
+        Session session = null;
+        Transaction transaction = null;
+        Customer customer = null;
+        try {
+            session = sf.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("from Customer where login = "
+                    + ":login");
+            query.setString("login", login);
+            customer = (Customer) query.uniqueResult();
+            transaction.commit();
+        } catch (RuntimeException e){
+            try{
+                transaction.rollback();
+            }catch(RuntimeException rbe){
+                System.out.println("Couldn’t roll back transaction");
+            }
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByCardNumber(String cardNumber) {
+        Session session = null;
+        Transaction transaction = null;
+        Customer customer = null;
+        try {
+            session = sf.openSession();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("from Customer where cardNumber = "
+                    + ":cardNumber");
+            query.setString("cardNumber", cardNumber);
             customer = (Customer) query.uniqueResult();
             transaction.commit();
         } catch (RuntimeException e){

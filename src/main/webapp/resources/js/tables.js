@@ -16,15 +16,18 @@ function sortTables(selectCustomers, selectProducts) {
 function initialDefaultSortValues(
     selectCustomers, selectProducts, sortCust, sortProd) {
 
-    for(var i, j = 0; i = selectCustomers.options[j]; j++) {
+    custSelect = document.getElementById(selectCustomers);
+    prodSelect = document.getElementById(selectProducts);
+
+    for(var i, j = 0; i = custSelect.options[j]; j++) {
         if(i.value == sortCust) {
-            selectCustomers.selectedIndex = j;
+            custSelect.selectedIndex = j;
             break;
         }
     }
-    for(var i, j = 0; i = selectProducts.options[j]; j++) {
+    for(var i, j = 0; i = prodSelect.options[j]; j++) {
         if(i.value == sortProd) {
-            selectProducts.selectedIndex = j;
+            prodSelect.selectedIndex = j;
             break;
         }
     }

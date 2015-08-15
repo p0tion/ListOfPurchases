@@ -13,8 +13,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.antontulskih.util.ProductFormattedTable.*;
 import static java.lang.System.out;
@@ -24,6 +22,7 @@ import static java.lang.System.out;
 public class Customer implements Serializable {
 
     private Integer id;
+
     private String firstName;
     private String lastName;
     private String cardNumber;
@@ -80,12 +79,7 @@ public class Customer implements Serializable {
     }
 
     public void setFirstName(final String firstName) {
-        if ((firstName == null) || (firstName.equals(""))) {
-            throw new IllegalArgumentException("Customers first name is"
-                    + " invalid.");
-        } else {
-            this.firstName = firstName.trim();
-        }
+        this.firstName = firstName.trim();
     }
 
     @Column(name = "last_name")
@@ -94,12 +88,7 @@ public class Customer implements Serializable {
     }
 
     public void setLastName(final String lastName) {
-        if ((lastName == null) || (lastName.equals(""))) {
-            throw new IllegalArgumentException("Customers last name is "
-                    + "invalid.");
-        } else {
-            this.lastName = lastName.trim();
-        }
+        this.lastName = lastName.trim();
     }
 
     @Column(name = "card_number", unique = true)
@@ -108,19 +97,7 @@ public class Customer implements Serializable {
     }
 
     public void setCardNumber(final String cardNumber) {
-        if (cardNumber == null) {
-            throw new IllegalArgumentException("Customers card number cannot "
-                    + "be null.");
-        }
-        String validationExpression = "\\d+";
-        Pattern pattern = Pattern.compile(validationExpression);
-        Matcher matcher = pattern.matcher(cardNumber);
-        if ((cardNumber.equals("")) || (!matcher.matches())) {
-            throw new IllegalArgumentException("Customers card number is"
-                    + " invalid.");
-        } else {
-            this.cardNumber = cardNumber.trim();
-        }
+        this.cardNumber = cardNumber.trim();
     }
 
     public void addProductToShoppingBasket(final Set<Product> set) {
@@ -204,19 +181,7 @@ public class Customer implements Serializable {
     }
 
     public void setLogin(final String login) {
-        if (login == null) {
-            throw new IllegalArgumentException("Customers login is "
-                    + "invalid.");
-        }
-        String validationExpression = "[A-Za-z0-9_]{2,15}";
-        Pattern pattern = Pattern.compile(validationExpression);
-        Matcher matcher = pattern.matcher(login);
-        if ((login.equals("")) || (!matcher.matches())) {
-            throw new IllegalArgumentException("Customers login is "
-                    + "invalid.");
-        } else {
             this.login = login.trim();
-        }
     }
 
     @Column(name = "password")
@@ -225,17 +190,7 @@ public class Customer implements Serializable {
     }
 
     public void setPassword(final String password) {
-        if (password == null) {
-            throw new IllegalArgumentException("Password is invalid.");
-        }
-        String validationExpression = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}";
-        Pattern pattern = Pattern.compile(validationExpression);
-        Matcher matcher = pattern.matcher(password);
-        if ((password.equals("")) || (!matcher.matches())) {
-            throw new IllegalArgumentException("Password is invalid.");
-        } else {
             this.password = password.trim();
-        }
     }
 
     @Override
@@ -260,24 +215,21 @@ public class Customer implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + cardNumber.hashCode();
-        result = 31 * result + quantity.hashCode();
-        result = 31 * result + invoice.hashCode();
-        result = 31 * result + login.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + shoppingBasket.hashCode();
+        int result = 1;
+        result = 31 * result + ((id == null) ? 0 : id.hashCode());
+        result = 31 * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = 31 * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = 31 * result +
+                ((cardNumber == null) ? 0 : cardNumber.hashCode());
+        result = 31 * result + ((login == null) ? 0 : login.hashCode());
+        result = 31 * result + ((password == null) ? 0 : password.hashCode());
+        result = 31 * result +
+                ((shoppingBasket == null) ? 0 : shoppingBasket.hashCode());
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("ID - %d, name - %s %s",
-                id,
-                firstName,
-                lastName
-        );
+        return String.format("ID - %d, name - %s %s", id, firstName, lastName);
     }
 }

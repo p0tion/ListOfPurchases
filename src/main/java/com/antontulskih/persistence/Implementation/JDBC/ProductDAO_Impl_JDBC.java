@@ -24,7 +24,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
     Connection c = null;
     final String url = "jdbc:mysql://localhost:3306/listofpurchases";
     final String user = "root";
-    final String password = "qwerty";
+    final String password = "root";
 
 
     @Override

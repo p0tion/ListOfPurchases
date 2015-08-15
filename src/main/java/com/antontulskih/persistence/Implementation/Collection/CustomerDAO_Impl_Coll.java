@@ -149,6 +149,77 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     }
 
     @Override
+    public Customer getByLoginAndPassword(final String login,
+                                          final String password) {
+        if (login == null || login == "" ||
+                password == null || password == "") {
+            throw new IllegalArgumentException(String.format("login and "
+                    + "password cannot be null or blank. "
+                    + "Login: %s, password: %s", login, password));
+        }
+        boolean isInList = false;
+        for (Customer c : customerList) {
+            if (c.getLogin().equals(login) && c.getPassword().equals(password)){
+                out.printf("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName());
+                return c;
+            }
+            if (!isInList) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such login or password.%n"
+                        + "Login: %s, password: %s", login, password));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Customer getByCardNumber(final String cardNumber) {
+        if (cardNumber == null || cardNumber == "") {
+            throw new IllegalArgumentException(String.format("card number "
+                    + "cannot be null or blank.%n "
+                    + "Card number: %s", cardNumber));
+        }
+        boolean isInList = false;
+        for (Customer c : customerList) {
+            if (c.getCardNumber().equals(cardNumber)){
+                out.printf("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName());
+                return c;
+            }
+            if (!isInList) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such card number.%n"
+                        + "Card number: %s", cardNumber));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Customer getByLogin(final String login) {
+        if (login == null || login == "") {
+            throw new IllegalArgumentException(String.format("login "
+                    + "cannot be null or blank.%n "
+                    + "Login: %s", login));
+        }
+        boolean isInList = false;
+        for (Customer c : customerList) {
+            if (c.getLogin().equals(login)){
+                out.printf("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName());
+                return c;
+            }
+            if (!isInList) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such login.%n"
+                        + "Login: %s", login));
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Set<Customer> getByIds(final Integer... ids) {
         Set<Customer> set= new TreeSet<Customer>(new IdSorterComparator());
         for (Integer i: ids) {

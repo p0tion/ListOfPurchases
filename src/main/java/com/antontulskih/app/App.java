@@ -96,8 +96,7 @@ final class App {
                 break;
         }
 
-
-        Logger logger = LogManager.getLogger();
+        Logger logger = LogManager.getLogger(App.class);
 
         logger.info("bla");
 //        CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();

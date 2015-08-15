@@ -103,6 +103,25 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     @Override
+    public Customer getByLoginAndPassword(final String login,
+                                          final String password) {
+        readFromFile();
+        return customerDAOImplColl.getByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public Customer getByCardNumber(final String cardNumber) {
+        readFromFile();
+        return customerDAOImplColl.getByCardNumber(cardNumber);
+    }
+
+    @Override
+    public Customer getByLogin(final String login) {
+        readFromFile();
+        return customerDAOImplColl.getByLogin(login);
+    }
+
+    @Override
     public Set<Customer> getByIds(final Integer... ids) {
         readFromFile();
         return customerDAOImplColl.getByIds(ids);

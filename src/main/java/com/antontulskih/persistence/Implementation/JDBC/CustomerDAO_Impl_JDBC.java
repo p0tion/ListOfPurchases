@@ -12,7 +12,12 @@ import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.CustomerDAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -280,6 +285,198 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
                 throw new IllegalArgumentException(String.format("There is no "
                         + "customer with such name: %s %s",
                         firstName, lastName));
+            }
+            rs.next();
+            out.printf("%n*** Getting %s %s from the list of customers ***",
+                    rs.getString("first_name"), rs.getString("last_name"));
+            customer.setId(rs.getInt("customer_id"));
+            customer.setFirstName(rs.getString("first_name"));
+            customer.setLastName(rs.getString("last_name"));
+            customer.setCardNumber(rs.getString("card_number"));
+            customer.setQuantity(0);
+            customer.setInvoice(0.0);
+            customer.setLogin(rs.getString("login"));
+            customer.setPassword(rs.getString("password"));
+            if (rs.getInt("quantity") != 0) {
+                ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
+                List<Integer> productIdsList = new ArrayList<Integer>();
+                ps = c.prepareStatement(anotherQuery);
+                ps.setInt(1, customer.getId());
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    productIdsList.add(rs2.getInt("product_id"));
+                }
+                customer.addProductToShoppingBasket(
+                        productDAOImp.getByIds(productIdsList.toArray(new
+                                Integer[productIdsList.size()]))
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByLoginAndPassword(final String login,
+                                          final String password) {
+        if (login == null || password == null
+                || login == "" || password == "") {
+            throw new IllegalArgumentException(String.format("login and "
+                    + "password cannot be null or blank. "
+                    + "Login: %s, password: %s", login, password));
+        }
+        PreparedStatement ps = null;
+        ResultSet rs;
+        Customer customer = new Customer();
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            ps = c.prepareStatement("SELECT * FROM customer_table WHERE "
+                    + "login=? AND password=?;");
+            ps.setString(1, login);
+            ps.setString(2, password);
+            rs = ps.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such login and password.%n"
+                        + "Login: %s, password: %s", login, password));
+            }
+            rs.next();
+            out.printf("%n*** Getting %s %s from the list of customers ***",
+                    rs.getString("first_name"), rs.getString("last_name"));
+            customer.setId(rs.getInt("customer_id"));
+            customer.setFirstName(rs.getString("first_name"));
+            customer.setLastName(rs.getString("last_name"));
+            customer.setCardNumber(rs.getString("card_number"));
+            customer.setQuantity(0);
+            customer.setInvoice(0.0);
+            customer.setLogin(rs.getString("login"));
+            customer.setPassword(rs.getString("password"));
+            if (rs.getInt("quantity") != 0) {
+                ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
+                List<Integer> productIdsList = new ArrayList<Integer>();
+                ps = c.prepareStatement(anotherQuery);
+                ps.setInt(1, customer.getId());
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    productIdsList.add(rs2.getInt("product_id"));
+                }
+                customer.addProductToShoppingBasket(
+                        productDAOImp.getByIds(productIdsList.toArray(new
+                                Integer[productIdsList.size()]))
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByLogin(String login) {
+        if (login == null || login == "") {
+            throw new IllegalArgumentException(String.format("login cannot be "
+                    + "null or blank. "
+                    + "Login: %s.", login, password));
+        }
+        PreparedStatement ps = null;
+        ResultSet rs;
+        Customer customer = new Customer();
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            ps = c.prepareStatement("SELECT * FROM customer_table WHERE "
+                    + "login=?;");
+            ps.setString(1, login);
+            rs = ps.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such login.%n"
+                        + "Login: %s.", login, password));
+            }
+            rs.next();
+            out.printf("%n*** Getting %s %s from the list of customers ***",
+                    rs.getString("first_name"), rs.getString("last_name"));
+            customer.setId(rs.getInt("customer_id"));
+            customer.setFirstName(rs.getString("first_name"));
+            customer.setLastName(rs.getString("last_name"));
+            customer.setCardNumber(rs.getString("card_number"));
+            customer.setQuantity(0);
+            customer.setInvoice(0.0);
+            customer.setLogin(rs.getString("login"));
+            customer.setPassword(rs.getString("password"));
+            if (rs.getInt("quantity") != 0) {
+                ProductDAO_Impl_JDBC productDAOImp = new ProductDAO_Impl_JDBC();
+                List<Integer> productIdsList = new ArrayList<Integer>();
+                ps = c.prepareStatement(anotherQuery);
+                ps.setInt(1, customer.getId());
+                ResultSet rs2 = ps.executeQuery();
+                while (rs2.next()) {
+                    productIdsList.add(rs2.getInt("product_id"));
+                }
+                customer.addProductToShoppingBasket(
+                        productDAOImp.getByIds(productIdsList.toArray(new
+                                Integer[productIdsList.size()]))
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (c != null) {
+                    c.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customer;
+    }
+
+    @Override
+    public Customer getByCardNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber == "") {
+            throw new IllegalArgumentException(String.format("card number "
+                    + "cannot be null or blank. "
+                    + "Card number: %s.", cardNumber));
+        }
+        PreparedStatement ps = null;
+        ResultSet rs;
+        Customer customer = new Customer();
+        try {
+            c = DriverManager.getConnection(url, user, password);
+            ps = c.prepareStatement("SELECT * FROM customer_table WHERE "
+                    + "card_number=?;");
+            ps.setString(1, cardNumber);
+            rs = ps.executeQuery();
+            if (!rs.isBeforeFirst() ) {
+                throw new IllegalArgumentException(String.format("There is no "
+                        + "customer with such card number.%n"
+                        + "Card number: %s", cardNumber));
             }
             rs.next();
             out.printf("%n*** Getting %s %s from the list of customers ***",

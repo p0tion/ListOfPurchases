@@ -45,4 +45,9 @@ function validateForm(){
     }
 }
 
-confirm_password.onchange = validateForm
+//firstName.onkeyup = validateForm();
+//lastName.onkeyup = validateForm;
+//cardNumber.onchange = validateForm();
+//login.onchange = validateForm();
+//password.onchange = validateForm;
+confirm_password.onchange = validateForm;
