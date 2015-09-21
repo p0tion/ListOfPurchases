@@ -10,15 +10,17 @@ package com.antontulskih.persistence.Implementation.Collection;
 
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
+import com.antontulskih.util.MyLogger;
 
 import java.util.Set;
 import java.util.TreeSet;
 
 import static com.antontulskih.util.ProductComparator.IdSorterComparator;
 import static com.antontulskih.util.ProductComparator.NameSorterComparator;
-import static java.lang.System.out;
 
 public class ProductDAO_Impl_Coll implements ProductDAO {
+
+    static final MyLogger LOGGER = new MyLogger(ProductDAO_Impl_Coll.class);
     private static Integer id = 1;
     private static Set<Product> productList =
             new TreeSet<Product>(new IdSorterComparator());
@@ -46,8 +48,6 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
             if (productList.size() == 0) {
                 p.setId(id++);
                 productList.add(p);
-                out.printf("%n*** %s has been saved. ID - %d ***",
-                        p.getName(), p.getId());
             } else {
                 for (Product d: productList) {
                     if (p.getName().equals(d.getName())) {
@@ -59,9 +59,9 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
                 }
                 p.setId(id++);
                 productList.add(p);
-                out.printf("%n*** %s has been saved. ID - %d",
-                        p.getName(), p.getId());
             }
+            LOGGER.info(String.format("*** %s has been saved. ID - %d",
+                    p.getName(), p.getId()));
         }
         return true;
     }
@@ -70,19 +70,6 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public Set<Product> getByIds(final Integer... ids) {
         Set<Product> set= new TreeSet<Product>(new IdSorterComparator());
         for (Integer i: ids) {
-//            boolean isInList = false;
-//            for (Product p: productList) {
-//                if (p.getId().equals(i)) {
-//                    out.printf("%n*** Getting product with ID %d from the list "
-//                            + "of products ***", i);
-//                    isInList = true;
-//                    set.add(p);
-//                }
-//            }
-//            if (!isInList) {
-//                throw new IllegalArgumentException("There is no product with "
-//                        + "such ID: " + i);
-//            }
             set.add(getById(i));
         }
         return set;
@@ -91,13 +78,13 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     @Override
     public Product getById(final Integer id) {
         if (id == null || id < 1) {
-            throw new IllegalArgumentException(String.format("ID cannot be "
-                    + "null and should be greater than 0. Your ID: " + id));
+            throw new IllegalArgumentException("ID cannot be null and should "
+                    + "be greater than 0. Your ID: " + id);
         }
         for (Product p: productList) {
             if (p.getId().equals(id)) {
-                out.printf("%n*** Getting product with ID %d from the list of "
-                                + "products ***", id);
+                LOGGER.info(String.format("*** Getting product with ID %d from "
+                        + "the list of products ***", id));
                 return p;
             } else {
                 throw new IllegalArgumentException("There is no product with "
@@ -109,15 +96,15 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public Set<Product> getAllSortedById() {
-        out.printf("%n*** Getting all products from the list ordered "
-                + "by ID ***");
+        LOGGER.info(String.format("%n*** Getting all products from the list "
+                + "ordered by ID ***"));
         return productList;
     }
 
     @Override
     public Set<Product> getAllSortedByName() {
-        out.printf("%n*** Getting all products from the list ordered "
-                + "by name ***");
+        LOGGER.info(String.format("%n*** Getting all products from the list "
+                + "ordered by name ***"));
         Set<Product> nameSortedProductList = new TreeSet<Product>(
                 new NameSorterComparator());
         nameSortedProductList.addAll(productList);
@@ -126,8 +113,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public Set<Product> getAllSortedByPrice() {
-        out.printf("%n*** Getting all products from the list ordered "
-                + "by price ***");
+        LOGGER.info(String.format("%n*** Getting all products from the list "
+                + "ordered by price ***"));
         Set<Product> priceSortedProductList = new TreeSet<Product>(
                 new NameSorterComparator());
         priceSortedProductList.addAll(productList);
@@ -138,12 +125,13 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public boolean update(final Product... products) {
         for (Product p: products) {
             if (p == null) {
-                throw new IllegalArgumentException(String.format("Input "
-                        + "product cannot be null. Your product: " + p));
+                throw new IllegalArgumentException("Input product cannot be "
+                        + "null. Your product: " + p);
             }
             for (Product d: productList) {
                 if (p.getId().equals(d.getId())) {
-                    out.printf("%n*** Updating %s ***", p.getName());
+                    LOGGER.info(String.format("*** Updating %s ***",
+                            p.getName()));
                     d.setName(p.getName());
                     d.setDescription(p.getDescription());
                     d.setPrice(p.getPrice());
@@ -157,12 +145,12 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public boolean remove(final Product... products) {
         for (Product p: products) {
             if (p == null) {
-                throw new IllegalArgumentException(String.format("Input "
-                        + "product cannot be null. Your product: " + p));
+                throw new IllegalArgumentException("Input product cannot be "
+                        + "null. Your product: " + p);
             }
             if (productList.contains(p)) {
-                out.printf("%n*** %s has been removed from the list of "
-                        + "products ***", p.getName());
+                LOGGER.info(String.format("*** %s has been removed from the "
+                        + "list of products ***", p.getName()));
                 productList.remove(p);
             } else {
                 throw new IllegalArgumentException("There is no product with "
@@ -178,9 +166,8 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
         int count = 0;
         for (Integer i: ids) {
             if (i == null || i < 1) {
-                throw new IllegalArgumentException(String.format("ID cannot "
-                        + "be null and should be greater than 0. Your ID: " +
-                        i));
+                throw new IllegalArgumentException("ID cannot be null and "
+                        + "should be greater than 0. Your ID: " + i);
             }
             boolean isInList = false;
             for (Product p: productList) {
@@ -200,7 +187,7 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public boolean removeAll() {
-        out.printf("%n*** Removing all products from the list of products ***");
+        LOGGER.info("*** Removing all products from the list of products ***");
         productList.clear();
         return true;
     }
@@ -209,19 +196,6 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
     public Set<Product> getByNames(final String... names) {
         Set<Product> set = new TreeSet<Product>(new IdSorterComparator());
         for (String n: names) {
-//            boolean isInList = false;
-//            for (Product p: productList) {
-//                if (p.getName().equals(n)) {
-//                    out.printf("%n*** Getting %s from the list "
-//                            + "of products ***", p.getName());
-//                    isInList = true;
-//                    set.add(p);
-//                }
-//            }
-//            if (!isInList) {
-//                throw new IllegalArgumentException("There is no product with "
-//                        + "such name: " + n);
-//            }
         set.add(productDAOCollImpl.getByName(n));
         }
         return set;
@@ -229,14 +203,14 @@ public class ProductDAO_Impl_Coll implements ProductDAO {
 
     @Override
     public Product getByName(final String name) {
-        if (name == null || name == "") {
-            throw new IllegalArgumentException(String.format("Input "
-                    + "name cannot be null or blank. Your name: " + name));
+        if (name == null || name.equals("")) {
+            throw new IllegalArgumentException("Input name cannot be null or "
+                    + "blank. Your name: " + name);
         }
         boolean isInList = false;
         for (Product p: productList) {
             if (p.getName().equals(name)) {
-                out.printf("%n*** Getting %s ***", p.getName());
+                LOGGER.info(String.format("*** Getting %s ***", p.getName()));
                 return p;
             }
         }

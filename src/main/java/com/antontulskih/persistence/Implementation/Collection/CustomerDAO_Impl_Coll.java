@@ -10,6 +10,7 @@ package com.antontulskih.persistence.Implementation.Collection;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.DAO.CustomerDAO;
+import com.antontulskih.util.MyLogger;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,6 +21,7 @@ import static java.lang.System.out;
 
 public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
+    static final MyLogger LOGGER = new MyLogger(CustomerDAO_Impl_Coll.class);
     private static Integer id = 1;
     private static Set<Customer> customerList =
             new TreeSet<Customer>(new IdSorterComparator());
@@ -41,14 +43,12 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     public boolean save(final Customer... customers) {
         for (Customer c: customers) {
             if (c == null) {
-                throw new IllegalArgumentException(String.format("Input "
-                        + "customer cannot be null. Your customer: " + c));
+                throw new IllegalArgumentException("Input customer cannot be "
+                        + "null. Your customer: " + c);
             }
             if (customerList.size() == 0) {
                 c.setId(id++);
                 customerList.add(c);
-                out.printf("*** %s %s has been saved. ID - %d ***",
-                        c.getFirstName(), c.getLastName(), c.getId());
             } else {
                 for (Customer d: customerList) {
                     if ((c.getFirstName().equals(d.getFirstName()))
@@ -62,9 +62,9 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
                 }
                 c.setId(id++);
                 customerList.add(c);
-                out.printf("*** %s %s has been saved. ID - %d ***",
-                        c.getFirstName(), c.getLastName(), c.getId());
             }
+            LOGGER.info(String.format("*** %s %s has been saved. ID - %d "
+                    + "***", c.getFirstName(), c.getLastName(), c.getId()));
         }
         return true;
     }
@@ -73,12 +73,12 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     public boolean remove(final Customer... customers) {
         for (Customer c: customers) {
             if (c == null) {
-                throw new IllegalArgumentException(String.format("Input "
-                        + "customer cannot be null. Your customer: " + c));
+                throw new IllegalArgumentException("Input customer cannot be "
+                        + "null. Your customer: " + c);
             }
             if (customerList.contains(c)) {
-                out.printf("*** %s %s has been removed ***",
-                        c.getFirstName(), c.getLastName());
+                LOGGER.info(String.format("*** %s %s has been removed ***",
+                        c.getFirstName(), c.getLastName()));
                 customerList.remove(c);
             } else {
                 throw new IllegalArgumentException(String.format("There is no "
@@ -95,9 +95,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         int count = 0;
         for (Integer i: ids) {
             if (i == null || i < 1) {
-                throw new IllegalArgumentException(String.format("ID cannot "
-                        + "be null and should be greater than 0. Your ID: %d",
-                        i));
+                throw new IllegalArgumentException("ID cannot be null and "
+                        + "should be greater than 0. Your ID: " +  i);
             }
             boolean isInList = false;
             for (Customer c: customerList) {
@@ -117,7 +116,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
     @Override
     public boolean removeAll() {
-        out.println("*** Removing all customers from the list of customers "
+        LOGGER.info("*** Removing all customers from the list of customers "
                 + "***");
         customerList.clear();
         return true;
@@ -126,7 +125,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     @Override
     public Customer getByName(final String firstName, final String lastName) {
         if (firstName == null || lastName == null
-                || firstName == "" || lastName == "") {
+                || firstName.equals("") || lastName.equals("")) {
             throw new IllegalArgumentException(String.format("First and last "
                     + "name cannot be null or blank. First name: %s, last "
                     + "name: %s.", firstName, lastName ));
@@ -135,8 +134,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         for (Customer c: customerList) {
             if (c.getFirstName().equals(firstName)
                     && c.getLastName().equals(lastName)) {
-                out.printf("*** Getting %s %s ***",
-                        c.getFirstName(), c.getLastName());
+                LOGGER.info(String.format("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName()));
                 return c;
             }
         }
@@ -151,8 +150,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     @Override
     public Customer getByLoginAndPassword(final String login,
                                           final String password) {
-        if (login == null || login == "" ||
-                password == null || password == "") {
+        if (login == null || login.equals("") ||
+                password == null || password.equals("")) {
             throw new IllegalArgumentException(String.format("login and "
                     + "password cannot be null or blank. "
                     + "Login: %s, password: %s", login, password));
@@ -160,8 +159,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         boolean isInList = false;
         for (Customer c : customerList) {
             if (c.getLogin().equals(login) && c.getPassword().equals(password)){
-                out.printf("*** Getting %s %s ***",
-                        c.getFirstName(), c.getLastName());
+                LOGGER.info(String.format("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName()));
                 return c;
             }
             if (!isInList) {
@@ -175,7 +174,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
     @Override
     public Customer getByCardNumber(final String cardNumber) {
-        if (cardNumber == null || cardNumber == "") {
+        if (cardNumber == null || cardNumber.equals("")) {
             throw new IllegalArgumentException(String.format("card number "
                     + "cannot be null or blank.%n "
                     + "Card number: %s", cardNumber));
@@ -183,8 +182,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         boolean isInList = false;
         for (Customer c : customerList) {
             if (c.getCardNumber().equals(cardNumber)){
-                out.printf("*** Getting %s %s ***",
-                        c.getFirstName(), c.getLastName());
+                LOGGER.info(String.format("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName()));
                 return c;
             }
             if (!isInList) {
@@ -198,7 +197,7 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
     @Override
     public Customer getByLogin(final String login) {
-        if (login == null || login == "") {
+        if (login == null || login.equals("")) {
             throw new IllegalArgumentException(String.format("login "
                     + "cannot be null or blank.%n "
                     + "Login: %s", login));
@@ -206,8 +205,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         boolean isInList = false;
         for (Customer c : customerList) {
             if (c.getLogin().equals(login)){
-                out.printf("*** Getting %s %s ***",
-                        c.getFirstName(), c.getLastName());
+                LOGGER.info(String.format("*** Getting %s %s ***",
+                        c.getFirstName(), c.getLastName()));
                 return c;
             }
             if (!isInList) {
@@ -223,19 +222,6 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     public Set<Customer> getByIds(final Integer... ids) {
         Set<Customer> set= new TreeSet<Customer>(new IdSorterComparator());
         for (Integer i: ids) {
-//            boolean isInList = false;
-//            for (Customer c: customerList) {
-//                if (c.getId().equals(i)) {
-//                    out.printf("*** Getting customer with ID %d from the list "
-//                            + "of customers ***", i);
-//                    isInList = true;
-//                    set.add(c);
-//                }
-//            }
-//            if (!isInList) {
-//                throw new IllegalArgumentException("There is no customer with "
-//                        + "such ID: " + id);
-//            }
             set.add(getById(i));
         }
         return set;
@@ -250,8 +236,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
         boolean isInList = false;
         for (Customer c: customerList) {
             if (c.getId().equals(id)) {
-                out.printf("*** Getting customer with ID %d from the list of "
-                        + "customers ***", id);
+                LOGGER.info(String.format("*** Getting customer with ID %d "
+                        + "from the list of customers ***", id));
                 return c;
             }
         }
@@ -266,13 +252,13 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
     public boolean update(Customer... customers) {
         for (Customer c: customers) {
             if (c == null) {
-                throw new IllegalArgumentException(String.format("Customer "
-                        + "cannot be null. Your customer: " + c));
+                throw new IllegalArgumentException("Customer cannot be null.\n"
+                        + "Your customer: " + c);
             }
             for (Customer d: customerList) {
                 if (c.getId().equals(d.getId())) {
-                    out.printf("*** Updating %s %s ***",
-                            c.getFirstName(), c.getLastName());
+                    LOGGER.info(String.format("*** Updating %s %s ***",
+                            c.getFirstName(), c.getLastName()));
                     d.setFirstName(c.getFirstName());
                     d.setLastName(c.getLastName());
                     d.setCardNumber(c.getCardNumber());
@@ -289,14 +275,14 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
     @Override
     public Set<Customer> getAllSortedById() {
-        out.println("\n*** Getting all customers from the list ordered "
+        LOGGER.info("*** Getting all customers from the list ordered "
                 + "by ID ***");
         return customerList;
     }
 
     @Override
     public Set<Customer> getAllSortedByLastName() {
-        out.println("\n*** Getting all customers from the list ordered "
+        LOGGER.info("*** Getting all customers from the list ordered "
                 + "by last name ***");
         Set<Customer> lastNameSortedSet = new TreeSet<Customer>(
                 new LastNameSorterComparator());
@@ -306,8 +292,8 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
     @Override
     public Set<Customer> getAllSortedByInvoice() {
-        out.println("\n*** Getting all customers from the list ordered "
-                + "by invoice***");
+        LOGGER.info("*** Getting all customers from the list ordered "
+                + "by invoice ***");
         Set<Customer> lastNameSortedSet = new TreeSet<Customer>(
                 new LastNameSorterComparator());
         lastNameSortedSet.addAll(customerList);

@@ -2,6 +2,7 @@ package com.antontulskih.persistence.Implementation.Hibernate;
 
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
+import com.antontulskih.util.MyLogger;
 import com.antontulskih.util.ProductComparator.NameSorterComparator;
 import com.antontulskih.util.ProductComparator.PriceSorterComparator;
 import org.hibernate.Query;
@@ -24,6 +25,10 @@ import static com.antontulskih.util.ProductComparator.IdSorterComparator;
 @Repository
 public class ProductDAO_Impl_Hibernate implements ProductDAO {
 
+    static final MyLogger LOGGER = new MyLogger(ProductDAO_Impl_Hibernate
+            .class);
+    static final String ROLLBACK_EXC_MSG = "Couldn’t roll back transaction";
+
     @Autowired
     SessionFactory sf;
 
@@ -42,8 +47,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -80,8 +85,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -108,8 +113,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -136,8 +141,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -163,8 +168,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -190,8 +195,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -226,8 +231,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -252,8 +257,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -277,8 +282,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {
@@ -306,8 +311,8 @@ public class ProductDAO_Impl_Hibernate implements ProductDAO {
         } catch (RuntimeException e){
             try{
                 transaction.rollback();
-            }catch(RuntimeException rbe){
-                System.out.println("Couldn’t roll back transaction");
+            }catch(RuntimeException re){
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;
         } finally {

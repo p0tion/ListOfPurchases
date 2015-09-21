@@ -8,6 +8,8 @@
 
 package com.antontulskih.domain;
 
+import com.antontulskih.util.MyLogger;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import static java.lang.System.out;
 @Table(name = "customer_table")
 public class Customer implements Serializable {
 
+    static final MyLogger LOGGER = new MyLogger(Customer.class);
     private Integer id;
 
     private String firstName;
@@ -109,17 +112,17 @@ public class Customer implements Serializable {
     }
 
     public void addProductToShoppingBasket(final Product... products) {
-        out.printf("%n%n*** %s %s added to their purchase basket:%n",
-                this.getFirstName(), this.getLastName());
+        LOGGER.info(String.format("%n%n*** %s %s added to their purchase "
+                + "basket:%n", this.getFirstName(), this.getLastName()));
         for (Product p: products) {
             this.shoppingBasket.add(p);
             invoice += p.getPrice();
             // to truncate garbage of double like 58.54890000000000000001
             invoice = Math.round(invoice * 100) / 100.0;
-            out.println("- " + p.getName());
+            LOGGER.info(String.format("- %s%n", p.getName()));
         }
         quantity = this.shoppingBasket.size();
-        out.println("***");
+        LOGGER.info("***");
     }
 
     public void showShoppingBasket() {
@@ -168,8 +171,8 @@ public class Customer implements Serializable {
     }
 
     public void clearShoppingBasket() {
-        out.printf("%n*** Clearing shopping basket of %s %s ***",
-                this.getFirstName(), this.getLastName());
+        LOGGER.info(String.format("%n*** Clearing shopping basket of %s %s ***",
+                this.getFirstName(), this.getLastName()));
         this.invoice = 0.0;
         this.quantity = 0;
         shoppingBasket.clear();

@@ -12,6 +12,7 @@ import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.CustomerDAO;
 import com.antontulskih.persistence.Implementation.Collection.CustomerDAO_Impl_Coll;
+import com.antontulskih.util.MyLogger;
 import com.thoughtworks.xstream.XStream;
 
 import java.io.FileInputStream;
@@ -20,9 +21,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Set;
 
-import static java.lang.System.out;
-
 public class CustomerDAO_Impl_XML implements CustomerDAO {
+
+    static final MyLogger LOGGER = new MyLogger(CustomerDAO_Impl_XML.class);
 
     protected CustomerDAO_Impl_Coll customerDAOImplColl;
     protected String fileName;
@@ -42,22 +43,24 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
     }
 
     public boolean writeToFile() {
-        out.printf("%n*** Saving list of customers to %s ***%n", fileName);
+        LOGGER.info(String.format("*** Saving the list of customers to %s ***",
+                fileName));
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);
             xStream.alias("Product", Product.class);
             xStream.toXML(CustomerDAO_Impl_Coll.getCustomerList(),
                     new FileOutputStream(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            LOGGER.error("IOException occurred", ioe);
         }
         return true;
     }
 
     public boolean readFromFile() {
         CustomerDAO_Impl_Coll.getCustomerList().clear();
-        out.printf("%n*** Loading list of customers from %s ***%n", fileName);
+        LOGGER.info(String.format("*** Loading the list of customers from %s "
+                        + "***", fileName));
         try {
             XStream xStream = new XStream();
             xStream.alias("Customer", Customer.class);
@@ -65,8 +68,8 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
             CustomerDAO_Impl_Coll.getCustomerList().addAll(
                     (Set<Customer>) xStream.fromXML(
                             new FileInputStream(fileName)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException fnfe) {
+            LOGGER.error(String.format("File %s wasn't found", fileName), fnfe);
         }
         return true;
     }

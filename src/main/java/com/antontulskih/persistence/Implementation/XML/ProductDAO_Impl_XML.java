@@ -11,6 +11,7 @@ package com.antontulskih.persistence.Implementation.XML;
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
 import com.antontulskih.persistence.Implementation.Collection.ProductDAO_Impl_Coll;
+import com.antontulskih.util.MyLogger;
 import com.thoughtworks.xstream.XStream;
 
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import static java.lang.System.out;
 
 public class ProductDAO_Impl_XML implements ProductDAO {
 
+    static final MyLogger LOGGER = new MyLogger(ProductDAO_Impl_XML.class);
     protected ProductDAO_Impl_Coll productDAOImplColl;
     protected String fileName;
 
@@ -47,22 +49,22 @@ public class ProductDAO_Impl_XML implements ProductDAO {
             xStream.alias("Product", Product.class);
             xStream.toXML(ProductDAO_Impl_Coll.getProductList(),
                     new FileOutputStream(fileName));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            LOGGER.error("IOException occurred", ioe);
         }
         return true;
     }
 
     public boolean readFromFile() {
-        out.printf("%n*** Loading list of products from ***%n", fileName);
+        out.printf("%n*** Loading list of products from %s***%n", fileName);
         try {
             XStream xStream = new XStream();
             xStream.alias("Product", Product.class);
             ProductDAO_Impl_Coll.getProductList().addAll(
                     (Set<Product>) xStream.fromXML(
                             new FileInputStream(fileName)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException fnfe) {
+            LOGGER.error(String.format("File %s wasn't found", fileName), fnfe);
         }
         return true;
     }
@@ -81,6 +83,7 @@ public class ProductDAO_Impl_XML implements ProductDAO {
         readFromFile();
         for (Integer i: ids) {
             productDAOImplColl.removeByIds(i);
+
         }
         return writeToFile();
     }

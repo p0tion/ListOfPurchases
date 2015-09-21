@@ -1,5 +1,5 @@
 html {
-	background: url('http://www.uxinspired.com/design/sites/default/files/public_files/images/about/macbook_pro.png');
+	background-image: url("../img/macbook_pro.png");
 	background-size: 70%;
 	background-repeat: no-repeat;
 	background-position: center;

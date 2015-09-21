@@ -12,14 +12,15 @@ import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.Implementation.Collection.CustomerDAO_Impl_Coll;
 import com.antontulskih.persistence.Implementation.Collection.ProductDAO_Impl_Coll;
 import com.antontulskih.persistence.Implementation.XML.ProductDAO_Impl_XML;
+import com.antontulskih.util.MyLogger;
 
 import java.io.*;
 import java.util.Set;
 
-import static java.lang.System.out;
-
 public final class ProductDAO_Impl_Ser extends
         ProductDAO_Impl_XML {
+
+    static final MyLogger LOGGER = new MyLogger(ProductDAO_Impl_Ser.class);
 
     public ProductDAO_Impl_Ser() {
         productDAOImplColl = ProductDAO_Impl_Coll.getProductDAOCollImpl();
@@ -29,12 +30,13 @@ public final class ProductDAO_Impl_Ser extends
 
     @Override
     public boolean writeToFile() {
-        out.println("\n*** Saving list of customers to " + fileName + " ***\n");
+        LOGGER.info(String.format("*** Saving list of customers to %s ***",
+                fileName));
         try (ObjectOutputStream oos = new ObjectOutputStream(
                 new FileOutputStream(fileName))){
             oos.writeObject(CustomerDAO_Impl_Coll.getCustomerList());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            LOGGER.error("IOException occurred", ioe);
         }
         return true;
     }
@@ -42,16 +44,16 @@ public final class ProductDAO_Impl_Ser extends
     @Override
     public boolean readFromFile() {
         CustomerDAO_Impl_Coll.getCustomerList().clear();
-        out.println("\n*** Loading list of customers from "
-                + fileName + " ***\n");
+        LOGGER.info(String.format("*** Loading list of customers from %s ***",
+                fileName));
         try (ObjectInputStream ois = new ObjectInputStream(
                 new FileInputStream(fileName))) {
             CustomerDAO_Impl_Coll.getCustomerList().addAll(
                     (Set<Customer>) ois.readObject());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException cnfe) {
+            LOGGER.error("ClassNotFoundException occurred", cnfe);
+        } catch (IOException ioe) {
+            LOGGER.error("IOException occurred", ioe);
         }
         return true;
     }

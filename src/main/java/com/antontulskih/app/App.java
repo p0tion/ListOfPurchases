@@ -12,10 +12,15 @@ import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO_Factory.DAO_AbstractFactory;
 import com.antontulskih.persistence.DAO_Factory.DAO_FactoryInitializer;
 import com.antontulskih.persistence.DAO_Factory.StorageType;
+import com.antontulskih.service.CustomerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 final class App {
+
+    @Autowired
+    static CustomerService customerService;
 
     private App() { }
 
@@ -238,6 +243,10 @@ final class App {
 //        customerDAOImpl.removeAll();
 //        printListOfCustomers(customerDAOImpl.getAllSortedById());
 //        printListOfProducts(productDAOImpl.getAllSortedById());
+
+        Customer customer = new Customer("Baba", "Blacksheep",
+                "9999666655557777", "Baba", "Qw1234");
+        customerService.save(customer);
 
     }
 }

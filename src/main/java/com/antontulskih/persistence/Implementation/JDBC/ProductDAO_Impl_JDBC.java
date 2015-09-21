@@ -11,16 +11,18 @@ package com.antontulskih.persistence.Implementation.JDBC;
 import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
 import com.antontulskih.persistence.DAO.ProductDAO;
+import com.antontulskih.util.MyLogger;
 
 import java.sql.*;
 import java.util.Set;
 import java.util.TreeSet;
 
 import static com.antontulskih.util.ProductComparator.*;
-import static java.lang.System.out;
 
 public final class ProductDAO_Impl_JDBC implements ProductDAO {
 
+    static final MyLogger LOGGER = new MyLogger(CustomerDAO_Impl_JDBC.class);
+    static final String SQL_EXC_MSG = "SQL Exception occurred";
     Connection c = null;
     final String url = "jdbc:mysql://localhost:3306/listofpurchases";
     final String user = "root";
@@ -46,13 +48,13 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 ps.setString(1, product.getName());
                 rs = ps.executeQuery();
                 rs.next();
-                out.printf("%n*** %s has been saved to the list of products. "
-                                + "ID - %d ***",
-                        rs.getString("name"), rs.getInt("product_id"));
+                LOGGER.info(String.format("*** %s has been saved to the list of products. "
+                                + "ID - %d ***", rs.getString("name"),
+                        rs.getInt("product_id")));
                 product.setId(rs.getInt("product_id"));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -61,8 +63,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return true;
@@ -76,8 +78,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
         Product product;
         try {
             c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Getting all products from the list ordered "
-                    + "by ID ***");
+            LOGGER.info(String.format("*** Getting all products from the list "
+                    + "ordered by ID ***"));
             st = c.createStatement();
             rs = st.executeQuery("SELECT * FROM product_table;");
             while (rs.next()) {
@@ -88,8 +90,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setPrice(rs.getDouble("price"));
                 set.add(product);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (st != null) {
@@ -98,8 +100,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return set;
@@ -113,8 +115,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
         Product product;
         try {
             c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Getting all products from the list ordered "
-                    + "by name ***");
+            LOGGER.info(String.format("*** Getting all products from the list "
+                    + "ordered by name ***"));
             st = c.createStatement();
             rs = st.executeQuery("SELECT * FROM product_table;");
             while (rs.next()) {
@@ -125,8 +127,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setPrice(rs.getDouble("price"));
                 set.add(product);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (st != null) {
@@ -135,8 +137,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return set;
@@ -150,8 +152,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
         Product product;
         try {
             c = DriverManager.getConnection(url, user, password);
-            out.println("\n*** Getting all products from the list ordered "
-                    + "by price ***");
+            LOGGER.info(String.format("*** Getting all products from the list "
+                    + "ordered by price ***"));
             st = c.createStatement();
             rs = st.executeQuery("SELECT * FROM product_table;");
             while (rs.next()) {
@@ -162,8 +164,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setPrice(rs.getDouble("price"));
                 set.add(product);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (st != null) {
@@ -172,8 +174,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return set;
@@ -200,14 +202,14 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             rs.next();
-            out.printf("%n*** Getting %s from the list of products ***",
-                    rs.getString("name"));
+            LOGGER.info(String.format("%n*** Getting %s from the list of "
+                            + "products ***", rs.getString("name")));
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
             product.setPrice(rs.getDouble("price"));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -216,8 +218,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return product;
@@ -244,14 +246,14 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             ps.setString(1, name);
             rs = ps.executeQuery();
             rs.next();
-            out.printf("%n*** Getting %s from the list of products ***",
-                    rs.getString("name"));
+            LOGGER.info(String.format("*** Getting %s from the list of "
+                            + "products ***", rs.getString("name")));
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
             product.setPrice(rs.getDouble("price"));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -260,8 +262,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return product;
@@ -282,14 +284,14 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                     ps.setDouble(3, product.getPrice());
                     ps.setInt(4, product.getId());
                     ps.executeUpdate();
-                    out.printf("%n*** Updating %s ***", product.getName());
+                    LOGGER.info(String.format("*** Updating %s ***", product.getName()));
                 } else {
                     throw new IllegalArgumentException("There is no product in "
                             + "the list with such ID - " + product.getId());
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -298,8 +300,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return true;
@@ -321,11 +323,11 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                         + "product_id=?;");
                 ps.setInt(1, id);
                 ps.execute();
-                out.printf("%n*** %s has been removed from the list of "
-                        + "products. ID - %d ***", name, id);
+                LOGGER.info(String.format("*** %s has been removed from the "
+                        + "list of products. ID - %d ***", name, id));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -334,8 +336,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return true;
@@ -361,11 +363,12 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                         + "product_id=?;");
                 ps.setInt(1, id);
                 ps.execute();
-                out.printf("%n*** %s has been removed from the list of "
-                        + "products. ID - %d ***", rs.getString("name"), id);
+                LOGGER.info(String.format("%n*** %s has been removed from the "
+                        + "list of products. ID - %d ***", rs.getString("name"),
+                        id));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (ps != null) {
@@ -374,8 +377,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return true;
@@ -386,7 +389,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
         Statement st = null;
         CustomerDAO_Impl_JDBC customerDAOImpl = new CustomerDAO_Impl_JDBC();
         try {
-            out.printf("%n*** Removing all products from the list of "
+            LOGGER.info("*** Removing all products from the list of "
                     + "products ***");
             c = DriverManager.getConnection(url, user, password);
             Set<Customer> customerList = customerDAOImpl.getAllSortedById();
@@ -397,8 +400,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             st = c.createStatement();
             st.execute("DELETE FROM customer_product_table");
             st.execute("DELETE FROM product_table");
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException sqle) {
+            LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
             try {
                 if (st != null) {
@@ -407,8 +410,8 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 if (c != null) {
                     c.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException sqle) {
+                LOGGER.error(SQL_EXC_MSG, sqle);
             }
         }
         return true;

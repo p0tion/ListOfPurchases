@@ -14,15 +14,27 @@ public class MyLogger {
         logger = LogManager.getLogger(clazz);
     }
 
-    public void debug(String message) {
+    public void trace(final String message) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(message);
+        }
+    }
+
+    public void debug(final String message) {
         if (logger.isDebugEnabled()) {
             logger.debug(message);
         }
     }
 
-    public void trace(String message) {
-        if (logger.isTraceEnabled()) {
-            logger.trace(message);
+    public void info(final String message) {
+        if (logger.isInfoEnabled()) {
+            logger.info(message);
+        }
+    }
+
+    public void error(final String message, final Throwable t) {
+        if (logger.isErrorEnabled()) {
+            logger.error(message, t);
         }
     }
 }
