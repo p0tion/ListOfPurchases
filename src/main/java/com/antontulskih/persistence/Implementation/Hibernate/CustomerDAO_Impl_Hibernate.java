@@ -4,6 +4,7 @@ import com.antontulskih.domain.Customer;
 import com.antontulskih.persistence.DAO.CustomerDAO;
 import com.antontulskih.util.CustomerComparator.LastNameSorterComparator;
 import com.antontulskih.util.MyLogger;
+import com.antontulskih.util.PasswordEncryptor;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,8 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
     static final MyLogger LOGGER = new MyLogger(CustomerDAO_Impl_Hibernate
             .class);
     static final String ROLLBACK_EXC_MSG = "Couldn’t roll back transaction";
+
+    static final PasswordEncryptor passwordEncryptor = new PasswordEncryptor();
 
     @Autowired
     private SessionFactory sf;
@@ -74,7 +77,8 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
             Query query = session.createQuery("from Customer where login = "
                     + ":login and password = :password");
             query.setString("login", login);
-            query.setString("password", password);
+            query.setString("password",
+                    passwordEncryptor.getCryptString(password));
             customer = (Customer) query.uniqueResult();
             transaction.commit();
         } catch (RuntimeException e){
@@ -241,6 +245,7 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
             session = sf.openSession();
             transaction = session.beginTransaction();
             for (Customer c: customers) {
+                c.setPassword(passwordEncryptor.getCryptString(c.getPassword()));
                 c.setId((Integer) session.save(c));
             }
             transaction.commit();

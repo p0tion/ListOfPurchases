@@ -24,7 +24,7 @@ import static java.lang.String.format;
 @Controller
 public class TablesController {
 
-    static final MyLogger logger = new MyLogger(TablesController.class);
+    static final MyLogger LOGGER = new MyLogger(TablesController.class);
     static String userRole;
 
     Customer user;
@@ -43,31 +43,31 @@ public class TablesController {
     @RequestMapping(value = "tables")
     public String showTablesPage(Model model, HttpSession session) {
 
-        logger.trace("Inside showTablesPage()");
+        LOGGER.trace("Inside showTablesPage()");
 
         if (session.getAttribute("userId") == null) {
 
-            logger.trace("User ID from session equals null. Redirecting to "
+            LOGGER.trace("User ID from session equals null. Redirecting to "
                     + "/signin");
 
             return "redirect:/signIn";
         }
 
-        logger.debug("Session is " + session.isNew());
-        logger.debug("Session ID - " + session.getId());
-        logger.debug("sortCust from session is " + session.getAttribute("sortCust"));
-        logger.debug("sortProd from session is " + session.getAttribute
+        LOGGER.debug("Session is " + session.isNew());
+        LOGGER.debug("Session ID - " + session.getId());
+        LOGGER.debug("sortCust from session is " + session.getAttribute("sortCust"));
+        LOGGER.debug("sortProd from session is " + session.getAttribute
                 ("sortProd"));
 
         user = customerService.getById((Integer)session.getAttribute("userId"));
-        logger.debug(format("User ID from session is %d", user.getId()));
+        LOGGER.debug(format("User ID from session is %d", user.getId()));
         userRole = user.getLogin();
-        logger.debug(format("User role is %s", userRole));
+        LOGGER.debug(format("User role is %s", userRole));
 
         if (session.getAttribute("sortCust") == null ||
                 session.getAttribute("sortProd") == null) {
 
-            logger.debug("sortCust from session is null, sortProd "
+            LOGGER.debug("sortCust from session is null, sortProd "
                     + "from session is null, will assign \"ID\" values "
                     + "automatically");
 
@@ -77,7 +77,7 @@ public class TablesController {
             session.setAttribute("sortProd", sortProd);
         }
 
-        logger.debug(format("%nsortCust from session is %s%nsortProd from "
+        LOGGER.debug(format("%nsortCust from session is %s%nsortProd from "
                         + "session is %s", session.getAttribute("sortCust"),
                                            session.getAttribute("sortProd")));
 
@@ -123,8 +123,8 @@ public class TablesController {
 
         model.addAttribute("sortCust", sortCust);
         model.addAttribute("sortProd", sortProd);
-        logger.debug(sortCust);
-        logger.debug(sortProd);
+        LOGGER.debug(sortCust);
+        LOGGER.debug(sortProd);
         model.addAttribute("productList", productList);
         model.addAttribute("customerList", customerList);
         model.addAttribute("user", user);
@@ -139,14 +139,14 @@ public class TablesController {
 
         if (session.getAttribute("userId") == null) {
 
-            logger.trace("User ID from session equals null. Redirecting to "
+            LOGGER.trace("User ID from session equals null. Redirecting to "
                     + "/signin");
 
             return "redirect:/signIn";
         }
 
-        logger.trace("Inside sortTables()");
-        logger.debug(format("%nsortCustomer - %s%nsortProduct - %s",
+        LOGGER.trace("Inside sortTables()");
+        LOGGER.debug(format("%nsortCustomer - %s%nsortProduct - %s",
                             sortCustomer, sortProduct));
         sortCust = sortCustomer;
         sortProd = sortProduct;
@@ -154,9 +154,9 @@ public class TablesController {
         session.setAttribute("sortCust", sortCust);
         session.setAttribute("sortProd", sortProd);
 
-        logger.debug("sortCust from session is "
+        LOGGER.debug("sortCust from session is "
                 + session.getAttribute("sortCust"));
-        logger.debug("sortProd from session is "
+        LOGGER.debug("sortProd from session is "
                 + session.getAttribute("sortProd"));
 
         return "redirect:/tables";

@@ -24,7 +24,7 @@ import static java.lang.String.*;
 @Controller
 public class AuthentificationController {
 
-    static final MyLogger logger =
+    static final MyLogger LOGGER =
             new MyLogger(AuthentificationController.class);
 
     @Autowired
@@ -36,17 +36,17 @@ public class AuthentificationController {
 
     @InitBinder
     private void initBinder(WebDataBinder binder) {
-        logger.trace("Inside initBinder()");
+        LOGGER.trace("Inside initBinder()");
         binder.setValidator(validator);
     }
 
     @RequestMapping(value = {"", "signIn"})
     public String showSignInPage(HttpSession session) {
-        logger.trace("Inside showSignInPage()");
+        LOGGER.trace("Inside showSignInPage()");
         if (session.getAttribute("userId") != null) {
-            logger.trace("userId detected in the session. will be removed");
+            LOGGER.trace("userId detected in the session. will be removed");
             session.removeAttribute("userId");
-            logger.debug("userId now is " + session.getAttribute("userId"));
+            LOGGER.debug("userId now is " + session.getAttribute("userId"));
         }
         return "signIn";
     }
@@ -56,20 +56,20 @@ public class AuthentificationController {
                                     @RequestParam String password,
                                     HttpSession session,
                                     Model model) {
-        logger.trace("Inside signInRequestForm()");
-        logger.debug(format("%nInput login: %s%nInput password: %s",
+        LOGGER.trace("Inside signInRequestForm()");
+        LOGGER.debug(format("%nInput login: %s%nInput password: %s",
                 login, password));
 
         Customer user;
         if ((user = customerService.getByLoginAndPassword(login, password))
                 != null) {
-            logger.debug("\nUser " + user);
+            LOGGER.debug("\nUser " + user);
             session.setAttribute("userId", user.getId());
             return "redirect:/tables";
         }
-        logger.trace("User with such credentials does not exist, should "
+        LOGGER.trace("User with such credentials does not exist, should "
                 + "display an error");
-        model.addAttribute("errorMessage", "Incorrect login or password");
+        model.addAttribute("errorMessage", "TRUE");
         model.addAttribute("login", login);
         model.addAttribute("password", password);
         return "signIn";
@@ -77,7 +77,7 @@ public class AuthentificationController {
 
     @RequestMapping(value = "signUp", method = RequestMethod.GET)
     public String signUpInitForm(Model model) {
-        logger.trace("Inside signUpInitForm()");
+        LOGGER.trace("Inside signUpInitForm()");
         Customer user = new Customer();
         model.addAttribute("signUpForm", user);
         return "signUp";
@@ -91,8 +91,8 @@ public class AuthentificationController {
                                        BindingResult result,
                                        Model model
     ) {
-        logger.trace("Inside signUpFormValidation()");
-        logger.debug(format(
+        LOGGER.trace("Inside signUpFormValidation()");
+        LOGGER.debug(format(
                         "%nuser.getFirstName(): %s%n"
                         + "user.getLastName(): %s%n"
                         + "user.getCardNumber(): %s%n"
@@ -103,29 +103,27 @@ public class AuthentificationController {
                 user.getLogin(), user.getPassword(), confirm_password));
 
         if (result.hasErrors()) {
-            logger.trace("Inside result.hasErrors()");
+            LOGGER.trace("Inside result.hasErrors()");
             if (!user.getPassword().equals(confirm_password)) {
-                logger.trace("confirm_password doesn't match to the password,"
+                LOGGER.trace("confirm_password doesn't match to the password,"
                         + " produce an error message");
-                model.addAttribute("confirmPasswordErrMsg","passwords doesn't "
-                        + "match");
+                model.addAttribute("confirmPasswordErrMsg","TRUE");
             }
             return "signUp";
         } else if (!user.getPassword().equals(confirm_password)) {
-            logger.trace("confirm_password doesn't match to the password, "
+            LOGGER.trace("confirm_password doesn't match to the password, "
                     + "produce an error message");
-            model.addAttribute("confirmPasswordErrMsg","passwords doesn't "
-                    + "match");
+            model.addAttribute("confirmPasswordErrMsg","TRUE");
             return "signUp";
         } else {
-            logger.trace("User signed up. Redirect to /tables");
+            LOGGER.trace("User signed up. Redirect to /tables");
             user.setQuantity(0);
             user.setInvoice(0.0);
             customerService.save(user);
-            logger.debug(format("User saved in DB. ID - %d",
+            LOGGER.debug(format("User saved in DB. ID - %d",
                     user.getId()));
             session.setAttribute("userId", user.getId());
-            logger.debug(format("User ID saved in session. ID - %d",
+            LOGGER.debug(format("User ID saved in session. ID - %d",
                     session.getAttribute("userId")));
             return "redirect:/tables";
         }

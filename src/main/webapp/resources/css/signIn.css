@@ -6,15 +6,20 @@ html {
 	font-size: 10pt;
 	font-family: "San Francisco", sans-serif;
 }
-label {
+a {
+	text-decoration: none;
+	color: #000000;
+}
+#loginLabel {
 	display: block;
 	color: #000000;
 	margin-left: 2px;
 	margin-top: 10px;
 }
-#sign_href {
-	text-decoration: none;
-	color: #000000;
+#passwordLabel {
+	display: block;
+	margin-top: 10px;
+	margin-left: 12px;
 }
 .cf:before,
 .cf:after {
@@ -33,7 +38,11 @@ label {
 }
 .signinform {
 	width: 385px;
-	margin: 16% auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-left: -218px;
+	margin-top: -83px;
 	padding: 25px;
 	background-color: rgba(250,250,250,0.5);
 	border-radius: 5px;
@@ -50,7 +59,6 @@ label {
 }
 .signinform input:not([type=submit]) {
 	padding: 5px;
-	margin-right: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 3px;
 	/*box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.1),*/
@@ -74,9 +82,22 @@ label {
 	border-radius: 3px;
 	text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
 }
+#errorMsgDiv{
+	text-align: center;
+}
 #signInLoginErrMsg {
-	position: absolute;
-	top: 220px;
-	left: 600px;
 	color: red;
+	text-align: center;
+	margin-top: -5px;
+}
+#login {
+	margin-right: 10px;
+}
+#password {
+	margin-left: 10px;
+}
+.localeUrls {
+	position: fixed;
+	left: 10px;
+	bottom: 10px;
 }

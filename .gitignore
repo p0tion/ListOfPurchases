@@ -2,6 +2,7 @@
 /out
 /lib
 /target
+/cont
 *.json
 *.xml
 *.ser
@@ -11,4 +12,5 @@
 *.suml
 *.txt
 *.class
-cont/
+*.iml
+*.ppk

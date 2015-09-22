@@ -5,117 +5,152 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<spring:message key="signUp.pageTitle" var="pageTitle"/>
+<spring:message key="signUp.firstNameLabel" var="firstNameLabel"/>
+<spring:message key="signUp.firstNamePlaceholder" var="firstNamePlaceholder"/>
+<spring:message key="signUp.firstNameTitle" var="firstNameTitle"/>
+<spring:message key="signUp.lastNameLabel" var="lastNameLabel"/>
+<spring:message key="signUp.lastNamePlaceholder" var="lastNamePlaceholder"/>
+<spring:message key="signUp.lastNameTitle" var="lastNameTitle"/>
+<spring:message key="signUp.cardNumberLabel" var="cardNumberLabel"/>
+<spring:message key="signUp.cardNumberPlaceholder" var="cardNumberPlaceholder"/>
+<spring:message key="signUp.cardNumberTitle" var="cardNumberTitle"/>
+<spring:message key="signUp.loginLabel" var="loginLabel"/>
+<spring:message key="signUp.loginPlaceholder" var="loginPlaceholder"/>
+<spring:message key="signUp.loginTitle" var="loginTitle"/>
+<spring:message key="signUp.passwordLabel" var="passwordLabel"/>
+<spring:message key="signUp.passwordPlaceholder" var="passwordPlaceholder"/>
+<spring:message key="signUp.passwordTitle" var="passwordTitle"/>
+<spring:message key="signUp.confirmPasswordLabel" var="confirmPasswordLabel"/>
+<spring:message key="signUp.confirmPasswordPlaceholder"
+                var="confirmPasswordPlaceholder"/>
+<spring:message key="signUp.confirmPasswordTitle" var="confirmPasswordTitle"/>
+<spring:message key="signUp.signUpButton" var="signUpButton"/>
+<spring:message key="signUp.orSignInLink" var="orSignInLink"/>
+<spring:message key="signUp.passwordsDontMatch" var="passwordsDontMatchErrMsg"/>
+
 <html>
 <head>
-    <title>Log in</title>
-    <link rel="stylesheet" href="../../resources/css/normalize.css">
+    <title>${pageTitle}</title>
     <link rel="stylesheet" href="../../resources/css/signUp.css">
     <script src="../../resources/js/signUp.js" defer="defer"></script>
 </head>
 <body>
+<div class="localeUrls">
+    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
+</div>
 <section class="signupform cf">
   <form:form commandName="signUpForm" method="post" action="/signUp"
              name="login">
-           <%--onsubmit="validateForm()">--%>
     <ul>
       <li>
-        <label for="firstName">First Name</label>
-        <form:input
-                path="firstName"
-                type="text"
-                name="firstName"
-                id="firstName"
-                size="15"
-                title="Latin chars only. Size from 2 to 15"
-                placeholder="first name"
-                pattern="[A-Za-z]{2,15}"
-                required = "true"
-                autofocus="true"
-                value="${firstName}"/>
+        <label for="firstName">${firstNameLabel}</label>
+          <div class="field">
+              <form:input
+                      path="firstName"
+                      type="text"
+                      name="firstName"
+                      id="firstName"
+                      size="15"
+                      title="${firstNameTitle}"
+                      placeholder="${firstNamePlaceholder}"
+                      pattern="[A-Za-z]{2,15}"
+                      required = "true"
+                      autofocus="true"
+                      value="${firstName}"/>
+              <label id="signUpErrMsg"><form:errors path="firstName"/></label>
+          </div>
+
+        <label for="lastName">${lastNameLabel}</label>
+        <div class="field">
+            <form:input
+                    path="lastName"
+                    type="text"
+                    name="lastName"
+                    id="lastName"
+                    size="15"
+                    title="${lastNameTitle}"
+                    placeholder="${lastNamePlaceholder}"
+                    pattern="[A-Za-z]{2,15}"
+                    required = "true"
+                    value="${lastName}"/>
+            <label id="signUpErrMsg"><form:errors path="lastName"/></label>
+        </div>
       </li>
-        <%--<form:errors path="firstName" cssStyle="color: red"/>--%>
-        <label id="signUpFirstNameErrMsg"><form:errors path="firstName"/></label>
       <li>
-        <label for="lastName">Last Name</label>
-        <form:input
-                path="lastName"
-                type="text"
-                name="lastName"
-                id="lastName"
-                size="15"
-                title="Latin chars only. Size from 2 to 15"
-                placeholder="last name"
-                pattern="[A-Za-z]{2,15}"
-                required = "true"
-                value="${lastName}"/>
-          <%--<form:errors path="lastName"/>--%>
+        <label for="cardNumber">${cardNumberLabel}</label>
+        <div class="field">
+            <form:input
+                    path="cardNumber"
+                    type="text"
+                    name="cardNumber"
+                    id="cardNumber"
+                    size="15"
+                    title="${cardNumberTitle}"
+                    placeholder="${cardNumberPlaceholder}"
+                    pattern="[0-9]{16}"
+                    required = "true"
+                    value="${cardNumber}"/>
+            <label id="signUpErrMsg"><form:errors path="cardNumber"/></label>
+        </div>
       </li>
-        <label id="signUpLastNameErrMsg"><form:errors path="lastName"/></label>
       <li>
-        <label for="cardNumber">Card Number</label>
-        <form:input
-                path="cardNumber"
-                type="text"
-                name="cardNumber"
-                id="cardNumber"
-                size="15"
-                title="16 digits"
-                placeholder="card number"
-                pattern="[0-9]{16}"
-                required = "true"
-                value="${cardNumber}"/>
-          <%--<form:errors path="cardNumber"/>--%>
+        <label for="login">${loginLabel}</label>
+        <div class="field">
+            <form:input
+                    path="login"
+                    type="text"
+                    name="login"
+                    id="login"
+                    size="15"
+                    title="${loginTitle}"
+                    placeholder="${loginPlaceholder}"
+                    pattern="[A-Za-z0-9_]{2,15}"
+                    required = "true"
+                    value="${login}"/>
+            <label id="signUpErrMsg"><form:errors path="login"/></label>
+        </div>
       </li>
-        <label
-                id="signUpCardNumberErrMsg"><form:errors path="cardNumber"/></label>
       <li>
-        <label for="login">Login</label>
-        <form:input
-                path="login"
-                type="text"
-                name="login"
-                id="login"
-                size="15"
-                title="Latin chars, digits or underscore. Size from 2 to 15"
-                placeholder="login"
-                pattern="[A-Za-z0-9_]{2,15}"
-                required = "true"
-                value="${login}"/>
-          <%--<form:errors path="login"/>--%>
+        <label for="password">${passwordLabel}</label>
+        <div class="field">
+            <form:input
+                    path="password"
+                    type="password"
+                    name="password"
+                    id="password"
+                    size="15"
+                    title="${passwordTitle}"
+                    placeholder="${passwordPlaceholder}"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}"
+                    required = "true"
+                    value="${password}"/>
+                <label id="signUpErrMsg"><form:errors path="password"/></label>
+        </div>
       </li>
-        <label id="signUpLoginErrMsg"><form:errors path="login"/></label>
       <li>
-        <label for="password">Password</label>
-        <form:input
-                path="password"
-                type="password"
-                name="password"
-                id="password"
-                size="15"
-                title="At least 6 chars including UPPER/lower case and digits"
-                placeholder="password"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}"
-                required = "true"
-                value="${password}"/>
-          <%--<form:errors path="password"/>--%>
+        <label for="confirm_password">${confirmPasswordLabel}</label>
+        <div class="field">
+            <input  type="password"
+                    name="confirm_password"
+                    id="confirm_password"
+                    size="15"
+                    title="${confirmPasswordTitle}"
+                    placeholder="${confirmPasswordPlaceholder}"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}"
+                    required = "true"
+                    value="${password}"/>
+            <c:if test="${confirmPasswordErrMsg eq 'TRUE'}">
+                <label id="signUpErrMsg">${passwordsDontMatchErrMsg}</label>
+            </c:if>
+        </div>
       </li>
-        <label id="signUpPasswordErrMsg"><form:errors path="password"/></label>
       <li>
-        <label for="confirm_password">Confirm Password</label>
-        <input  type="password"
-                name="confirm_password"
-                id="confirm_password"
-                size="15"
-                title="Must be the same password as above"
-                placeholder="confirm password"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}"
-                required = "true"
-                value="${password}"/>
-      </li>
-        <label id="signUpConfirmPasswordErrMsg">${confirmPasswordErrMsg}</label>
-      <li>
-        <input type="submit" formnovalidate="true" value="Sign up"/>
-        <a id="sign_href" href="/signIn">Or sign in</a>
+        <input type="submit" formnovalidate="true" value="${signUpButton}"/>
+        <a href="/signIn">${orSignInLink}</a>
       </li>
     </ul>
   </form:form>

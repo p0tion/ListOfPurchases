@@ -1,6 +1,6 @@
 <%--
   User: Tulskih Anton
-  Date: 20.07.2015
+  Date: 20.08.2015
   Time: 18:04
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
