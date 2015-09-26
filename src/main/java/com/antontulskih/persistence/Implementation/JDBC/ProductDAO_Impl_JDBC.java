@@ -87,7 +87,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setId(rs.getInt("product_id"));
                 product.setName(rs.getString("name"));
                 product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
+                product.setPrice(rs.getDouble("tables.price"));
                 set.add(product);
             }
         } catch (SQLException sqle) {
@@ -124,7 +124,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setId(rs.getInt("product_id"));
                 product.setName(rs.getString("name"));
                 product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
+                product.setPrice(rs.getDouble("tables.price"));
                 set.add(product);
             }
         } catch (SQLException sqle) {
@@ -161,7 +161,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
                 product.setId(rs.getInt("product_id"));
                 product.setName(rs.getString("name"));
                 product.setDescription(rs.getString("description"));
-                product.setPrice(rs.getDouble("price"));
+                product.setPrice(rs.getDouble("tables.price"));
                 set.add(product);
             }
         } catch (SQLException sqle) {
@@ -207,7 +207,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
-            product.setPrice(rs.getDouble("price"));
+            product.setPrice(rs.getDouble("tables.price"));
         } catch (SQLException sqle) {
             LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {
@@ -251,7 +251,7 @@ public final class ProductDAO_Impl_JDBC implements ProductDAO {
             product.setId(rs.getInt("product_id"));
             product.setName(rs.getString("name"));
             product.setDescription(rs.getString("description"));
-            product.setPrice(rs.getDouble("price"));
+            product.setPrice(rs.getDouble("tables.price"));
         } catch (SQLException sqle) {
             LOGGER.error(SQL_EXC_MSG, sqle);
         } finally {

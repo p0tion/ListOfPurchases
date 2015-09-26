@@ -1,4 +1,7 @@
-function appendRow(tableId) {
+function appendRow(tableId, firstNameTitle, firstNamePlaceholder, lastNameTitle,
+                   lastNamePlaceholder, cardNumberTitle, cardNumberPlaceholder,
+                   loginTitle, loginPlaceholder, passwordTitle,
+                   passwordPlaceholder, checkBoxTitle) {
     var table = document.getElementById(tableId);
     var row = table.insertRow(table.rows.length);
 
@@ -13,9 +16,9 @@ function appendRow(tableId) {
     el.setAttribute('type', 'text');
     el.setAttribute('name', 'firstName');
     el.setAttribute('id', 'firstName');
-    el.setAttribute('size', '15');
-    el.setAttribute('title', 'Latin chars only. Size from 2 to 20');
-    el.setAttribute('placeholder', 'first name');
+    el.setAttribute('size', '17');
+    el.setAttribute('title', firstNameTitle);
+    el.setAttribute('placeholder', firstNamePlaceholder);
     el.setAttribute('required', "");
     el.setAttribute('pattern', "[A-Za-z]{2,20}");
     el.setAttribute('value', "");
@@ -27,9 +30,9 @@ function appendRow(tableId) {
     el2.setAttribute('type', 'text');
     el2.setAttribute('name', 'lastName');
     el2.setAttribute('id', 'lastName');
-    el2.setAttribute('size', '15');
-    el2.setAttribute('title', 'Latin chars only. Size from 2 to 20');
-    el2.setAttribute('placeholder', 'last name');
+    el2.setAttribute('size', '17');
+    el2.setAttribute('title', lastNameTitle);
+    el2.setAttribute('placeholder', lastNamePlaceholder);
     el2.setAttribute('required', "");
     el2.setAttribute('pattern', "[A-Za-z]{2,20}");
     el2.setAttribute('value', "");
@@ -41,9 +44,9 @@ function appendRow(tableId) {
     el3.setAttribute('type', 'text');
     el3.setAttribute('name', 'cardNumber');
     el3.setAttribute('id', 'cardNumber');
-    el3.setAttribute('size', '15');
-    el3.setAttribute('title', '16 digits');
-    el3.setAttribute('placeholder', 'card number');
+    el3.setAttribute('size', '13');
+    el3.setAttribute('title', cardNumberTitle);
+    el3.setAttribute('placeholder', cardNumberPlaceholder);
     el3.setAttribute('required', "");
     el3.setAttribute('pattern', "[0-9]{16}");
     el3.setAttribute('value', "");
@@ -56,8 +59,8 @@ function appendRow(tableId) {
     el4.setAttribute('name', 'login');
     el4.setAttribute('id', 'login');
     el4.setAttribute('size', '15');
-    el4.setAttribute('title', 'Latin chars, digits or underscore. Size from 2 to 15');
-    el4.setAttribute('placeholder', 'login');
+    el4.setAttribute('title', loginTitle);
+    el4.setAttribute('placeholder', loginPlaceholder);
     el4.setAttribute('required', "");
     el4.setAttribute('pattern', "[A-Za-z0-9_]{2,15}");
     el4.setAttribute('value', "");
@@ -70,8 +73,8 @@ function appendRow(tableId) {
     el5.setAttribute('name', 'password');
     el5.setAttribute('id', 'password');
     el5.setAttribute('size', '15');
-    el5.setAttribute('title', 'At least 6 chars including UPPER/lower case and digits');
-    el5.setAttribute('placeholder', 'password');
+    el5.setAttribute('title', passwordTitle);
+    el5.setAttribute('placeholder', passwordPlaceholder);
     el5.setAttribute('required', "");
     el5.setAttribute('pattern', "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}");
     el5.setAttribute('value', "");
@@ -79,12 +82,12 @@ function appendRow(tableId) {
 
     // select cell for checkbox
     var cellChck = row.insertCell(6);
-    cellChck.setAttribute("class", "hiddenTd");
+    cellChck.setAttribute("class", 'hiddenTd');
     var chck = document.createElement('input');
     chck.setAttribute('type', 'checkbox');
     chck.setAttribute('name', 'child');
     chck.setAttribute('id', 'checkBox');
-    chck.setAttribute('title', 'Check to delete');
+    chck.setAttribute('title', checkBoxTitle);
     chck.setAttribute('tabindex', '-1');
     cellChck.appendChild(chck);
 

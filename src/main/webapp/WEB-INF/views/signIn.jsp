@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <spring:message code="signIn.pageTitle" var="pageTitle"/>
-<spring:message code="signIn.loginLabel" var="loginLabel"/>
-<spring:message code="signIn.loginPlaceholder" var="loginPlaceholder"/>
-<spring:message code="signIn.passwordLabel" var="passwordLabel"/>
-<spring:message code="signIn.passwordPlaceholder" var="passwordPlaceholder"/>
+<spring:message code="customer.login" var="loginLabel"/>
+<spring:message code="customer.login.small" var="loginPlaceholder"/>
+<spring:message code="customer.password" var="passwordLabel"/>
+<spring:message code="customer.password.small" var="passwordPlaceholder"/>
 <spring:message code="signIn.signInButton" var="signInButton"/>
 <spring:message code="signIn.orSignUpLink" var="orSignUpLabel"/>
 <spring:message code="signIn.incorrectLoginOrPassword" var="errorMsg"/>
@@ -22,18 +22,15 @@
   <link rel="stylesheet" href="../../resources/css/signIn.css">
 </head>
 <body>
-<div class="localeUrls">
-    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
-</div>
 <section class="signinform cf">
-  <form name="login" action="signIn" method="post"
+    <form name="login" action="signIn" method="post"
         accept-charset="utf-8">
-      <c:if test="${errorMessage eq 'TRUE'}">
-          <div id="errorMsgDiv">
-              <label id="signInLoginErrMsg">${errorMsg}</label>
-          </div>
-      </c:if>
-    <ul>
+        <c:if test="${errorMessage eq 'TRUE'}">
+            <div id="errorMsgDiv">
+                <label id="signInLoginErrMsg">${errorMsg}</label>
+            </div>
+        </c:if>
+        <ul>
       <li>
         <label for="login" id="loginLabel">${loginLabel}</label>
         <input type="text"
@@ -58,7 +55,10 @@
         <a href="/signUp">${orSignUpLabel}</a>
       </li>
     </ul>
-  </form>
+    </form>
 </section>
+<div class="localeUrls">
+    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
+</div>
 </body>
 </html>

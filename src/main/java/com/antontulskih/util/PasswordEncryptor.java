@@ -19,6 +19,9 @@ public class PasswordEncryptor {
     private static String nameCrypt = "PBKDF2WithHmacSHA512";
 
     public static String getCryptString(final String string) {
+
+        System.out.println("string: " + string);
+
         String saltString = "some salt string";
         byte[] hash = new byte[0];
         try {
@@ -36,4 +39,11 @@ public class PasswordEncryptor {
         Base64.Encoder enc = Base64.getEncoder();
         return  enc.encodeToString(hash);
     }
+
+    public static void main(String[] args) {
+
+        System.out.println(getCryptString("Qw1234"));
+
+    }
+
 }

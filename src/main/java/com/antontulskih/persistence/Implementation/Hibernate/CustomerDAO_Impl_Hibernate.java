@@ -31,7 +31,7 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
             .class);
     static final String ROLLBACK_EXC_MSG = "Couldn’t roll back transaction";
 
-    static final PasswordEncryptor passwordEncryptor = new PasswordEncryptor();
+    static final PasswordEncryptor PASSWORD_ENCRYPTOR = new PasswordEncryptor();
 
     @Autowired
     private SessionFactory sf;
@@ -78,7 +78,7 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
                     + ":login and password = :password");
             query.setString("login", login);
             query.setString("password",
-                    passwordEncryptor.getCryptString(password));
+                    PASSWORD_ENCRYPTOR.getCryptString(password));
             customer = (Customer) query.uniqueResult();
             transaction.commit();
         } catch (RuntimeException e){
@@ -245,7 +245,7 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
             session = sf.openSession();
             transaction = session.beginTransaction();
             for (Customer c: customers) {
-                c.setPassword(passwordEncryptor.getCryptString(c.getPassword()));
+                c.setPassword(PASSWORD_ENCRYPTOR.getCryptString(c.getPassword()));
                 c.setId((Integer) session.save(c));
             }
             transaction.commit();

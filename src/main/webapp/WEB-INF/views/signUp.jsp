@@ -9,25 +9,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <spring:message key="signUp.pageTitle" var="pageTitle"/>
-<spring:message key="signUp.firstNameLabel" var="firstNameLabel"/>
-<spring:message key="signUp.firstNamePlaceholder" var="firstNamePlaceholder"/>
-<spring:message key="signUp.firstNameTitle" var="firstNameTitle"/>
-<spring:message key="signUp.lastNameLabel" var="lastNameLabel"/>
-<spring:message key="signUp.lastNamePlaceholder" var="lastNamePlaceholder"/>
-<spring:message key="signUp.lastNameTitle" var="lastNameTitle"/>
-<spring:message key="signUp.cardNumberLabel" var="cardNumberLabel"/>
-<spring:message key="signUp.cardNumberPlaceholder" var="cardNumberPlaceholder"/>
-<spring:message key="signUp.cardNumberTitle" var="cardNumberTitle"/>
-<spring:message key="signUp.loginLabel" var="loginLabel"/>
-<spring:message key="signUp.loginPlaceholder" var="loginPlaceholder"/>
-<spring:message key="signUp.loginTitle" var="loginTitle"/>
-<spring:message key="signUp.passwordLabel" var="passwordLabel"/>
-<spring:message key="signUp.passwordPlaceholder" var="passwordPlaceholder"/>
-<spring:message key="signUp.passwordTitle" var="passwordTitle"/>
-<spring:message key="signUp.confirmPasswordLabel" var="confirmPasswordLabel"/>
-<spring:message key="signUp.confirmPasswordPlaceholder"
+<spring:message key="customer.firstName" var="firstNameLabel"/>
+<spring:message key="customer.firstName.small" var="firstNamePlaceholder"/>
+<spring:message key="customer.firstNameTitle" var="firstNameTitle"/>
+<spring:message key="customer.lastName" var="lastNameLabel"/>
+<spring:message key="customer.lastName.small" var="lastNamePlaceholder"/>
+<spring:message key="customer.lastNameTitle" var="lastNameTitle"/>
+<spring:message key="customer.cardNumber" var="cardNumberLabel"/>
+<spring:message key="customer.cardNumber.small" var="cardNumberPlaceholder"/>
+<spring:message key="customer.cardNumberTitle" var="cardNumberTitle"/>
+<spring:message key="customer.login" var="loginLabel"/>
+<spring:message key="customer.login.small" var="loginPlaceholder"/>
+<spring:message key="customer.loginTitle" var="loginTitle"/>
+<spring:message key="customer.password" var="passwordLabel"/>
+<spring:message key="customer.password.small" var="passwordPlaceholder"/>
+<spring:message key="customer.passwordTitle" var="passwordTitle"/>
+<spring:message key="customer.confirmPassword" var="confirmPasswordLabel"/>
+<spring:message key="customer.confirmPassword.small"
                 var="confirmPasswordPlaceholder"/>
-<spring:message key="signUp.confirmPasswordTitle" var="confirmPasswordTitle"/>
+<spring:message key="customer.confirmPasswordTitle" var="confirmPasswordTitle"/>
 <spring:message key="signUp.signUpButton" var="signUpButton"/>
 <spring:message key="signUp.orSignInLink" var="orSignInLink"/>
 <spring:message key="signUp.passwordsDontMatch" var="passwordsDontMatchErrMsg"/>
@@ -39,13 +39,10 @@
     <script src="../../resources/js/signUp.js" defer="defer"></script>
 </head>
 <body>
-<div class="localeUrls">
-    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
-</div>
 <section class="signupform cf">
-  <form:form commandName="signUpForm" method="post" action="/signUp"
-             name="login">
-    <ul>
+    <form:form commandName="signUpForm" method="post" action="/signUp"
+    name="login">
+        <ul>
       <li>
         <label for="firstName">${firstNameLabel}</label>
           <div class="field">
@@ -153,7 +150,10 @@
         <a href="/signIn">${orSignInLink}</a>
       </li>
     </ul>
-  </form:form>
+    </form:form>
 </section>
+<div class="localeUrls">
+    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
+</div>
 </body>
 </html>

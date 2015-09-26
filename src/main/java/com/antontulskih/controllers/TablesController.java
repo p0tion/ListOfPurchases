@@ -25,14 +25,14 @@ import static java.lang.String.format;
 public class TablesController {
 
     static final MyLogger LOGGER = new MyLogger(TablesController.class);
-    static String userRole;
+    private static String userRole;
 
-    Customer user;
-    Set<Customer> customerList;
-    Set<Product> productList;
-    String sortCust;
-    String sortProd;
-    String hideAdminElementsFromUser = "";
+    private Customer user;
+    private Set<Customer> customerList;
+    private Set<Product> productList;
+    private String sortCust;
+    private String sortProd;
+    private String hideAdminElementsFromUser = "";
 
     @Autowired
     private CustomerService customerService;
@@ -53,11 +53,10 @@ public class TablesController {
             return "redirect:/signIn";
         }
 
-        LOGGER.debug("Session is " + session.isNew());
-        LOGGER.debug("Session ID - " + session.getId());
-        LOGGER.debug("sortCust from session is " + session.getAttribute("sortCust"));
-        LOGGER.debug("sortProd from session is " + session.getAttribute
-                ("sortProd"));
+        LOGGER.debug(String.format("%nsortCust from session is %s%n"
+                + "sortProd from session is %s",
+                session.getAttribute("sortCust"),
+                session.getAttribute("sortProd")));
 
         user = customerService.getById((Integer)session.getAttribute("userId"));
         LOGGER.debug(format("User ID from session is %d", user.getId()));
@@ -77,9 +76,10 @@ public class TablesController {
             session.setAttribute("sortProd", sortProd);
         }
 
-        LOGGER.debug(format("%nsortCust from session is %s%nsortProd from "
-                        + "session is %s", session.getAttribute("sortCust"),
-                                           session.getAttribute("sortProd")));
+        LOGGER.debug(String.format("%nsortCust from session is %s%n"
+                        + "sortProd from session is %s",
+                session.getAttribute("sortCust"),
+                session.getAttribute("sortProd")));
 
         sortCust = (String)session.getAttribute("sortCust");
         sortProd = (String)session.getAttribute("sortProd");
@@ -117,14 +117,12 @@ public class TablesController {
 
             customerList = customerService.getByIds(user.getId());
             model.addAttribute("hideFromUser", "style=\"visibility: hidden\"");
-            model.addAttribute("tableLabel", "Your basket");
+            model.addAttribute("tableLabel", "Your Cart");
 
         }
 
         model.addAttribute("sortCust", sortCust);
         model.addAttribute("sortProd", sortProd);
-        LOGGER.debug(sortCust);
-        LOGGER.debug(sortProd);
         model.addAttribute("productList", productList);
         model.addAttribute("customerList", customerList);
         model.addAttribute("user", user);
@@ -154,10 +152,10 @@ public class TablesController {
         session.setAttribute("sortCust", sortCust);
         session.setAttribute("sortProd", sortProd);
 
-        LOGGER.debug("sortCust from session is "
-                + session.getAttribute("sortCust"));
-        LOGGER.debug("sortProd from session is "
-                + session.getAttribute("sortProd"));
+        LOGGER.debug(String.format("%nsortCust from session is %s%n"
+                        + "sortProd from session is %s",
+                session.getAttribute("sortCust"),
+                session.getAttribute("sortProd")));
 
         return "redirect:/tables";
     }
