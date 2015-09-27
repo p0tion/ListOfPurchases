@@ -77,16 +77,11 @@ public class EditCustomers {
             updateLabel = "Update profile";
         }
 
-        if (message.length() > 0) {
-            message.delete(0, message.length());
-        }
-
         model.addAttribute("customerList", customerList);
         model.addAttribute("hideFromUser", hideAdminElementsFromUser);
         model.addAttribute("tableLabel", tableLabel);
         model.addAttribute("user", user);
         model.addAttribute("updateLabel", updateLabel);
-        model.addAttribute("updateMessage", message);
         model.addAttribute("scrollDownOnSubmit", scrollDownOnSubmit);
 
         return "editCustomers";
@@ -204,12 +199,12 @@ public class EditCustomers {
                 customerList = customerService.getAllSortedById();
                 scrollDownOnSubmit = "window.onload = window.scrollTo(0, "
                         + "document.body.scrollHeight);";
-                String ids[] = req.getParameterValues("id");
-                String firstNames[] = req.getParameterValues("firstName");
-                String lastNames[] = req.getParameterValues("lastName");
-                String cardNumbers[] = req.getParameterValues("cardNumber");
-                String logins[] = req.getParameterValues("login");
-                String passwords[] = req.getParameterValues("password");
+                String[] ids = req.getParameterValues("id");
+                String[] firstNames = req.getParameterValues("firstName");
+                String[] lastNames = req.getParameterValues("lastName");
+                String[] cardNumbers = req.getParameterValues("cardNumber");
+                String[] logins = req.getParameterValues("login");
+                String[] passwords = req.getParameterValues("password");
                 for (Customer c: customerList) {
                     for (int i = 0; i < ids.length; i++) {
                         if (c.getLogin().equals(logins[i])
@@ -331,7 +326,7 @@ public class EditCustomers {
             }
         }
         if (message.length() == 0) {
-            message.append(String.format("<p %s>All profiles is up to "
+            message.append(String.format("<p %s>All profiles are up to "
                     + "date</p>%n", CSS_STYLE_GREEN));
         }
         customerList = customerService.getAllSortedById();

@@ -73,7 +73,7 @@
                 </c:if>
             </span>
         </caption>
-        <tr id="tr">
+        <tr class="tr">
             <th class="${hideFromUser}" id="thId">ID</th>
             <th id="thFn">${firstName}</th>
             <th id="thLn">${lastName}</th>
@@ -196,7 +196,6 @@
 <div class="localeUrls">
     <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
 </div>
-
 </body>
 <script>
     ${scrollDownOnSubmit}

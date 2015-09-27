@@ -4,29 +4,63 @@
   Time: 17:17
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<spring:message code="editProducts.pageTitle" var="pageTitle"/>
+<spring:message code="product.name" var="name"/>
+<spring:message code="product.name.small" var="namePlaceholder"/>
+<spring:message code="product.nameTitle" var="nameTitle"/>
+<spring:message code="product.description" var="description"/>
+<spring:message code="product.description.small" var="descriptionPlaceholder"/>
+<spring:message code="product.descriptionTitle" var="descriptionTitle"/>
+<spring:message code="product.price" var="price"/>
+<spring:message code="product.price.small" var="pricePlaceholder"/>
+<spring:message code="product.priceTitle" var="priceTitle"/>
+<spring:message code="editProducts.addProductButton" var="addProductButton"/>
+<spring:message code="editProducts.addProductButtonTitle"
+                var="addProductButtonTitle"/>
+<spring:message code="editProducts.deleteProductsButton"
+                var="deleteProductsButton"/>
+<spring:message code="editProducts.deleteProductsButtonTitle"
+                var="deleteProductsButtonTitle"/>
+<spring:message code="editProducts.updateProductsButton"
+                var="updateProductsButton"/>
+<spring:message code="editProducts.updateProductsButtonTitle"
+                var="updateProductsButtonTitle"/>
+<spring:message code="editProducts.restoreChangesButton"
+                var="restoreChangesButton"/>
+<spring:message code="editProducts.restoreChangesButtonTitle"
+                var="restoreChangesButtonTitle"/>
+<spring:message code="editProducts.selectAllTitle" var="selectAllTitle"/>
+<spring:message code="editProducts.selectTitle" var="selectTitle"/>
+<spring:message code="logOutLink" var="logOutLink"/>
+<spring:message code="backToMainPageLink" var="backToMainPageLink"/>
+<spring:message code="backToMainPageLinkTitle" var="backToMainPageLinkTitle"/>
+<spring:message code="tables.productsTable" var="productsTable"/>
+
 <html>
 <head>
-    <title>Edit products</title>
+    <title>${pageTitle}</title>
     <link href="../../resources/css/main.css" type="text/css" rel="Stylesheet"/>
     <script src="../../resources/js/editProducts.js" defer="defer"></script>
 </head>
 <body>
 <div class="logOut"><a href="/editCustomers">${user.firstName}
-    ${user.lastName}</a> <a id="logOutText" href="/signIn">(log out)</a> </div>
-<form method="post" class="editProductsForm">
+    ${user.lastName}</a> <a id="logOutText" href="/signIn">(${logOutLink})</a> </div>
+<form class="editProductsForm" method="post">
     <table class="tables" id="productsTable" border="1" cellpadding="3" cellspacing="1">
-        <caption><span>Products Table</span></caption>
-        <tr id="tr">
+        <caption><span>${productsTable}</span></caption>
+        <tr class="tr">
             <th>ID</th>
-            <th width="138">Name</th>
-            <th width="208">Description</th>
-            <th width="68">Price</th>
-            <td class="hiddenTd">
+            <th id="thN">${name}</th>
+            <th id="thD">${description}</th>
+            <th td="thP">${price}</th>
+            <td class="hiddenTd" id="thChck">
                 <input type="checkbox"
                        id="mainCheckBox"
                        name="deleteAll"
-                       title="Select all"
+                       title="${selectAllTitle}"
                        onclick="checkAll()"/>
             </td>
         </tr>
@@ -39,8 +73,8 @@
                            name="name"
                            id="nameCell"
                            size="15"
-                           title="Latin chars, numbers, signs.Size from 2 to 15"
-                           placeholder="name"
+                           title="${nameTitle}}"
+                           placeholder="${namePlaceholder}"
                            required
                            pattern="[A-Za-z .,!?:;+&0-9()/\\@\'&#34;<>$-]{2,15}"
                            value="${i.name}"/>
@@ -49,8 +83,8 @@
                            name="description"
                            id="descriptionCell"
                            size="25"
-                           title="Latin chars, numbers, signs.Size from 2 to 25"
-                           placeholder="description"
+                           title="${descriptionTitle}"
+                           placeholder="${descriptionPlaceholder}"
                            required
                            pattern="[A-Za-z .,!?:;+&0-9()/\\@\'&#34;<>$-]{2,25}"
                            value="${i.description}"/>
@@ -58,9 +92,9 @@
                 <td><input type="text"
                            name="price"
                            id="priceCell"
-                           size="5"
-                           title="A number fractioned by a dot"
-                           placeholder="price"
+                           size="3"
+                           title="${priceTitle}"
+                           placeholder="${pricePlaceholder}"
                            required
                            pattern="[0-9]{1,3}[.][0-9]{1,2}"
                            value="${i.price}"/>
@@ -69,7 +103,7 @@
                     <input type="checkbox"
                            name="child"
                            id="checkBox"
-                           title="Check to delete"
+                           title="${selectTitle}"
                            tabindex="-1"/>
                 </td>
             </tr>
@@ -78,29 +112,36 @@
     <p align="middle">
         <input class="button"
                type="button"
-               title="Add a row for another product"
-               value="Add product"
-               onclick="appendRow('productsTable');"/>
+               title="${addProductButtonTitle}"
+               value="${addProductButton}"
+               onclick="appendRow('productsTable', '${nameTitle}',
+                       '${namePlaceholder}', '${descriptionTitle}',
+                       '${descriptionPlaceholder}', '${priceTitle}',
+                       '${pricePlaceholder}', '${selectTitle}');"/>
         <input class="button"
                type="button"
-               title="Delete checked products"
-               value="Delete products"
+               title="${deleteProductsButtonTitle}"
+               value="${deleteProductsButton}"
                onclick="deleteProduct('productsTable');"/>
         <input class="button"
                type="submit"
-               title="Update all products in the list"
-               value="Update products"/>
+               title="${updateProductsButtonTitle}"
+               value="${updateProductsButton}"/>
         <input class="button"
                type="button"
-               title="Restore changes before update"
-               value="Restore changes"
+               title="${restoreChangesButtonTitle}"
+               value="${restoreChangesButton}"
                onclick="restore()"/>
     </p>
-    ${updateMessage}
+    <div class="left">
+        ${updateMessage}
+    </div>
 </form>
-<p><a id="backToTablesUrl" title="Back to the main page"
-      href=${pageContext.request.contextPath}/tables>Back to tables</a></p>
-
+<p><a id="backToTablesUrl" title="${backToMainPageLinkTitle}"
+      href=${pageContext.request.contextPath}/tables>${backToMainPageLink}</a></p>
+<div class="localeUrls">
+    <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
+</div>
 </body>
 <script>
     ${scrollDownOnSubmit}

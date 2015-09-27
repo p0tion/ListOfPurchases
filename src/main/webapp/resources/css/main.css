@@ -14,7 +14,7 @@ body {
 .editCustomersForm {
     width: 860px;
     position: relative;
-    top: 25%;
+    top: 10%;
     left: 50%;
     margin-left: -461px;
     padding: 25px;
@@ -26,9 +26,13 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 .editProductsForm {
-    width: 500px;
-    margin: 6% 390px;
+    width: 530px;
+    position: relative;
+    top: 10%;
+    left: 50%;
+    margin-left: -290px;
     padding: 25px;
+    text-align: center;
     background-color: rgba(250,250,250,0.5);
     border-radius: 5px;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2),
@@ -38,7 +42,7 @@ body {
 .showCustProdForm {
     width: 860px;
     position: absolute;
-    top: 25%;
+    top: 10%;
     left: 50%;
     margin-left: -461px;
     padding: 25px;
@@ -227,10 +231,7 @@ td {
 #label2 {
     text-align: right;
 }
-#tr {
-    font-size: 10pt;
-}
-#tr2 {
+.tr {
     font-size: 10pt;
 }
 .localeUrls {
@@ -283,4 +284,13 @@ td {
 }
 #thChck {
     min-width: 18px;
+}
+#thN {
+    min-width: 154px;
+}
+#thD {
+    min-width: 224px;
+}
+#thP {
+    min-width: 70px;
 }

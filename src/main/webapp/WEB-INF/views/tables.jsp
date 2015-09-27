@@ -85,7 +85,7 @@
                     </span>
                 </caption>
                 <thead>
-                    <tr id="tr2">
+                    <tr class="tr">
                         <th ${hideFromUser}>ID</th>
                         <th>${firstName}</th>
                         <th>${lastName}</th>
@@ -135,7 +135,7 @@
                     </span>
                 </caption>
                 <thead>
-                    <tr id="tr">
+                    <tr class="tr">
                         <th>ID</th>
                         <th class="tdProdName">${name}</th>
                         <th class="tdProdDesc">${description}</th>

@@ -1,4 +1,6 @@
-function appendRow(tableId) {
+function appendRow(tableId, nameTitle, namePlaceholder, descriptionTitle,
+                    descriptionPlaceholder, priceTitle, pricePlaceholder,
+                    selectTitle) {
 
     var table = document.getElementById(tableId);
     var row = table.insertRow(table.rows.length);
@@ -15,8 +17,8 @@ function appendRow(tableId) {
     el.setAttribute('name', 'name');
     el.setAttribute('id', 'nameCell');
     el.setAttribute('size', '15');
-    el.setAttribute('title', 'Latin chars, numbers, signs.Size from 2 to 25');
-    el.setAttribute('placeholder', 'name');
+    el.setAttribute('title', nameTitle);
+    el.setAttribute('placeholder', namePlaceholder);
     el.setAttribute('required', "");
     el.setAttribute('pattern', "[A-Za-z .,!?:;+&0-9()/\\@\'&#34;<>$-]{2,15}");
     el.setAttribute('value', "");
@@ -29,8 +31,8 @@ function appendRow(tableId) {
     el2.setAttribute('name', 'description');
     el2.setAttribute('id', 'descriptionCell');
     el2.setAttribute('size', '25');
-    el2.setAttribute('title', 'Latin chars, numbers, signs.Size from 2 to 25');
-    el2.setAttribute('placeholder', 'description');
+    el2.setAttribute('title', descriptionTitle);
+    el2.setAttribute('placeholder', descriptionPlaceholder);
     el2.setAttribute('required', "");
     el2.setAttribute('pattern', "[A-Za-z .,!?:;+&0-9()/\\@\'&#34;<>$-]{2,25}");
     el2.setAttribute('value', "");
@@ -42,9 +44,9 @@ function appendRow(tableId) {
     el3.setAttribute('type', 'text');
     el3.setAttribute('name', 'price');
     el3.setAttribute('id', 'priceCell');
-    el3.setAttribute('size', '5');
-    el3.setAttribute('title', 'A number fractioned by a dot');
-    el3.setAttribute('placeholder', 'price');
+    el3.setAttribute('size', '3');
+    el3.setAttribute('title', priceTitle);
+    el3.setAttribute('placeholder', pricePlaceholder);
     el3.setAttribute('required', "");
     el3.setAttribute('pattern', "[0-9]{1,3}[.][0-9]{1,2}");
     el3.setAttribute('value', "");
@@ -57,7 +59,7 @@ function appendRow(tableId) {
     chck.setAttribute('type', 'checkbox');
     chck.setAttribute('name', 'child');
     chck.setAttribute('id', 'checkBox');
-    chck.setAttribute('title', 'Check to delete');
+    chck.setAttribute('title', selectTitle);
     chck.setAttribute('tabindex', '-1');
     cellChck.appendChild(chck);
 
