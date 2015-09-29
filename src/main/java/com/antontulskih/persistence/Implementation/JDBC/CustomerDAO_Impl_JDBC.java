@@ -826,4 +826,9 @@ public final class CustomerDAO_Impl_JDBC implements CustomerDAO {
         }
         return true;
     }
+
+    @Override
+    public boolean updateAll() {
+        return false;
+    }
 }

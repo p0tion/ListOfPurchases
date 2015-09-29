@@ -163,8 +163,10 @@ public class EditProducts {
                                         p.getName()));
                     }
                 }
-                productService.removeByIds(idsToRemove.toArray(
-                        new Integer[idsToRemove.size()]));
+                if (idsToRemove.size() > 0) {
+                    productService.removeByIds(idsToRemove.toArray(
+                            new Integer[idsToRemove.size()]));
+                }
             }
             // saving new products
             if (ids == null) {
@@ -187,6 +189,7 @@ public class EditProducts {
         model.addAttribute("scrollDownOnSubmit", scrollDownOnSubmit);
         model.addAttribute("productList", productList);
         model.addAttribute("updateMessage", message);
+        customerService.updateAll();
         return "editProducts";
     }
 }

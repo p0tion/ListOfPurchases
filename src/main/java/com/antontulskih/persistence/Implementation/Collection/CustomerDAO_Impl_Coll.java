@@ -17,7 +17,6 @@ import java.util.TreeSet;
 
 import static com.antontulskih.util.CustomerComparator.IdSorterComparator;
 import static com.antontulskih.util.CustomerComparator.LastNameSorterComparator;
-import static java.lang.System.out;
 
 public class CustomerDAO_Impl_Coll implements CustomerDAO {
 
@@ -270,6 +269,11 @@ public class CustomerDAO_Impl_Coll implements CustomerDAO {
                 }
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean updateAll() {
         return false;
     }
 

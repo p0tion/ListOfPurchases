@@ -9,12 +9,11 @@ package com.antontulskih.app;
 
 import com.antontulskih.domain.Customer;
 import com.antontulskih.domain.Product;
+import com.antontulskih.persistence.DAO.ProductDAO;
 import com.antontulskih.persistence.DAO_Factory.DAO_AbstractFactory;
 import com.antontulskih.persistence.DAO_Factory.DAO_FactoryInitializer;
 import com.antontulskih.persistence.DAO_Factory.StorageType;
 import com.antontulskih.service.CustomerService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 final class App {
@@ -101,18 +100,15 @@ final class App {
                 break;
         }
 
-        Logger logger = LogManager.getLogger(App.class);
-
-        logger.info("bla");
 //        CustomerDAO customerDAOImpl = daoAbstractFactory.getCustomerDAO();
-//        ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
+        ProductDAO productDAOImpl = daoAbstractFactory.getProductDAO();
 
 //        customerDAOImpl.save(customer1, customer2, customer3, customer4,
 //                customer5, customer6, customer7, customer8, customer9,
 //                customer10, customer11, customer12, customer13);
 
-//        productDAOImpl.save(potato, cucumber, bread, minWater, tomato, cheese,
-//                garlic, nuts, saladPepper);
+        productDAOImpl.save(potato, cucumber, bread, minWater, tomato, cheese,
+                garlic, nuts, saladPepper);
 
 //        Customer customer = customerDAOImpl.getById(200);
 //
@@ -244,9 +240,9 @@ final class App {
 //        printListOfCustomers(customerDAOImpl.getAllSortedById());
 //        printListOfProducts(productDAOImpl.getAllSortedById());
 
-        Customer customer = new Customer("Baba", "Blacksheep",
-                "9999666655557777", "Baba", "Qw1234");
-        customerService.save(customer);
+//        Customer customer = new Customer("Baba", "Blacksheep",
+//                "9999666655557777", "Baba", "Qw1234");
+//        customerService.save(customer);
 
     }
 }

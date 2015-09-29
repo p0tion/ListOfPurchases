@@ -11,23 +11,23 @@
 <spring:message key="signUp.pageTitle" var="pageTitle"/>
 <spring:message key="customer.firstName" var="firstNameLabel"/>
 <spring:message key="customer.firstName.small" var="firstNamePlaceholder"/>
-<spring:message key="customer.firstNameTitle" var="firstNameTitle"/>
+<spring:message key="customer.firstName.title" var="firstNameTitle"/>
 <spring:message key="customer.lastName" var="lastNameLabel"/>
 <spring:message key="customer.lastName.small" var="lastNamePlaceholder"/>
-<spring:message key="customer.lastNameTitle" var="lastNameTitle"/>
+<spring:message key="customer.lastName.title" var="lastNameTitle"/>
 <spring:message key="customer.cardNumber" var="cardNumberLabel"/>
 <spring:message key="customer.cardNumber.small" var="cardNumberPlaceholder"/>
-<spring:message key="customer.cardNumberTitle" var="cardNumberTitle"/>
+<spring:message key="customer.cardNumber.title" var="cardNumberTitle"/>
 <spring:message key="customer.login" var="loginLabel"/>
 <spring:message key="customer.login.small" var="loginPlaceholder"/>
-<spring:message key="customer.loginTitle" var="loginTitle"/>
+<spring:message key="customer.login.title" var="loginTitle"/>
 <spring:message key="customer.password" var="passwordLabel"/>
 <spring:message key="customer.password.small" var="passwordPlaceholder"/>
-<spring:message key="customer.passwordTitle" var="passwordTitle"/>
+<spring:message key="customer.password.title" var="passwordTitle"/>
 <spring:message key="customer.confirmPassword" var="confirmPasswordLabel"/>
 <spring:message key="customer.confirmPassword.small"
                 var="confirmPasswordPlaceholder"/>
-<spring:message key="customer.confirmPasswordTitle" var="confirmPasswordTitle"/>
+<spring:message key="customer.confirmPassword.title" var="confirmPasswordTitle"/>
 <spring:message key="signUp.signUpButton" var="signUpButton"/>
 <spring:message key="signUp.orSignInLink" var="orSignInLink"/>
 <spring:message key="signUp.passwordsDontMatch" var="passwordsDontMatchErrMsg"/>
@@ -147,7 +147,7 @@
       </li>
       <li>
         <input type="submit" formnovalidate="true" value="${signUpButton}"/>
-        <a href="/signIn">${orSignInLink}</a>
+        <a href="${pageContext.request.contextPath}/signIn">${orSignInLink}</a>
       </li>
     </ul>
     </form:form>

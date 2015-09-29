@@ -315,9 +315,47 @@ public class CustomerDAO_Impl_Hibernate implements CustomerDAO {
             }
             transaction.commit();
         } catch (RuntimeException e){
-            try{
+            try {
                 transaction.rollback();
-            }catch(RuntimeException re) {
+            } catch(RuntimeException re) {
+                LOGGER.error(ROLLBACK_EXC_MSG, re);
+            }
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateAll() {
+        Session session = null;
+        Transaction transaction = null;
+        Set<Customer> customerList = Collections.EMPTY_SET;
+        Customer customer;
+        try {
+            session = sf.openSession();
+            customerList = getAllSortedById();
+            transaction = session.beginTransaction();
+            for (Customer c: customerList) {
+                customer = new Customer();
+                customer.setId(c.getId());
+                customer.setFirstName(c.getFirstName());
+                customer.setLastName(c.getLastName());
+                customer.setCardNumber(c.getCardNumber());
+                customer.setInvoice(0.0);
+                customer.setLogin(c.getLogin());
+                customer.setPassword(c.getPassword());
+                customer.addProductToShoppingBasket(c.getShoppingBasket());
+                session.update(customer);
+            }
+            transaction.commit();
+        } catch (RuntimeException e){
+            try {
+                transaction.rollback();
+            } catch(RuntimeException re) {
                 LOGGER.error(ROLLBACK_EXC_MSG, re);
             }
             throw e;

@@ -26,7 +26,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.3);
 }
 .editProductsForm {
-    width: 530px;
+    width: 540px;
     position: relative;
     top: 10%;
     left: 50%;
@@ -112,7 +112,7 @@ body {
     background: linear-gradient(to bottom,  #64c8ef 0%,#00a2e2 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#64c8ef', endColorstr='#00a2e2',GradientType=0 ); /* IE6-9 */
     color: #fff;
-    padding: 5px 15px;
+    padding: 5px;
     margin-right: 0;
     border-radius: 3px;
     text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
@@ -197,7 +197,8 @@ a {
     position: fixed;
     right: 10px;
     top: 10px;
-    max-width: 180px;
+    max-width: 150px;
+    text-align: right;
 }
 #logOutText {
     color: #000000;
@@ -225,11 +226,12 @@ td {
     min-width: 150px;
 }
 #label1 {
-    margin: 0;
-    text-align: right
-}
-#label2 {
     text-align: right;
+    margin: 0;
+}
+.label2 {
+    text-align: center;
+    vertical-align: bottom;
 }
 .tr {
     font-size: 10pt;
@@ -240,11 +242,11 @@ td {
     bottom: 10px;
 }
 .tdCustFN {
-    max-width: 60px;
+    max-width: 90px;
     word-break: break-all;
 }
 .tdCustLN {
-    max-width: 65px;
+    max-width: 90px;
     word-break: break-all;
 }
 .tdProdName {

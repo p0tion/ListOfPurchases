@@ -78,4 +78,9 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean update(final Customer... customers){
         return customerDAO.update(customers);
     }
+
+    @Transactional
+    public boolean updateAll(){
+        return customerDAO.updateAll();
+    }
 }

@@ -34,4 +34,6 @@ public interface CustomerService {
     public Customer getById(final Integer id);
 
     public boolean update(final Customer... customers);
+
+    public boolean updateAll();
 }

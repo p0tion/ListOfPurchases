@@ -160,4 +160,9 @@ public class CustomerDAO_Impl_XML implements CustomerDAO {
         customerDAOImplColl.update(customers);
         return writeToFile();
     }
+
+    @Override
+    public boolean updateAll() {
+        return false;
+    }
 }

@@ -12,46 +12,47 @@
 <spring:message code="editCustomers.yourProfile" var="yourProfile"/>
 <spring:message code="customer.firstName" var="firstName"/>
 <spring:message code="customer.firstName.small" var="firstNamePlaceholder"/>
-<spring:message code="customer.firstNameTitle" var="firstNameTitle"/>
+<spring:message code="customer.firstName.title" var="firstNameTitle"/>
 <spring:message code="customer.lastName" var="lastName"/>
 <spring:message code="customer.lastName.small" var="lastNamePlaceholder"/>
-<spring:message code="customer.lastNameTitle" var="lastNameTitle"/>
+<spring:message code="customer.lastName.title" var="lastNameTitle"/>
 <spring:message code="customer.cardNumber" var="cardNumber"/>
 <spring:message code="customer.cardNumber.small" var="cardNumberPlaceholder"/>
-<spring:message code="customer.cardNumberTitle" var="cardNumberTitle"/>
+<spring:message code="customer.cardNumber.title" var="cardNumberTitle"/>
 <spring:message code="customer.login" var="login"/>
 <spring:message code="customer.login.small" var="loginPlaceholder"/>
-<spring:message code="customer.loginTitle" var="loginTitle"/>
+<spring:message code="customer.login.title" var="loginTitle"/>
 <spring:message code="customer.password.small" var="passwordPlaceholder"/>
-<spring:message code="customer.passwordTitle" var="passwordTitle"/>
+<spring:message code="customer.password.title" var="passwordTitle"/>
 <spring:message code="editCustomers.newPassword" var="newPassword"/>
 <spring:message code="editCustomers.newPassword.small"
                 var="newPasswordPlaceholder"/>
-<spring:message code="editCustomers.newPasswordTitle" var="newPasswordTitle"/>
-<spring:message code="editCustomers.selectAllTitle" var="selectAllTitle"/>
-<spring:message code="editCustomers.selectTitle" var="selectTitle"/>
+<spring:message code="editCustomers.newPassword.title" var="newPasswordTitle"/>
+<spring:message code="editCustomers.selectAll.title" var="selectAllTitle"/>
+<spring:message code="editCustomers.select.title" var="selectTitle"/>
 <spring:message code="editCustomers.addCustomerButton" var="addCustomerButton"/>
-<spring:message code="editCustomers.addCustomerButtonTitle"
+<spring:message code="editCustomers.addCustomerButton.title"
                 var="addCustomerButtonTitle"/>
 <spring:message code="editCustomers.deleteCustomersButton"
                 var="deleteCustomersButton"/>
-<spring:message code="editCustomers.deleteCustomersButtonTitle"
+<spring:message code="editCustomers.deleteCustomersButton.title"
                 var="deleteCustomersButtonTitle"/>
 <spring:message code="editCustomers.updateProfilesButton"
                 var="updateProfilesButton"/>
-<spring:message code="editCustomers.updateProfilesButtonTitle"
+<spring:message code="editCustomers.updateProfilesButton.title"
                 var="updateProfilesButtonTitle"/>
 <spring:message code="editCustomers.updateProfileButton"
                 var="updateProfileButton"/>
-<spring:message code="editCustomers.updateProfileButtonTitle"
+<spring:message code="editCustomers.updateProfileButton.title"
                 var="updateProfileButtonTitle"/>
 <spring:message code="editCustomers.restoreChangesButton"
                 var="restoreChangesButton"/>
-<spring:message code="editCustomers.restoreChangesButtonTitle"
+<spring:message code="editCustomers.restoreChangesButton.title"
                 var="restoreChangesButtonTitle"/>
 <spring:message code="logOutLink" var="logOutLink"/>
+<spring:message code="logOutLink.title" var="logOutLinkTitle"/>
 <spring:message code="backToMainPageLink" var="backToMainPageLink"/>
-<spring:message code="backToMainPageLinkTitle" var="backToMainPageLinkTitle"/>
+<spring:message code="backToMainPageLink.title" var="backToMainPageLinkTitle"/>
 
 <html>
 <head>
@@ -60,7 +61,16 @@
     <script src="../../resources/js/editCustomers.js" defer="defer"></script>
 </head>
 <body>
-<form class="editCustomersForm" method="post" onsubmit="scrollOnSubmit()">
+<div class="logOut">
+        ${user.firstName} ${user.lastName}
+    </a>
+    <a id="logOutText"
+       href="${pageContext.request.contextPath}/signIn"
+       title="${logOutLinkTitle}">
+        (${logOutLink})
+    </a>
+</div>
+<form class="editCustomersForm" method="post">
     <table class="tables" id="table" border="1" cellpadding="3"
            cellspacing="1">
         <caption>
@@ -188,11 +198,12 @@
     </p>
     <div class="left">${updateMessage}</div>
 </form>
-<div class="logOut"><label>${user.firstName} ${user.lastName}</label>
-    <a id="logOutText" href="/signIn">(${logOutLink})</a>
-</div>
-<p><a id="backToTablesUrl" title="${backToMainPageLinkTitle}"
-      href=${pageContext.request.contextPath}/tables>${backToMainPageLink}</a></p>
+<p>
+    <a id="backToTablesUrl"
+      title="${backToMainPageLinkTitle}"
+      href=${pageContext.request.contextPath}/tables>${backToMainPageLink}
+    </a>
+</p>
 <div class="localeUrls">
     <a href="?lang=en">en</a> | <a href="?lang=ru">ru</a>
 </div>

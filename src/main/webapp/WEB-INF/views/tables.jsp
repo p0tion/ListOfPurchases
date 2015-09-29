@@ -9,14 +9,16 @@
 
 <spring:message code="tables.pageTitle" var="pageTitle"/>
 <spring:message code="tables.sortCustomersBy" var="sortCustomersBy"/>
+<spring:message code="tables.sortCustomersBy.title" var="sortCustomersByTitle"/>
 <spring:message code="tables.sortProductsBy" var="sortProductsBy"/>
+<spring:message code="tables.sortProductsBy.title" var="sortProductsByTitle"/>
 <spring:message code="tables.sortButton" var="sortButton"/>
 <spring:message code="tables.customersTable" var="customersTable"/>
 <spring:message code="tables.yourCart" var="yourCart"/>
 <spring:message code="tables.add" var="add"/>
-<spring:message code="tables.addLinkTitle" var="addLinkTitle"/>
+<spring:message code="tables.addLink.title" var="addLinkTitle"/>
 <spring:message code="tables.edit" var="edit"/>
-<spring:message code="tables.editLinkTitle" var="editShoppingCart"/>
+<spring:message code="tables.editLink.title" var="editShoppingCart"/>
 <spring:message code="customer.firstName" var="firstName"/>
 <spring:message code="customer.lastName" var="lastName"/>
 <spring:message code="customer.cardNumber" var="cardNumber"/>
@@ -26,7 +28,9 @@
 <spring:message code="product.name" var="name"/>
 <spring:message code="product.description" var="description"/>
 <spring:message code="product.price" var="price"/>
-<spring:message code="logOutLink" var="logOut"/>
+<spring:message code="logOutLink" var="logOutLink"/>
+<spring:message code="logOutLink.title" var="logOutLinkTitle"/>
+<spring:message code="editCustomersLink.title" var="editCustomersLinkTitle"/>
 
 <html>
 <head>
@@ -36,17 +40,22 @@
 </head>
 <body onload="initialDefaultSortValues(
     'sortCustomersSelect', 'sortProductsSelect', '${sortCust}', '${sortProd}')">
-
-    <div class="logOut">
-        <a href="/editCustomers">${user.firstName} ${user.lastName}</a>
-        <a href="${pageContext.request.contextPath}/signIn">(${logOut})</a>
-    </div>
-
-    <form method="POST" action="/tables">
+<div class="logOut">
+    <a href="${pageContext.request.contextPath}/editCustomers"
+       title="${editCustomersLinkTitle}">
+        ${user.firstName} ${user.lastName}
+    </a>
+    <a id="logOutText"
+       href="${pageContext.request.contextPath}/signIn"
+       title="${logOutLinkTitle}">
+        (${logOutLink})
+    </a>
+</div>
+    <form method="POST" action="${pageContext.request.contextPath}/tables">
         <p id="sortText1" ${hideFromUser}>${sortCustomersBy}</p>
         <p ${hideFromUser}>
             <select class="sortSelect" id="sortCustomersSelect"
-                    name="sortCustomer">
+                    name="sortCustomer" title="${sortCustomersByTitle}">
                 <option value="id">ID</option>
                 <option value="lastName">${lastName}</option>
                 <option value="invoice">${invoice}</option>
@@ -55,7 +64,7 @@
         <p id="sortText2">${sortProductsBy}</p>
         <p>
             <select class="sortSelect" id="sortProductsSelect"
-                    name="sortProduct">
+                    name="sortProduct" title="${sortProductsByTitle}">
                 <option value="id">ID</option>
                 <option value="name">${name}</option>
                 <option value="price">${price}</option>
@@ -106,13 +115,13 @@
                             <td class="hiddenTd">
                                 <c:if test="${i.quantity == 0}">
                                     <a title="${addLinkTitle}"
-                                       href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
+                                       href="${pageContext.request.contextPath}/addToShoppingCart?id=${i.id}">
                                         ${add}
                                     </a>
                                 </c:if>
                                 <c:if test="${i.quantity > 0}">
                                     <a title="${editShoppingCart}"
-                                       href="${pageContext.request.contextPath}/addToOrEditShoppingBasket?id=${i.id}">
+                                       href="${pageContext.request.contextPath}/editShoppingCart?id=${i.id}">
                                         ${edit}
                                     </a>
                                 </c:if>

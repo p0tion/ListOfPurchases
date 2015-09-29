@@ -32,7 +32,6 @@ public class TablesController {
     private Set<Product> productList;
     private String sortCust;
     private String sortProd;
-    private String hideAdminElementsFromUser = "";
 
     @Autowired
     private CustomerService customerService;

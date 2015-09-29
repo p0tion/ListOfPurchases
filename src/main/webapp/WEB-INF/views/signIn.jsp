@@ -52,7 +52,7 @@
       </li>
       <li>
         <input type="submit" value="${signInButton}">
-        <a href="/signUp">${orSignUpLabel}</a>
+        <a href="${pageContext.request.contextPath}/signUp">${orSignUpLabel}</a>
       </li>
     </ul>
     </form>
