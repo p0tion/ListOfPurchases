@@ -1,12 +1,13 @@
 package com.antontulskih.util;
 
+import org.apache.commons.codec.binary.Base64;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Base64;
 
 /**
  * @author Tulskih Anton
@@ -33,7 +34,7 @@ public class PasswordEncryptor {
         } catch(InvalidKeySpecException ikse) {
             LOGGER.error("InvalidKeySpecException occurred", ikse);
         }
-        Base64.Encoder enc = Base64.getEncoder();
+        Base64 enc = new Base64();
         return  enc.encodeToString(hash);
     }
 
